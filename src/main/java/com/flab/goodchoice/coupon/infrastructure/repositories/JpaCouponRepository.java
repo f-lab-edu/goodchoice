@@ -5,5 +5,4 @@ import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaCouponRepository extends CouponRepository, JpaRepository<Coupon, Long> {
-
 }

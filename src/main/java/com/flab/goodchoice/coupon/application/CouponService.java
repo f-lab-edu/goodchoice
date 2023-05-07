@@ -3,10 +3,12 @@ package com.flab.goodchoice.coupon.application;
 import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.State;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
+import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.UUID;
 
 @Transactional(readOnly = true)
@@ -33,5 +35,11 @@ public class CouponService {
         if (stock < 0) {
             throw new IllegalArgumentException("쿠폰 갯수는 음수가 될수 없습니다.");
         }
+    }
+
+    public List<CouponInfoResponse> getAllCoupons() {
+        return couponRepository.findAll().stream()
+                .map(coupon -> new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState()))
+                .toList();
     }
 }
