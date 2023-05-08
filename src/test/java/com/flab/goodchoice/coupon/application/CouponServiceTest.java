@@ -151,4 +151,15 @@ class CouponServiceTest {
         assertThatThrownBy(() -> couponService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @DisplayName("쿠폰 삭제")
+    @Test
+    void deleteCoupon() {
+        final Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
+        couponRepository.save(coupon);
+
+        couponService.deleteCoupon(coupon.getCouponToken());
+
+        assertThat(coupon.getState()).isEqualTo(State.INACTIVITY);
+    }
 }

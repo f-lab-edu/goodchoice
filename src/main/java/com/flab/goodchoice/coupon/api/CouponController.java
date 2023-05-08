@@ -38,4 +38,9 @@ public class CouponController {
     public void modifyCoupon(@PathVariable final UUID couponToken, @RequestBody final ModifyCouponRequest modifyCouponRequest) {
         couponService.modifyCoupon(couponToken, modifyCouponRequest.couponName(), modifyCouponRequest.stock());
     }
+
+    @DeleteMapping("/{couponToken}")
+    public void deleteCoupon(@PathVariable final UUID couponToken) {
+        couponService.deleteCoupon(couponToken);
+    }
 }

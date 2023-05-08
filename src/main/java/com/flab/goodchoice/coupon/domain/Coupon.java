@@ -64,4 +64,8 @@ public class Coupon {
             this.stock = stock;
         }
     }
+
+    public void delete() {
+        this.state = State.INACTIVITY;
+    }
 }

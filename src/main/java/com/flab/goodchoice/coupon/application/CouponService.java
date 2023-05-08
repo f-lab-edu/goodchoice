@@ -56,4 +56,10 @@ public class CouponService {
             throw new IllegalArgumentException("쿠폰 갯수는 음수가 될수 없습니다.");
         }
     }
+
+    @Transactional
+    public void deleteCoupon(UUID couponToken) {
+        Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+        coupon.delete();
+    }
 }
