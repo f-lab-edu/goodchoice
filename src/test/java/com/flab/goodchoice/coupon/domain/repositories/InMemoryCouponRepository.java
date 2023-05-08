@@ -22,4 +22,11 @@ public class InMemoryCouponRepository implements CouponRepository {
     public Optional<Coupon> findById(Long couponId) {
         return Optional.ofNullable(coupons.get(couponId));
     }
+
+    @Override
+    public Optional<Coupon> findByCouponToken(UUID couponToken) {
+        return coupons.values().stream()
+                .filter(coupon -> coupon.getCouponToken().equals(couponToken))
+                .findFirst();
+    }
 }

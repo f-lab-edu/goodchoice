@@ -1,6 +1,7 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.domain.State;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
 import com.flab.goodchoice.coupon.domain.repositories.InMemoryCouponRepository;
 import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -84,5 +86,29 @@ class CouponServiceTest {
                 () -> assertThat(result.get(1).couponName()).isEqualTo(couponNameSecond),
                 () -> assertThat(result.get(1).stock()).isEqualTo(stockSecond)
         );
+    }
+
+    @DisplayName("쿠폰 단건 조회")
+    @Test
+    void getCouponDetail() {
+        Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
+        couponRepository.save(coupon);
+
+        CouponInfoResponse result = couponService.getCouponDetail(coupon.getCouponToken());
+
+        assertAll(
+                () -> assertThat(result.couponName()).isEqualTo(coupon.getCouponName()),
+                () -> assertThat(result.stock()).isEqualTo(coupon.getStock())
+        );
+    }
+
+    @DisplayName("해당 쿠폰이 없다면 에러")
+    @Test
+    void notFoundCoupon() {
+        Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
+        couponRepository.save(coupon);
+
+        assertThatThrownBy(() -> couponService.getCouponDetail(UUID.randomUUID()))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

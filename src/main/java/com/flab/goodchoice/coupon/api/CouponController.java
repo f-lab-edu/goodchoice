@@ -6,6 +6,7 @@ import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequestMapping("/api/coupons")
 @RestController
@@ -25,5 +26,10 @@ public class CouponController {
     @GetMapping
     public List<CouponInfoResponse> getAllCoupons() {
         return couponService.getAllCoupons();
+    }
+
+    @GetMapping("/{couponToken}")
+    public CouponInfoResponse getCouponDetail(@PathVariable UUID couponToken) {
+        return couponService.getCouponDetail(couponToken);
     }
 }
