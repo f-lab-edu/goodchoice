@@ -91,10 +91,10 @@ class CouponServiceTest {
     @DisplayName("쿠폰 단건 조회")
     @Test
     void getCouponDetail() {
-        Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
+        final Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
         couponRepository.save(coupon);
 
-        CouponInfoResponse result = couponService.getCouponDetail(coupon.getCouponToken());
+        final CouponInfoResponse result = couponService.getCouponDetail(coupon.getCouponToken());
 
         assertAll(
                 () -> assertThat(result.couponName()).isEqualTo(coupon.getCouponName()),
@@ -105,10 +105,50 @@ class CouponServiceTest {
     @DisplayName("해당 쿠폰이 없다면 에러")
     @Test
     void notFoundCoupon() {
-        Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
+        final Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
         couponRepository.save(coupon);
 
         assertThatThrownBy(() -> couponService.getCouponDetail(UUID.randomUUID()))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("쿠폰 정보 수정")
+    @Test
+    void modifyCoupon() {
+        final Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
+        couponRepository.save(coupon);
+
+        couponService.modifyCoupon(coupon.getCouponToken(), "15%할인", 200);
+
+        assertAll(
+                () -> assertThat(coupon.getCouponName()).isEqualTo("15%할인"),
+                () -> assertThat(coupon.getStock()).isEqualTo(200)
+        );
+    }
+
+    @DisplayName("쿠폰 정보 수정시 쿠폰명 미입력 에러")
+    @Test
+    void modifyNotInputCouponName() {
+        final Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
+        couponRepository.save(coupon);
+
+        final String couponName = "";
+        final int stock = 200;
+
+        assertThatThrownBy(() -> couponService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("쿠폰 정보 수정시 쿠폰 갯수가 음수이면 에러")
+    @Test
+    void modifyNegativeStock() {
+        final Coupon coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, State.ACTIVITY);
+        couponRepository.save(coupon);
+
+        final String couponName = "15%할인";
+        final int stock = -1;
+
+        assertThatThrownBy(() -> couponService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

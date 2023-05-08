@@ -21,10 +21,30 @@ public class CouponService {
         this.couponRepository = couponRepository;
     }
 
+    @Transactional
     public void create(final String couponName, final int stock) {
         validation(couponName, stock);
         Coupon coupon = new Coupon(UUID.randomUUID(), couponName, stock, State.ACTIVITY);
         couponRepository.save(coupon);
+    }
+
+    public List<CouponInfoResponse> getAllCoupons() {
+        return couponRepository.findAll().stream()
+                .map(coupon -> new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState()))
+                .toList();
+    }
+
+    public CouponInfoResponse getCouponDetail(final UUID couponToken) {
+        Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+        return new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState());
+    }
+
+    @Transactional
+    public void modifyCoupon(final UUID couponToken, final String couponName, final int stock) {
+        validation(couponName, stock);
+        Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+
+        coupon.modify(couponName, stock);
     }
 
     private void validation(final String couponName, final int stock) {
@@ -35,16 +55,5 @@ public class CouponService {
         if (stock < 0) {
             throw new IllegalArgumentException("쿠폰 갯수는 음수가 될수 없습니다.");
         }
-    }
-
-    public List<CouponInfoResponse> getAllCoupons() {
-        return couponRepository.findAll().stream()
-                .map(coupon -> new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState()))
-                .toList();
-    }
-
-    public CouponInfoResponse getCouponDetail(UUID couponToken) {
-        Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
-        return new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState());
     }
 }

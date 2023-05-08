@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -52,5 +53,15 @@ public class Coupon {
         this.couponName = couponName;
         this.stock = stock;
         this.state = state;
+    }
+
+    public void modify(String couponName, int stock) {
+        if (StringUtils.hasText(couponName)) {
+            this.couponName = couponName;
+        }
+
+        if (stock >= 0) {
+            this.stock = stock;
+        }
     }
 }
