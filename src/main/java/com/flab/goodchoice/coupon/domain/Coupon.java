@@ -56,13 +56,15 @@ public class Coupon {
     }
 
     public void modify(String couponName, int stock) {
-        if (StringUtils.hasText(couponName)) {
-            this.couponName = couponName;
+        if (!StringUtils.hasText(couponName)) {
+            throw new IllegalArgumentException("빈 쿠폰명으로 수정할 수 없습니다.");
+        }
+        if (stock < 0) {
+            throw new IllegalArgumentException("쿠폰 갯수는 0보다 작을 수 없습니다.");
         }
 
-        if (stock >= 0) {
-            this.stock = stock;
-        }
+        this.couponName = couponName;
+        this.stock = stock;
     }
 
     public void delete() {
