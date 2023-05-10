@@ -4,6 +4,7 @@ import com.flab.goodchoice.coupon.application.CouponService;
 import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
 import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
 import com.flab.goodchoice.coupon.dto.ModifyCouponRequest;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,10 @@ public class CouponController {
     }
 
     @PostMapping
-    public void create(@RequestBody final CreateCouponRequest createCouponRequest) {
-        couponService.create(createCouponRequest.couponName(), createCouponRequest.stock());
+    public UUID create(@RequestBody final CreateCouponRequest createCouponRequest) {
+        validation(createCouponRequest.couponName(), createCouponRequest.stock());
+
+        return couponService.create(createCouponRequest.couponName(), createCouponRequest.stock());
     }
 
     @GetMapping
@@ -35,12 +38,24 @@ public class CouponController {
     }
 
     @PutMapping("/{couponToken}")
-    public void modifyCoupon(@PathVariable final UUID couponToken, @RequestBody final ModifyCouponRequest modifyCouponRequest) {
-        couponService.modifyCoupon(couponToken, modifyCouponRequest.couponName(), modifyCouponRequest.stock());
+    public UUID modifyCoupon(@PathVariable final UUID couponToken, @RequestBody final ModifyCouponRequest modifyCouponRequest) {
+        validation(modifyCouponRequest.couponName(), modifyCouponRequest.stock());
+
+        return couponService.modifyCoupon(couponToken, modifyCouponRequest.couponName(), modifyCouponRequest.stock());
+    }
+
+    private void validation(final String couponName, final int stock) {
+        if (!StringUtils.hasText(couponName)) {
+            throw new IllegalArgumentException("쿠폰명을 입력해주세요.");
+        }
+
+        if (stock < 0) {
+            throw new IllegalArgumentException("쿠폰 갯수는 음수가 될수 없습니다.");
+        }
     }
 
     @DeleteMapping("/{couponToken}")
-    public void deleteCoupon(@PathVariable final UUID couponToken) {
-        couponService.deleteCoupon(couponToken);
+    public UUID deleteCoupon(@PathVariable final UUID couponToken) {
+        return couponService.deleteCoupon(couponToken);
     }
 }

@@ -6,7 +6,6 @@ import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
 import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,10 +21,11 @@ public class CouponService {
     }
 
     @Transactional
-    public void create(final String couponName, final int stock) {
-        validation(couponName, stock);
+    public UUID create(final String couponName, final int stock) {
         Coupon coupon = new Coupon(UUID.randomUUID(), couponName, stock, State.ACTIVITY);
         couponRepository.save(coupon);
+
+        return coupon.getCouponToken();
     }
 
     public List<CouponInfoResponse> getAllCoupons() {
@@ -40,26 +40,18 @@ public class CouponService {
     }
 
     @Transactional
-    public void modifyCoupon(final UUID couponToken, final String couponName, final int stock) {
-        validation(couponName, stock);
+    public UUID modifyCoupon(final UUID couponToken, final String couponName, final int stock) {
         Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
-
         coupon.modify(couponName, stock);
-    }
 
-    private void validation(final String couponName, final int stock) {
-        if (!StringUtils.hasText(couponName)) {
-            throw new IllegalArgumentException("쿠폰명을 입력해주세요.");
-        }
-
-        if (stock < 0) {
-            throw new IllegalArgumentException("쿠폰 갯수는 음수가 될수 없습니다.");
-        }
+        return coupon.getCouponToken();
     }
 
     @Transactional
-    public void deleteCoupon(UUID couponToken) {
+    public UUID deleteCoupon(UUID couponToken) {
         Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
         coupon.delete();
+
+        return coupon.getCouponToken();
     }
 }
