@@ -27,7 +27,7 @@ public class CouponController {
     public UUID create(@RequestBody final CreateCouponRequest createCouponRequest) {
         validation(createCouponRequest.couponName(), createCouponRequest.stock());
 
-        return couponCommandService.create(createCouponRequest.couponName(), createCouponRequest.stock());
+        return couponCommandService.create(createCouponRequest.couponName(), createCouponRequest.stock(), createCouponRequest.couponType(), createCouponRequest.discountValue());
     }
 
     @GetMapping

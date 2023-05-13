@@ -1,6 +1,7 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class CouponCommandService {
         this.couponRepository = couponRepository;
     }
 
-    public UUID create(final String couponName, final int stock) {
-        Coupon coupon = new Coupon(UUID.randomUUID(), couponName, stock, State.ACTIVITY);
+    public UUID create(final String couponName, final int stock, CouponType couponType, int discoutValue) {
+        Coupon coupon = new Coupon(UUID.randomUUID(), couponName, stock, couponType, discoutValue, State.ACTIVITY);
         couponRepository.save(coupon);
 
         return coupon.getCouponToken();

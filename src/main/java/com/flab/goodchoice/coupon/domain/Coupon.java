@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -34,6 +35,13 @@ public class Coupon {
     private int stock;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "coupon_type")
+    private CouponType couponType;
+
+    @Column(name = "discount_value")
+    private BigDecimal discountValue;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
     private State state;
 
@@ -45,14 +53,20 @@ public class Coupon {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Coupon(UUID couponToken, String couponName, int stock, State state) {
+    public Coupon(UUID couponToken, String couponName, int stock, CouponType couponType, BigDecimal discountValue, State state) {
         Assert.hasText(couponName, "쿠폰명을 입력해주세요.");
         Assert.isTrue(stock >= 0, "쿠폰 갯수는 0보다 작을 수 없습니다.");
+        Assert.notNull(couponType, "쿠폰 할인 종류를 입력해주세요.");
+        Assert.isTrue(discountValue.compareTo(BigDecimal.ZERO) > 0, "쿠폰 할인 값은 0보다 작을 수 없습니다.");
 
         this.couponToken = couponToken;
         this.couponName = couponName;
         this.stock = stock;
         this.state = state;
+    }
+
+    public Coupon(UUID couponToken, String couponName, int stock, CouponType couponType, int discountValue, State state) {
+        this(couponToken, couponName, stock, couponType, BigDecimal.valueOf(discountValue), state);
     }
 
     public void modify(String couponName, int stock) {
