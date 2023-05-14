@@ -2,9 +2,8 @@ package com.flab.goodchoice.coupon.api;
 
 import com.flab.goodchoice.coupon.application.CouponCommandService;
 import com.flab.goodchoice.coupon.application.CouponQueryService;
-import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
-import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
-import com.flab.goodchoice.coupon.dto.ModifyCouponRequest;
+import com.flab.goodchoice.coupon.application.CouponUseService;
+import com.flab.goodchoice.coupon.dto.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +16,22 @@ public class CouponController {
 
     private final CouponQueryService couponQueryService;
     private final CouponCommandService couponCommandService;
+    private final CouponUseService couponUseService;
 
-    public CouponController(CouponQueryService couponQueryService, CouponCommandService couponCommandService) {
+    public CouponController(CouponQueryService couponQueryService, CouponCommandService couponCommandService, CouponUseService couponUseService) {
         this.couponQueryService = couponQueryService;
         this.couponCommandService = couponCommandService;
+        this.couponUseService = couponUseService;
+    }
+
+    @PostMapping("/used")
+    public CouponUsedInfoResponse couponUsed(@RequestBody CouponUsedRequest couponUsedRequest) {
+        return couponUseService.couponUsed(couponUsedRequest.couponToken(), couponUsedRequest.price());
+    }
+
+    @PostMapping("/cancel")
+    public CouponUsedCancelInfoResponse couponUsedCancel(@RequestBody CouponUsedRequest couponUsedRequest) {
+        return couponUseService.couponUsedCancel(couponUsedRequest.couponToken(), couponUsedRequest.price());
     }
 
     @PostMapping

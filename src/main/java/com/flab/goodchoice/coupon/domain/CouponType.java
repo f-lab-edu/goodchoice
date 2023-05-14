@@ -1,19 +1,39 @@
 package com.flab.goodchoice.coupon.domain;
 
-import java.math.BigDecimal;
-
 public enum CouponType {
     DISCOUNT("% 할인") {
         @Override
-        BigDecimal calculation(BigDecimal price, int discountValue) {
-            BigDecimal resultValue = BigDecimal.valueOf((100 - discountValue) / 100);
-            return price.multiply(resultValue);
+        public int discountPriceCalculation(int price, int couponValue) {
+            double resultValue = couponValue / 100.0;
+
+            return (int) Math.ceil(price * resultValue);
+        }
+
+        @Override
+        public int usedCalculation(int price, int couponValue) {
+            double resultValue = (100 - couponValue) / 100.0;
+
+            return (int) Math.ceil(price * resultValue);
+        }
+        @Override
+        public int usedCancelCalculation(int price, int couponValue) {
+            double resultValue = 100.0 / (100 - couponValue);
+            return (int) Math.ceil(price * resultValue);
         }
     },
     DEDUCTION("가격 할인") {
         @Override
-        BigDecimal calculation(BigDecimal price, int couponValue) {
-            return price.subtract(BigDecimal.valueOf(couponValue));
+        public int discountPriceCalculation(int price, int couponValue) {
+            return couponValue;
+        }
+
+        @Override
+        public int usedCalculation(int price, int couponValue) {
+            return (int) Math.ceil( price - couponValue);
+        }
+        @Override
+        public int usedCancelCalculation(int price, int couponValue) {
+            return (int) Math.ceil(price + couponValue);
         }
     };
 
@@ -23,5 +43,7 @@ public enum CouponType {
         this.name = name;
     }
 
-    abstract BigDecimal calculation(BigDecimal price, int couponValue);
+    public abstract int discountPriceCalculation(int price, int couponValue);
+    public abstract int usedCalculation(int price, int couponValue);
+    public abstract int usedCancelCalculation(int price, int couponValue);
 }
