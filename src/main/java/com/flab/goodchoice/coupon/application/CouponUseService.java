@@ -1,7 +1,9 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.domain.CouponPublishHistory;
 import com.flab.goodchoice.coupon.domain.CouponType;
+import com.flab.goodchoice.coupon.domain.repositories.CouponHistoryPublishRepository;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
@@ -15,9 +17,11 @@ import java.util.UUID;
 public class CouponUseService {
 
     private final CouponRepository couponRepository;
+    private final CouponHistoryPublishRepository couponHistoryPublishRepository;
 
-    public CouponUseService(CouponRepository couponRepository) {
+    public CouponUseService(CouponRepository couponRepository, CouponHistoryPublishRepository couponHistoryPublishRepository) {
         this.couponRepository = couponRepository;
+        this.couponHistoryPublishRepository = couponHistoryPublishRepository;
     }
 
     public CouponUsedInfoResponse couponUsed(final UUID couponToken, final int price) {
@@ -35,5 +39,15 @@ public class CouponUseService {
 
         int usedCancelPrice = couponType.usedCancelCalculation(price, coupon.getDiscountValue());
         return new CouponUsedCancelInfoResponse(couponToken, price, usedCancelPrice);
+    }
+
+    public UUID couponPublish(final Long memberId, final UUID couponToken) {
+        Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow();
+        CouponPublishHistory couponPublishHistory = new CouponPublishHistory(UUID.randomUUID(), memberId, coupon);
+        couponHistoryPublishRepository.save(couponPublishHistory);
+
+        coupon.usedCoupon();
+
+        return couponPublishHistory.getCouponPublishToken();
     }
 }

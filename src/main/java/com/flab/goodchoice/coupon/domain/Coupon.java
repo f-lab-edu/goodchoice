@@ -79,6 +79,9 @@ public class Coupon {
     }
 
     public void usedCoupon() {
+        if (this.stock <= 0) {
+            throw new IllegalArgumentException("선택된 쿠폰이 모두 소진 되었습니다.");
+        }
         this.stock--;
     }
 
