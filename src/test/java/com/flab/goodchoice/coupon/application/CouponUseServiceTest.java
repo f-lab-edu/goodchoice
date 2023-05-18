@@ -9,12 +9,14 @@ import com.flab.goodchoice.coupon.domain.repositories.InMemoryCouponHistoryPubli
 import com.flab.goodchoice.coupon.domain.repositories.InMemoryCouponRepository;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
+import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,10 +32,12 @@ class CouponUseServiceTest {
     final UUID couponTokenDiscount = UUID.randomUUID();
     final String couponNameDiscount = "10%할인";
     final int stockDiscount = 100;
+    final int discountValue = 10;
 
     final UUID couponTokenDeduction = UUID.randomUUID();
     final String couponNameDeduction = "10000원 차감";
     final int stockDeduction = 100;
+    final int deductionValue = 10000;
 
     Coupon couponDiscount;
     Coupon couponDeduction;
@@ -44,10 +48,10 @@ class CouponUseServiceTest {
         couponHistoryPublishRepository = new InMemoryCouponHistoryPublishRepository();
         couponUseService = new CouponUseService(couponRepository, couponHistoryPublishRepository);
 
-        couponDiscount = new Coupon(couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, 10, State.ACTIVITY);
+        couponDiscount = new Coupon(couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
         couponRepository.save(couponDiscount);
 
-        couponDeduction = new Coupon(couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, 10000, State.ACTIVITY);
+        couponDeduction = new Coupon(couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
         couponRepository.save(couponDeduction);
     }
 
@@ -109,5 +113,19 @@ class CouponUseServiceTest {
 
         assertThatThrownBy(() -> couponUseService.couponPublish(1L, couponTokenDiscount))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("회원이 가진 쿠폰 목록 조회")
+    @Test
+    void memberGetCouponList() {
+        couponUseService.couponPublish(1L, couponTokenDiscount);
+
+        List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponUseService.getMemberCoupon(1L);
+
+        assertAll(
+                () -> assertThat(memberSpecificCouponResponses.get(0).couponId()).isEqualTo(couponTokenDiscount),
+                () -> assertThat(memberSpecificCouponResponses.get(0).couponName()).isEqualTo(couponNameDiscount),
+                () -> assertThat(memberSpecificCouponResponses.get(0).discountValue()).isEqualTo(discountValue)
+        );
     }
 }

@@ -7,9 +7,11 @@ import com.flab.goodchoice.coupon.domain.repositories.CouponHistoryPublishReposi
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
+import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Transactional
@@ -49,5 +51,13 @@ public class CouponUseService {
         coupon.usedCoupon();
 
         return couponPublishHistory.getCouponPublishToken();
+    }
+
+    public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
+        List<CouponPublishHistory> couponPublishHistories = couponHistoryPublishRepository.findCouponHistoryFetchByMemberId(memberId);
+
+        return couponPublishHistories.stream()
+                .map(couponPublishHistory -> new MemberSpecificCouponResponse(couponPublishHistory.getCoupon().getCouponToken(), couponPublishHistory.getCoupon().getCouponName(), couponPublishHistory.getCoupon().getCouponType(), couponPublishHistory.getCoupon().getDiscountValue()))
+                .toList();
     }
 }
