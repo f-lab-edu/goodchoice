@@ -15,7 +15,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "coupon_history")
-public class CouponPublishHistory {
+public class CouponPublish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,13 +31,29 @@ public class CouponPublishHistory {
     @JoinColumn(name = "coupon_id", nullable = false)
     private Coupon coupon;
 
+    @Column(name = "usedYn", nullable = false)
+    private boolean usedYn;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public CouponPublishHistory(UUID couponPublishToken, Long memberId, Coupon coupon) {
+    @Column(name = "used_at")
+    private LocalDateTime usedAt;
+
+    public CouponPublish(UUID couponPublishToken, Long memberId, Coupon coupon, boolean usedYn) {
         this.couponPublishToken = couponPublishToken;
         this.memberId = memberId;
         this.coupon = coupon;
+        this.usedYn = usedYn;
+    }
+
+    public void used() {
+        this.usedYn = true;
+        this.usedAt = LocalDateTime.now();
+    }
+
+    public void cancel() {
+        this.usedYn = false;
     }
 }

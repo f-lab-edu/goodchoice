@@ -1,17 +1,17 @@
 package com.flab.goodchoice.coupon.domain.repositories;
 
 import com.flab.goodchoice.coupon.domain.Coupon;
-import com.flab.goodchoice.coupon.domain.CouponPublishHistory;
+import com.flab.goodchoice.coupon.domain.CouponPublish;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryCouponHistoryPublishRepository implements CouponHistoryPublishRepository {
-    private final Map<Long, CouponPublishHistory> couponPublishHistorys = new HashMap<>();
+public class InMemoryCouponPublishRepository implements CouponPublishRepository {
+    private final Map<Long, CouponPublish> couponPublishHistorys = new HashMap<>();
 
     @Override
-    public CouponPublishHistory save(CouponPublishHistory couponPublishHistory) {
+    public CouponPublish save(CouponPublish couponPublishHistory) {
         couponPublishHistorys.put(couponPublishHistorys.size() + 1L, couponPublishHistory);
         return couponPublishHistory;
     }
@@ -22,7 +22,7 @@ public class InMemoryCouponHistoryPublishRepository implements CouponHistoryPubl
     }
 
     @Override
-    public List<CouponPublishHistory> findCouponHistoryFetchByMemberId(Long memberId) {
+    public List<CouponPublish> findCouponHistoryFetchByMemberId(Long memberId) {
         return couponPublishHistorys.values().stream()
                 .filter(couponPublishHistory -> couponPublishHistory.getMemberId().equals(memberId))
                 .toList();

@@ -1,10 +1,10 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.domain.Coupon;
-import com.flab.goodchoice.coupon.domain.CouponPublishHistory;
+import com.flab.goodchoice.coupon.domain.CouponPublish;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.Member;
-import com.flab.goodchoice.coupon.domain.repositories.CouponHistoryPublishRepository;
+import com.flab.goodchoice.coupon.domain.repositories.CouponPublishRepository;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
 import com.flab.goodchoice.coupon.domain.repositories.MemberRepository;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
@@ -22,12 +22,12 @@ public class CouponUseService {
 
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
-    private final CouponHistoryPublishRepository couponHistoryPublishRepository;
+    private final CouponPublishRepository couponPublishRepository;
 
-    public CouponUseService(MemberRepository memberRepository, CouponRepository couponRepository, CouponHistoryPublishRepository couponHistoryPublishRepository) {
+    public CouponUseService(MemberRepository memberRepository, CouponRepository couponRepository, CouponPublishRepository couponPublishRepository) {
         this.memberRepository = memberRepository;
         this.couponRepository = couponRepository;
-        this.couponHistoryPublishRepository = couponHistoryPublishRepository;
+        this.couponPublishRepository = couponPublishRepository;
     }
 
     public CouponUsedInfoResponse couponUsed(final UUID couponToken, final int price) {
@@ -51,20 +51,20 @@ public class CouponUseService {
         getMemberById(memberId);
 
         Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow();
-        CouponPublishHistory couponPublishHistory = new CouponPublishHistory(UUID.randomUUID(), memberId, coupon);
-        couponHistoryPublishRepository.save(couponPublishHistory);
+        CouponPublish couponPublish = new CouponPublish(UUID.randomUUID(), memberId, coupon, false);
+        couponPublishRepository.save(couponPublish);
 
         coupon.usedCoupon();
 
-        return couponPublishHistory.getCouponPublishToken();
+        return couponPublish.getCouponPublishToken();
     }
 
     public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
         getMemberById(memberId);
 
-        List<CouponPublishHistory> couponPublishHistories = couponHistoryPublishRepository.findCouponHistoryFetchByMemberId(memberId);
+        List<CouponPublish> couponPublishes = couponPublishRepository.findCouponHistoryFetchByMemberId(memberId);
 
-        return couponPublishHistories.stream()
+        return couponPublishes.stream()
                 .map(couponPublishHistory -> new MemberSpecificCouponResponse(couponPublishHistory.getCoupon().getCouponToken(), couponPublishHistory.getCoupon().getCouponName(), couponPublishHistory.getCoupon().getCouponType(), couponPublishHistory.getCoupon().getDiscountValue()))
                 .toList();
     }
