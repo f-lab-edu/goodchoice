@@ -15,15 +15,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-class ItemEntryServiceImplTest {
+class ItemEntryServiceTest {
 
     ItemCommand.RegisterItemRequest 판매준비중_단계의_상품_생성 = new ItemCommand.RegisterItemRequest("제주해비치", 100000L, 10L);
 
     @Autowired
-    private ItemEntryServiceImpl itemEntryServiceImpl;
+    private ItemEntryService itemEntryService;
 
     @Autowired
-    private ItemOneServiceImpl itemOneServiceImpl;
+    private ItemOneService itemOneService;
 
     @Autowired
     private EntityManager em;
@@ -37,11 +37,11 @@ class ItemEntryServiceImplTest {
     @Test
     void create() {
         // when
-        String itemToken = itemEntryServiceImpl.registerItem(판매준비중_단계의_상품_생성);
+        String itemToken = itemEntryService.registerItem(판매준비중_단계의_상품_생성);
 
         em.flush();
 
-        ItemInfo.Main itemInfo = itemOneServiceImpl.retrieveItemInfo(itemToken);
+        ItemInfo.Main itemInfo = itemOneService.retrieveItemInfo(itemToken);
 
         // then
         assertEquals(판매준비중_단계의_상품_생성.getItemName(), itemInfo.getItemName());

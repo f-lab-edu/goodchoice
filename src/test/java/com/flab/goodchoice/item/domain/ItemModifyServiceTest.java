@@ -1,12 +1,10 @@
 package com.flab.goodchoice.item.domain;
 
-import com.flab.goodchoice.item.infrastructure.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-class ItemModifyServiceImplTest {
+class ItemModifyServiceTest {
 
     ItemCommand.RegisterItemRequest 판매준비중_단계의_상품_생성 = new ItemCommand.RegisterItemRequest("제주해비치", 100000L, 10L);
 
@@ -27,12 +25,11 @@ class ItemModifyServiceImplTest {
 
     ItemCommand.UpdateItemRequest 판매준비중_단계의_상품_재고_업데이트 = new ItemCommand.UpdateItemRequest("제주해비치", 100000L, 1L);
 
+    @Autowired
+    private ItemEntryService itemEntryService;
 
     @Autowired
-    private ItemEntryServiceImpl itemEntryServiceImpl;
-
-    @Autowired
-    private ItemModifyServiceImpl itemModifyServiceImpl;
+    private ItemModifyService itemModifyService;
 
     @Autowired
     private EntityManager em;
@@ -46,11 +43,11 @@ class ItemModifyServiceImplTest {
     @Test
     void updateItemName() {
         // when
-        String itemToken = itemEntryServiceImpl.registerItem(판매준비중_단계의_상품_생성);
+        String itemToken = itemEntryService.registerItem(판매준비중_단계의_상품_생성);
 
         em.flush();
 
-        ItemInfo.Main itemInfo = itemModifyServiceImpl.updateItem(itemToken, 판매준비중_단계의_상품_상품명_업데이트);
+        ItemInfo.Main itemInfo = itemModifyService.updateItem(itemToken, 판매준비중_단계의_상품_상품명_업데이트);
 
         // then
         assertEquals(판매준비중_단계의_상품_상품명_업데이트.getItemName(), itemInfo.getItemName());
@@ -62,11 +59,11 @@ class ItemModifyServiceImplTest {
     @Test
     void updateItemPrice() {
         // when
-        String itemToken = itemEntryServiceImpl.registerItem(판매준비중_단계의_상품_생성);
+        String itemToken = itemEntryService.registerItem(판매준비중_단계의_상품_생성);
 
         em.flush();
 
-        ItemInfo.Main itemInfo = itemModifyServiceImpl.updateItem(itemToken, 판매준비중_단계의_상품_가격_업데이트);
+        ItemInfo.Main itemInfo = itemModifyService.updateItem(itemToken, 판매준비중_단계의_상품_가격_업데이트);
 
         // then
         assertEquals(판매준비중_단계의_상품_가격_업데이트.getItemName(), itemInfo.getItemName());
@@ -78,11 +75,11 @@ class ItemModifyServiceImplTest {
     @Test
     void updateItemStock() {
         // when
-        String itemToken = itemEntryServiceImpl.registerItem(판매준비중_단계의_상품_생성);
+        String itemToken = itemEntryService.registerItem(판매준비중_단계의_상품_생성);
 
         em.flush();
 
-        ItemInfo.Main itemInfo = itemModifyServiceImpl.updateItem(itemToken, 판매준비중_단계의_상품_재고_업데이트);
+        ItemInfo.Main itemInfo = itemModifyService.updateItem(itemToken, 판매준비중_단계의_상품_재고_업데이트);
 
         // then
         assertEquals(판매준비중_단계의_상품_재고_업데이트.getItemName(), itemInfo.getItemName());
