@@ -59,6 +59,9 @@ public class CouponPublish {
     }
 
     public void cancel() {
+        if (!this.usedYn) {
+            throw new IllegalArgumentException("사용한 쿠폰만 취소 할 수 있습니다.");
+        }
         this.usedYn = false;
     }
 }

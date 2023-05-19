@@ -32,8 +32,8 @@ public class CouponIssueController {
         return couponUseService.couponUsed(request.memberId(), request.couponToken(), request.price());
     }
 
-    @PostMapping("/cancel")
-    public CouponUsedCancelInfoResponse couponUsedCancel(@RequestBody CouponUsedRequest couponUsedRequest) {
-        return couponUseService.couponUsedCancel(couponUsedRequest.couponToken(), couponUsedRequest.price());
+    @PostMapping("/api/coupons/cancel")
+    public CouponUsedCancelInfoResponse couponUsedCancel(@RequestBody CouponUsedRequest request) {
+        return couponUseService.couponUsedCancel(request.memberId(), request.couponToken(), request.price());
     }
 }
