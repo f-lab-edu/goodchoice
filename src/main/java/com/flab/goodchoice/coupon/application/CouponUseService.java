@@ -3,8 +3,10 @@ package com.flab.goodchoice.coupon.application;
 import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponPublishHistory;
 import com.flab.goodchoice.coupon.domain.CouponType;
+import com.flab.goodchoice.coupon.domain.Member;
 import com.flab.goodchoice.coupon.domain.repositories.CouponHistoryPublishRepository;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
+import com.flab.goodchoice.coupon.domain.repositories.MemberRepository;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
@@ -18,10 +20,12 @@ import java.util.UUID;
 @Service
 public class CouponUseService {
 
+    private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
     private final CouponHistoryPublishRepository couponHistoryPublishRepository;
 
-    public CouponUseService(CouponRepository couponRepository, CouponHistoryPublishRepository couponHistoryPublishRepository) {
+    public CouponUseService(MemberRepository memberRepository, CouponRepository couponRepository, CouponHistoryPublishRepository couponHistoryPublishRepository) {
+        this.memberRepository = memberRepository;
         this.couponRepository = couponRepository;
         this.couponHistoryPublishRepository = couponHistoryPublishRepository;
     }
@@ -44,6 +48,8 @@ public class CouponUseService {
     }
 
     public UUID couponPublish(final Long memberId, final UUID couponToken) {
+        getMemberById(memberId);
+
         Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow();
         CouponPublishHistory couponPublishHistory = new CouponPublishHistory(UUID.randomUUID(), memberId, coupon);
         couponHistoryPublishRepository.save(couponPublishHistory);
@@ -54,10 +60,16 @@ public class CouponUseService {
     }
 
     public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
+        getMemberById(memberId);
+
         List<CouponPublishHistory> couponPublishHistories = couponHistoryPublishRepository.findCouponHistoryFetchByMemberId(memberId);
 
         return couponPublishHistories.stream()
                 .map(couponPublishHistory -> new MemberSpecificCouponResponse(couponPublishHistory.getCoupon().getCouponToken(), couponPublishHistory.getCoupon().getCouponName(), couponPublishHistory.getCoupon().getCouponType(), couponPublishHistory.getCoupon().getDiscountValue()))
                 .toList();
+    }
+
+    private Member getMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
     }
 }
