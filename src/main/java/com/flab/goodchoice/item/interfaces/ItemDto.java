@@ -36,7 +36,6 @@ public class ItemDto {
     @Setter
     @ToString
     public static class UpdateItemRequest {
-//        private String itemToken;
         private String itemName;
         private Long itemPrice;
         private Long itemStock;
