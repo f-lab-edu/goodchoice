@@ -66,6 +66,11 @@ public class Coupon {
         this.state = state;
     }
 
+    public Coupon(Long id, UUID couponToken, String couponName, int stock, CouponType couponType, int discountValue, State state) {
+        this(couponToken, couponName, stock, couponType, discountValue, state);
+        this.id = id;
+    }
+
     public void modify(String couponName, int stock) {
         if (!StringUtils.hasText(couponName)) {
             throw new IllegalArgumentException("빈 쿠폰명으로 수정할 수 없습니다.");

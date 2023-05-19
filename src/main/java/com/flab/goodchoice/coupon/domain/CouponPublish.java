@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "coupon_history")
+@Table(name = "coupon_publish")
 public class CouponPublish {
 
     @Id
@@ -31,7 +31,7 @@ public class CouponPublish {
     @JoinColumn(name = "coupon_id", nullable = false)
     private Coupon coupon;
 
-    @Column(name = "usedYn", nullable = false)
+    @Column(name = "used_yn", nullable = false)
     private boolean usedYn;
 
     @CreatedDate
@@ -46,6 +46,11 @@ public class CouponPublish {
         this.memberId = memberId;
         this.coupon = coupon;
         this.usedYn = usedYn;
+    }
+
+    public CouponPublish(Long id, UUID couponPublishToken, Long memberId, Coupon coupon, boolean usedYn) {
+        this(couponPublishToken, memberId, coupon, usedYn);
+        this.id = id;
     }
 
     public void used() {

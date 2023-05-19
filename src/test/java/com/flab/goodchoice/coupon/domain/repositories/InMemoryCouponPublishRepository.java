@@ -6,25 +6,34 @@ import com.flab.goodchoice.coupon.domain.CouponPublish;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class InMemoryCouponPublishRepository implements CouponPublishRepository {
-    private final Map<Long, CouponPublish> couponPublishHistorys = new HashMap<>();
+    private final Map<Long, CouponPublish> couponPublishs = new HashMap<>();
 
     @Override
     public CouponPublish save(CouponPublish couponPublishHistory) {
-        couponPublishHistorys.put(couponPublishHistorys.size() + 1L, couponPublishHistory);
+        couponPublishs.put(couponPublishs.size() + 1L, couponPublishHistory);
         return couponPublishHistory;
     }
 
     @Override
     public int countByCoupon(Coupon coupon) {
-        return couponPublishHistorys.size();
+        return couponPublishs.size();
     }
 
     @Override
     public List<CouponPublish> findCouponHistoryFetchByMemberId(Long memberId) {
-        return couponPublishHistorys.values().stream()
+        return couponPublishs.values().stream()
                 .filter(couponPublishHistory -> couponPublishHistory.getMemberId().equals(memberId))
                 .toList();
+    }
+
+    @Override
+    public Optional<CouponPublish> findByCouponAndMemberId(Coupon coupon, Long memberId) {
+        return couponPublishs.values().stream()
+                .filter(couponPublish -> couponPublish.getCoupon().getId().equals(coupon.getId()))
+                .filter(couponPublish -> couponPublish.getMemberId().equals(memberId))
+                .findFirst();
     }
 }

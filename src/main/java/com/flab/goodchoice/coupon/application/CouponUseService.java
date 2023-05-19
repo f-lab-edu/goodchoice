@@ -30,8 +30,15 @@ public class CouponUseService {
         this.couponPublishRepository = couponPublishRepository;
     }
 
-    public CouponUsedInfoResponse couponUsed(final UUID couponToken, final int price) {
+    public CouponUsedInfoResponse couponUsed(final Long memberId, final UUID couponToken, final int price) {
+        getMemberById(memberId);
+
         Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+
+        CouponPublish couponPublish = couponPublishRepository.findByCouponAndMemberId(coupon, memberId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 보유하고 있지 않습니다."));
+
+        couponPublish.used();
+
         CouponType couponType = coupon.getCouponType();
 
         int discountPrice = couponType.discountPriceCalculation(price, coupon.getDiscountValue());

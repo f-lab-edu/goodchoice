@@ -16,22 +16,10 @@ public class CouponController {
 
     private final CouponQueryService couponQueryService;
     private final CouponCommandService couponCommandService;
-    private final CouponUseService couponUseService;
 
-    public CouponController(CouponQueryService couponQueryService, CouponCommandService couponCommandService, CouponUseService couponUseService) {
+    public CouponController(CouponQueryService couponQueryService, CouponCommandService couponCommandService) {
         this.couponQueryService = couponQueryService;
         this.couponCommandService = couponCommandService;
-        this.couponUseService = couponUseService;
-    }
-
-    @PostMapping("/used")
-    public CouponUsedInfoResponse couponUsed(@RequestBody CouponUsedRequest couponUsedRequest) {
-        return couponUseService.couponUsed(couponUsedRequest.couponToken(), couponUsedRequest.price());
-    }
-
-    @PostMapping("/cancel")
-    public CouponUsedCancelInfoResponse couponUsedCancel(@RequestBody CouponUsedRequest couponUsedRequest) {
-        return couponUseService.couponUsedCancel(couponUsedRequest.couponToken(), couponUsedRequest.price());
     }
 
     @PostMapping
