@@ -72,6 +72,7 @@ public class CouponUseService {
         return couponPublish.getCouponPublishToken();
     }
 
+    @Transactional(readOnly = true)
     public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
         getMemberById(memberId);
 
