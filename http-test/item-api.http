@@ -1,0 +1,35 @@
+### 아이템 등록
+POST http://localhost:8080/api/v1/items
+Content-Type: application/json
+
+{
+  "itemName": "한옥스테이조아당",
+  "itemPrice": 35000,
+  "itemStock": 10
+}
+
+### 아이템 전체 조회
+GET http://localhost:8080/api/v1/items
+Content-Type: application/json
+
+### 아이템 상세 조회
+GET http://localhost:8080/api/v1/items/itm_m01CJuHJ6ogMx7f0
+Content-Type: application/json
+
+### 아이템 수정
+PUT http://localhost:8080/api/v1/items/itm_m01CJuHJ6ogMx7f0
+Content-Type: application/json
+
+{
+  "itemName": "한옥스테이조아당 업데이트",
+  "itemPrice": 35000,
+  "itemStock": 10
+}
+
+### 아이템 비활성화
+POST http://localhost:8080/api/v1/items/change-end-of-sales
+Content-Type: application/json
+
+{
+  "itemToken": "itm_m01CJuHJ6ogMx7f0"
+}
