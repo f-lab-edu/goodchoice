@@ -2,8 +2,9 @@ package com.flab.goodchoice.coupon.api;
 
 import com.flab.goodchoice.coupon.application.CouponCommandService;
 import com.flab.goodchoice.coupon.application.CouponQueryService;
-import com.flab.goodchoice.coupon.application.CouponUseService;
-import com.flab.goodchoice.coupon.dto.*;
+import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
+import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
+import com.flab.goodchoice.coupon.dto.ModifyCouponRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +36,8 @@ public class CouponController {
     }
 
     @GetMapping("/{couponToken}")
-    public CouponInfoResponse getCouponDetail(@PathVariable final UUID couponToken) {
-        return couponQueryService.getCouponDetail(couponToken);
+    public CouponInfoResponse getCoupon(@PathVariable final UUID couponToken) {
+        return couponQueryService.getCoupon(couponToken);
     }
 
     @PutMapping("/{couponToken}")

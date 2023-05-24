@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.domain.entity.CouponEntity;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
 import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,8 @@ public class CouponQueryService {
                 .toList();
     }
 
-    public CouponInfoResponse getCouponDetail(final UUID couponToken) {
-        Coupon coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+    public CouponInfoResponse getCoupon(final UUID couponToken) {
+        CouponEntity coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
         return new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState());
     }
 }

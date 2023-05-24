@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.domain.entity.CouponEntity;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
@@ -20,7 +20,7 @@ class CouponCommandServiceTest {
     private CouponCommandService couponCommandService;
     private CouponRepository couponRepository;
 
-    Coupon coupon;
+    CouponEntity coupon;
 
     @BeforeEach
     void setUp() {
@@ -28,7 +28,7 @@ class CouponCommandServiceTest {
 
         couponCommandService = new CouponCommandService(couponRepository);
 
-        coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, CouponType.DISCOUNT, 10, State.ACTIVITY);
+        coupon = new CouponEntity(UUID.randomUUID(), "10%할인", 100, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);
     }
 
@@ -40,7 +40,7 @@ class CouponCommandServiceTest {
 
         couponCommandService.create(couponName, stock, CouponType.DISCOUNT, 10);
 
-        Coupon coupon = couponRepository.findById(1L).get();
+        CouponEntity coupon = couponRepository.findById(1L).get();
 
         assertAll(
                 () -> assertThat(coupon.getCouponName()).isEqualTo(couponName),

@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.domain.entity.CouponEntity;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
 import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
@@ -32,7 +32,7 @@ class CouponQueryServiceTest {
 
         couponQueryService = new CouponQueryService(couponRepository);
 
-        final Coupon coupon = new Coupon(couponToken, couponName, stock, CouponType.DISCOUNT, 10, State.ACTIVITY);
+        final CouponEntity coupon = new CouponEntity(couponToken, couponName, stock, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);
     }
 
@@ -42,7 +42,7 @@ class CouponQueryServiceTest {
         final String couponNameSecond = "10%할인";
         final int stockSecond = 100;
 
-        final Coupon couponSecond = new Coupon(UUID.randomUUID(), couponNameSecond, stockSecond, CouponType.DISCOUNT, 10, State.ACTIVITY);
+        final CouponEntity couponSecond = new CouponEntity(UUID.randomUUID(), couponNameSecond, stockSecond, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(couponSecond);
 
         final List<CouponInfoResponse> result = couponQueryService.getAllCoupons();

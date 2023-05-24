@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping()
+@RequestMapping("/api/coupons")
 @RestController
 public class CouponIssueController {
 
@@ -17,23 +17,23 @@ public class CouponIssueController {
         this.couponUseService = couponUseService;
     }
 
-    @PostMapping("/api/coupons/publish")
-    public UUID couponPublish(@RequestBody CouponPublishRequest couponPublishRequest) {
-        return couponUseService.couponPublish(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
+    @PostMapping("/publish")
+    public UUID createCouponPublish(@RequestBody CouponPublishRequest couponPublishRequest) {
+        return couponUseService.createCouponPublish(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
     }
 
-    @GetMapping("/api/coupons/publish/{memberId}")
+    @GetMapping("/publish/{memberId}")
     public List<MemberSpecificCouponResponse> getMemberCoupon(@PathVariable Long memberId) {
         return couponUseService.getMemberCoupon(memberId);
     }
 
-    @PostMapping("/api/coupons/used")
-    public CouponUsedInfoResponse couponUsed(@RequestBody CouponUsedRequest request) {
-        return couponUseService.couponUsed(request.memberId(), request.couponToken(), request.price());
+    @PostMapping("/use")
+    public CouponUsedInfoResponse useCoupon(@RequestBody CouponUsedRequest request) {
+        return couponUseService.useCoupon(request.memberId(), request.couponToken(), request.price());
     }
 
-    @PostMapping("/api/coupons/cancel")
-    public CouponUsedCancelInfoResponse couponUsedCancel(@RequestBody CouponUsedRequest request) {
-        return couponUseService.couponUsedCancel(request.memberId(), request.couponToken(), request.price());
+    @PostMapping("/cancel")
+    public CouponUsedCancelInfoResponse usedCouponCancel(@RequestBody CouponUsedRequest request) {
+        return couponUseService.usedCouponCancel(request.memberId(), request.couponToken(), request.price());
     }
 }
