@@ -1,58 +1,39 @@
 package com.flab.goodchoice.coupon.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-@Entity
-@Table(name = "coupon_publish")
 public class CouponPublish {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "coupon_publish_token", columnDefinition = "BINARY(16)", nullable = false)
     private UUID couponPublishToken;
-
-    @Column(name = "member_id")
     private Long memberId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupon_id", nullable = false)
+    private Long couponId;
+    private boolean usedYn;
+    private LocalDateTime createdAt;
+    private LocalDateTime usedAt;
     private Coupon coupon;
 
-    @Column(name = "used_yn", nullable = false)
-    private boolean usedYn;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "used_at")
-    private LocalDateTime usedAt;
-
-    public CouponPublish(UUID couponPublishToken, Long memberId, Coupon coupon, boolean usedYn) {
+    public CouponPublish(UUID couponPublishToken, Long memberId, Long couponId, boolean usedYn, Coupon coupon) {
         this.couponPublishToken = couponPublishToken;
         this.memberId = memberId;
-        this.coupon = coupon;
+        this.couponId = couponId;
         this.usedYn = usedYn;
+        this.coupon = coupon;
     }
 
-    public CouponPublish(Long id, UUID couponPublishToken, Long memberId, Coupon coupon, boolean usedYn) {
-        this(couponPublishToken, memberId, coupon, usedYn);
+    @Builder
+    public CouponPublish(Long id, UUID couponPublishToken, Long memberId, Long couponId, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt, Coupon coupon) {
+        this(couponPublishToken, memberId, couponId, usedYn, coupon);
         this.id = id;
+        this.createdAt = createdAt;
+        this.usedAt = usedAt;
     }
 
     public void used() {

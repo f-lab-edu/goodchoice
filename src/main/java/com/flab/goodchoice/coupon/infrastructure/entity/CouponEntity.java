@@ -90,6 +90,20 @@ public class CouponEntity {
                 .build();
     }
 
+    public static CouponEntity of(Coupon coupon) {
+        return CouponEntity.builder()
+                .id(coupon.getId())
+                .couponToken(coupon.getCouponToken())
+                .couponName(coupon.getCouponName())
+                .stock(coupon.getStock())
+                .couponType(coupon.getCouponType())
+                .discountValue(coupon.getDiscountValue())
+                .state(coupon.getState())
+                .createdAt(coupon.getCreatedAt())
+                .updatedAt(coupon.getUpdatedAt())
+                .build();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

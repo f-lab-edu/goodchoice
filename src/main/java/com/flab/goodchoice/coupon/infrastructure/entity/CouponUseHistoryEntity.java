@@ -1,0 +1,56 @@
+package com.flab.goodchoice.coupon.infrastructure.entity;
+
+import com.flab.goodchoice.coupon.domain.UseState;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
+@Entity
+@Table(name = "coupon_use_history")
+public class CouponUseHistoryEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private MemberEntity member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coupon_id")
+    private CouponEntity couponEntity;
+
+    @Column(name = "price")
+    private int price;
+
+    @Column(name = "discount_price")
+    private int discountPrice;
+
+    @Column(name = "state")
+    private UseState useState;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    public CouponUseHistoryEntity(MemberEntity member, CouponEntity couponEntity, int price, int discountPrice, UseState useState) {
+        this.member = member;
+        this.couponEntity = couponEntity;
+        this.price = price;
+        this.discountPrice = discountPrice;
+        this.useState = useState;
+    }
+
+    public void cancel() {
+        this.useState = UseState.CANCEL;
+    }
+}
