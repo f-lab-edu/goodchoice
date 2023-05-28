@@ -1,11 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.domain.*;
-import com.flab.goodchoice.coupon.domain.entity.CouponEntity;
-import com.flab.goodchoice.coupon.domain.entity.CouponPublishEntity;
-import com.flab.goodchoice.coupon.domain.repositories.CouponPublishRepository;
-import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
-import com.flab.goodchoice.coupon.domain.repositories.MemberRepository;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
@@ -19,54 +14,75 @@ import java.util.UUID;
 @Service
 public class CouponUseService {
 
-    private final MemberRepository memberRepository;
-    private final CouponRepository couponRepository;
-    private final CouponPublishRepository couponPublishRepository;
+    private final MemberQuery memberQuery;
+    private final CouponQuery couponQuery;
+    private final CouponCommand couponCommand;
+    private final CouponPublishQuery couponPublishQuery;
+    private final CouponPublishCommand couponPublishCommand;
+    private final CouponUseHistoryQuery couponUseHistoryQuery;
+    private final CouponUseHistoryCommand couponUseHistoryCommand;
 
-    public CouponUseService(MemberRepository memberRepository, CouponRepository couponRepository, CouponPublishRepository couponPublishRepository) {
-        this.memberRepository = memberRepository;
-        this.couponRepository = couponRepository;
-        this.couponPublishRepository = couponPublishRepository;
+    public CouponUseService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponPublishQuery couponPublishQuery, CouponPublishCommand couponPublishCommand,
+                            CouponUseHistoryQuery couponUseHistoryQuery, CouponUseHistoryCommand couponUseHistoryCommand) {
+        this.memberQuery = memberQuery;
+        this.couponQuery = couponQuery;
+        this.couponCommand = couponCommand;
+        this.couponPublishQuery = couponPublishQuery;
+        this.couponPublishCommand = couponPublishCommand;
+        this.couponUseHistoryQuery = couponUseHistoryQuery;
+        this.couponUseHistoryCommand = couponUseHistoryCommand;
     }
 
     public CouponUsedInfoResponse useCoupon(final Long memberId, final UUID couponToken, final int price) {
-        getMemberById(memberId);
+        Member member = getMemberById(memberId);
 
-        CouponEntity coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+        Coupon coupon = couponQuery.findByCouponToken(couponToken);
 
-        CouponPublishEntity couponPublish = couponPublishRepository.findByCouponAndMemberId(coupon, memberId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 보유하고 있지 않습니다."));
+        CouponPublish couponPublish = couponPublishQuery.findByCouponEntityIdAndMemberId(coupon.getId(), memberId);
+
         couponPublish.used();
+        couponPublishCommand.modify(couponPublish);
 
         CouponType couponType = coupon.getCouponType();
 
         int discountPrice = couponType.discountPriceCalculation(price, coupon.getDiscountValue());
-        int resultPrice = couponType.usedCalculation(price, coupon.getDiscountValue());
+        int resultPrice = couponType.useCalculation(price, coupon.getDiscountValue());
+
+        couponUseHistoryCommand.save(new CouponUseHistory(member, coupon, price, discountPrice, UseState.USE));
+
         return new CouponUsedInfoResponse(couponToken, price, discountPrice, resultPrice);
     }
 
     public CouponUsedCancelInfoResponse usedCouponCancel(final Long memberId, final UUID couponToken, final int price) {
-        getMemberById(memberId);
+        Member member = getMemberById(memberId);
 
-        CouponEntity coupon = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+        Coupon coupon = couponQuery.findByCouponToken(couponToken);
 
-        CouponPublishEntity couponPublish = couponPublishRepository.findByCouponAndMemberId(coupon, memberId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 보유하고 있지 않습니다."));
+        CouponPublish couponPublish = couponPublishQuery.findByCouponEntityIdAndMemberId(coupon.getId(), memberId);
 
         couponPublish.cancel();
+        couponPublishCommand.modify(couponPublish);
 
         CouponType couponType = coupon.getCouponType();
 
         int usedCancelPrice = couponType.usedCancelCalculation(price, coupon.getDiscountValue());
+
+        CouponUseHistory couponUseHistory = couponUseHistoryQuery.findByMemberIdAndCouponEntityId(member, coupon);
+        couponUseHistory.cancel();
+
+
         return new CouponUsedCancelInfoResponse(couponToken, price, usedCancelPrice);
     }
 
     public UUID createCouponPublish(final Long memberId, final UUID couponToken) {
-        getMemberById(memberId);
+        Member member = getMemberById(memberId);
 
-        CouponEntity coupon = couponRepository.findByCouponTokenLock(couponToken).orElseThrow();
-        CouponPublishEntity couponPublish = new CouponPublishEntity(UUID.randomUUID(), memberId, coupon, false);
-        couponPublishRepository.save(couponPublish);
+        Coupon coupon = couponQuery.findByCouponTokenLock(couponToken);
+        CouponPublish couponPublish = new CouponPublish(UUID.randomUUID(), member, coupon, false);
+        couponPublishCommand.save(couponPublish);
 
-        coupon.usedCoupon();
+        coupon.useCoupon();
+        couponCommand.modify(coupon);
 
         return couponPublish.getCouponPublishToken();
     }
@@ -75,14 +91,14 @@ public class CouponUseService {
     public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
         getMemberById(memberId);
 
-        List<CouponPublishEntity> couponPublishes = couponPublishRepository.findCouponHistoryFetchByMemberId(memberId);
+        List<CouponPublish> couponPublishes = couponPublishQuery.findCouponHistoryFetchByMemberId(memberId);
 
         return couponPublishes.stream()
-                .map(couponPublishHistory -> new MemberSpecificCouponResponse(couponPublishHistory.getCoupon().getCouponToken(), couponPublishHistory.getCoupon().getCouponName(), couponPublishHistory.getCoupon().getCouponType(), couponPublishHistory.getCoupon().getDiscountValue()))
+                .map(couponPublish -> new MemberSpecificCouponResponse(couponPublish.getCoupon().getCouponToken(), couponPublish.getCoupon().getCouponName(), couponPublish.getCoupon().getCouponType(), couponPublish.getCoupon().getDiscountValue()))
                 .toList();
     }
 
     private Member getMemberById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+        return memberQuery.findById(memberId);
     }
 }

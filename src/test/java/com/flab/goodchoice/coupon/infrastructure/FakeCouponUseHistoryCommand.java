@@ -6,14 +6,12 @@ import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponUseHistoryEntity;
 import com.flab.goodchoice.coupon.infrastructure.entity.MemberEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponUseHistoryRepository;
-import org.springframework.stereotype.Component;
 
-@Component
-public class CouponUseHistoryCommandImpl implements CouponUseHistoryCommand {
+public class FakeCouponUseHistoryCommand implements CouponUseHistoryCommand {
 
-    private final CouponUseHistoryRepository couponUseHistoryRepository;
+    private CouponUseHistoryRepository couponUseHistoryRepository;
 
-    public CouponUseHistoryCommandImpl(CouponUseHistoryRepository couponUseHistoryRepository) {
+    public FakeCouponUseHistoryCommand(CouponUseHistoryRepository couponUseHistoryRepository) {
         this.couponUseHistoryRepository = couponUseHistoryRepository;
     }
 

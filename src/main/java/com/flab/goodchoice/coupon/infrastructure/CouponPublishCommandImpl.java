@@ -4,6 +4,7 @@ import com.flab.goodchoice.coupon.application.CouponPublishCommand;
 import com.flab.goodchoice.coupon.domain.CouponPublish;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponPublishEntity;
+import com.flab.goodchoice.coupon.infrastructure.entity.MemberEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponPublishRepository;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ public class CouponPublishCommandImpl implements CouponPublishCommand {
     public CouponPublish save(CouponPublish couponPublish) {
         CouponPublishEntity couponPublishEntity = CouponPublishEntity.builder()
                 .couponPublishToken(couponPublish.getCouponPublishToken())
-                .memberId(couponPublish.getMemberId())
+                .memberEntity(MemberEntity.of(couponPublish.getMember()))
                 .couponEntity(CouponEntity.of(couponPublish.getCoupon()))
                 .usedYn(couponPublish.isUsedYn())
                 .build();
@@ -35,7 +36,7 @@ public class CouponPublishCommandImpl implements CouponPublishCommand {
         CouponPublishEntity couponPublishEntity = CouponPublishEntity.builder()
                 .id(couponPublish.getId())
                 .couponPublishToken(couponPublish.getCouponPublishToken())
-                .memberId(couponPublish.getMemberId())
+                .memberEntity(MemberEntity.of(couponPublish.getMember()))
                 .couponEntity(CouponEntity.of(couponPublish.getCoupon()))
                 .usedYn(couponPublish.isUsedYn())
                 .createdAt(couponPublish.getCreatedAt())

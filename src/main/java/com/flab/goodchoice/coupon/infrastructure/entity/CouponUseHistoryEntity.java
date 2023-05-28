@@ -66,8 +66,8 @@ public class CouponUseHistoryEntity {
     public CouponUseHistory toCouponUseHistory() {
         return CouponUseHistory.builder()
                 .id(getId())
-                .member(getMember())
-                .couponEntity(getCouponEntity())
+                .member(getMember().toMember())
+                .coupon(getCouponEntity().toCoupon())
                 .price(getPrice())
                 .discountPrice(getDiscountPrice())
                 .useState(getUseState())

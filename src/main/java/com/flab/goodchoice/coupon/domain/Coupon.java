@@ -62,7 +62,7 @@ public class Coupon {
         this.stock = stock;
     }
 
-    public void usedCoupon() {
+    public void useCoupon() {
         if (this.stock <= 0) {
             throw new IllegalArgumentException("선택된 쿠폰이 모두 소진 되었습니다.");
         }

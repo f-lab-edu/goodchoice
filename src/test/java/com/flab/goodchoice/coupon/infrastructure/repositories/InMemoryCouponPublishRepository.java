@@ -12,6 +12,15 @@ public class InMemoryCouponPublishRepository implements CouponPublishRepository 
 
     @Override
     public CouponPublishEntity save(CouponPublishEntity couponPublishHistory) {
+        if (couponPublishs.containsValue(couponPublishHistory)) {
+            for (Long key : couponPublishs.keySet()) {
+                if (couponPublishs.get(key).equals(couponPublishHistory)) {
+                    couponPublishs.put(key, couponPublishHistory);
+                    return couponPublishHistory;
+                }
+            }
+        }
+
         couponPublishs.put(couponPublishs.size() + 1L, couponPublishHistory);
         return couponPublishHistory;
     }
@@ -24,7 +33,7 @@ public class InMemoryCouponPublishRepository implements CouponPublishRepository 
     @Override
     public List<CouponPublishEntity> findCouponHistoryFetchByMemberId(Long memberId) {
         return couponPublishs.values().stream()
-                .filter(couponPublishHistory -> couponPublishHistory.getMemberId().equals(memberId))
+                .filter(couponPublishHistory -> couponPublishHistory.getMemberEntity().getId().equals(memberId))
                 .toList();
     }
 
@@ -32,7 +41,7 @@ public class InMemoryCouponPublishRepository implements CouponPublishRepository 
     public Optional<CouponPublishEntity> findByCouponEntityIdAndMemberId(Long couponId, Long memberId) {
         return couponPublishs.values().stream()
                 .filter(couponPublish -> couponPublish.getCouponEntity().getId().equals(couponId))
-                .filter(couponPublish -> couponPublish.getMemberId().equals(memberId))
+                .filter(couponPublish -> couponPublish.getMemberEntity().getId().equals(memberId))
                 .findFirst();
     }
 }

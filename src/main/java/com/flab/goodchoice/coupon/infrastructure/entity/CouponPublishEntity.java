@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -27,8 +28,9 @@ public class CouponPublishEntity {
     @Column(name = "coupon_publish_token", columnDefinition = "BINARY(16)", nullable = false)
     private UUID couponPublishToken;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private MemberEntity memberEntity;
 
     @ManyToOne
     @JoinColumn(name = "coupon_id")
@@ -45,21 +47,21 @@ public class CouponPublishEntity {
     @Column(name = "used_at")
     private LocalDateTime usedAt;
 
-    public CouponPublishEntity(UUID couponPublishToken, Long memberId, CouponEntity couponEntity, boolean usedYn) {
+    public CouponPublishEntity(UUID couponPublishToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn) {
         this.couponPublishToken = couponPublishToken;
-        this.memberId = memberId;
+        this.memberEntity = memberEntity;
         this.couponEntity = couponEntity;
         this.usedYn = usedYn;
     }
 
-    public CouponPublishEntity(Long id, UUID couponPublishToken, Long memberId, CouponEntity couponEntity, boolean usedYn) {
-        this(couponPublishToken, memberId, couponEntity, usedYn);
+    public CouponPublishEntity(Long id, UUID couponPublishToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn) {
+        this(couponPublishToken, memberEntity, couponEntity, usedYn);
         this.id = id;
     }
 
     @Builder
-    public CouponPublishEntity(Long id, UUID couponPublishToken, Long memberId, CouponEntity couponEntity, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
-        this(id, couponPublishToken, memberId, couponEntity, usedYn);
+    public CouponPublishEntity(Long id, UUID couponPublishToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
+        this(id, couponPublishToken, memberEntity, couponEntity, usedYn);
         this.createdAt = createdAt;
         this.usedAt = usedAt;
     }
@@ -68,12 +70,24 @@ public class CouponPublishEntity {
         return CouponPublish.builder()
                 .id(getId())
                 .couponPublishToken(getCouponPublishToken())
-                .memberId(getMemberId())
-                .couponId(getCouponEntity().getId())
+                .member(getMemberEntity().toMember())
+                .coupon(getCouponEntity().toCoupon())
                 .usedYn(isUsedYn())
                 .createdAt(getCreatedAt())
                 .usedAt(getUsedAt())
                 .coupon(getCouponEntity().toCoupon())
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CouponPublishEntity that)) return false;
+        return Objects.equals(couponPublishToken, that.couponPublishToken);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(couponPublishToken);
     }
 }

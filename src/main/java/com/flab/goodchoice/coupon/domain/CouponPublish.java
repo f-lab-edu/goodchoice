@@ -13,24 +13,27 @@ import java.util.UUID;
 public class CouponPublish {
     private Long id;
     private UUID couponPublishToken;
-    private Long memberId;
-    private Long couponId;
+    private Member member;
+    private Coupon coupon;
     private boolean usedYn;
     private LocalDateTime createdAt;
     private LocalDateTime usedAt;
-    private Coupon coupon;
 
-    public CouponPublish(UUID couponPublishToken, Long memberId, Long couponId, boolean usedYn, Coupon coupon) {
+    public CouponPublish(UUID couponPublishToken, Member member, Coupon coupon, boolean usedYn) {
         this.couponPublishToken = couponPublishToken;
-        this.memberId = memberId;
-        this.couponId = couponId;
-        this.usedYn = usedYn;
+        this.member = member;
         this.coupon = coupon;
+        this.usedYn = usedYn;
+    }
+
+    public CouponPublish(Long id, UUID couponPublishToken, Member member, Coupon coupon, boolean usedYn) {
+        this(couponPublishToken, member, coupon, usedYn);
+        this.id = id;
     }
 
     @Builder
-    public CouponPublish(Long id, UUID couponPublishToken, Long memberId, Long couponId, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt, Coupon coupon) {
-        this(couponPublishToken, memberId, couponId, usedYn, coupon);
+    public CouponPublish(Long id, UUID couponPublishToken, Member member, Coupon coupon, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
+        this(couponPublishToken, member, coupon, usedYn);
         this.id = id;
         this.createdAt = createdAt;
         this.usedAt = usedAt;
