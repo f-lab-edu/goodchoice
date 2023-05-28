@@ -1,7 +1,9 @@
 package com.flab.goodchoice.coupon.infrastructure.entity;
 
+import com.flab.goodchoice.coupon.domain.CouponUseHistory;
 import com.flab.goodchoice.coupon.domain.UseState;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -50,7 +52,26 @@ public class CouponUseHistoryEntity {
         this.useState = useState;
     }
 
-    public void cancel() {
-        this.useState = UseState.CANCEL;
+    @Builder
+    public CouponUseHistoryEntity(Long id, MemberEntity member, CouponEntity couponEntity, int price, int discountPrice, UseState useState, LocalDateTime createdAt) {
+        this.id = id;
+        this.member = member;
+        this.couponEntity = couponEntity;
+        this.price = price;
+        this.discountPrice = discountPrice;
+        this.useState = useState;
+        this.createdAt = createdAt;
+    }
+
+    public CouponUseHistory toCouponUseHistory() {
+        return CouponUseHistory.builder()
+                .id(getId())
+                .member(getMember())
+                .couponEntity(getCouponEntity())
+                .price(getPrice())
+                .discountPrice(getDiscountPrice())
+                .useState(getUseState())
+                .createdAt(getCreatedAt())
+                .build();
     }
 }
