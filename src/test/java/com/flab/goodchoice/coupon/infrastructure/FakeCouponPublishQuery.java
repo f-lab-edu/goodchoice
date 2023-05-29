@@ -6,6 +6,7 @@ import com.flab.goodchoice.coupon.infrastructure.entity.CouponPublishEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponPublishRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,11 +19,6 @@ public class FakeCouponPublishQuery implements CouponPublishQuery {
     }
 
     @Override
-    public int countByCouponEntityId(Long couponId) {
-        return couponPublishRepository.countByCouponEntityId(couponId);
-    }
-
-    @Override
     public List<CouponPublish> findCouponHistoryFetchByMemberId(Long memberId) {
         return couponPublishRepository.findCouponHistoryFetchByMemberId(memberId).stream()
                 .map(CouponPublishEntity::toCouponPublish)
@@ -30,8 +26,8 @@ public class FakeCouponPublishQuery implements CouponPublishQuery {
     }
 
     @Override
-    public CouponPublish findByCouponEntityIdAndMemberEntityId(Long couponId, Long memberId) {
-        CouponPublishEntity couponPublishEntity = couponPublishRepository.findByCouponEntityIdAndMemberEntityId(couponId, memberId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 보유하고 있지 않습니다."));
+    public CouponPublish findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId) {
+        CouponPublishEntity couponPublishEntity = couponPublishRepository.findByCouponPublishTokenAndMemberEntityId(couponPublishToken, memberId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 보유하고 있지 않습니다."));
         return couponPublishEntity.toCouponPublish();
     }
 }

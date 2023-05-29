@@ -37,6 +37,7 @@ public class CouponUseHistoryEntity {
     @Column(name = "discount_price")
     private int discountPrice;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "state")
     private UseState useState;
 

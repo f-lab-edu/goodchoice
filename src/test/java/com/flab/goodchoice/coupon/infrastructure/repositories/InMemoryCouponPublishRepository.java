@@ -2,10 +2,7 @@ package com.flab.goodchoice.coupon.infrastructure.repositories;
 
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponPublishEntity;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class InMemoryCouponPublishRepository implements CouponPublishRepository {
     private final Map<Long, CouponPublishEntity> couponPublishs = new HashMap<>();
@@ -38,9 +35,9 @@ public class InMemoryCouponPublishRepository implements CouponPublishRepository 
     }
 
     @Override
-    public Optional<CouponPublishEntity> findByCouponEntityIdAndMemberEntityId(Long couponId, Long memberId) {
+    public Optional<CouponPublishEntity> findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId) {
         return couponPublishs.values().stream()
-                .filter(couponPublish -> couponPublish.getCouponEntity().getId().equals(couponId))
+                .filter(couponPublish -> couponPublish.getCouponPublishToken().equals(couponPublishToken))
                 .filter(couponPublish -> couponPublish.getMemberEntity().getId().equals(memberId))
                 .findFirst();
     }

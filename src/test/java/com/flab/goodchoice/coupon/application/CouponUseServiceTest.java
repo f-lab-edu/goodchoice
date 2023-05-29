@@ -97,7 +97,7 @@ class CouponUseServiceTest {
     void couponUsedDiscount(int prePrice, int discountPrice, int result) {
         couponPublishCommand.save(new CouponPublish(1L, CouponPublishToken, member, couponDiscount, false));
 
-        CouponUsedInfoResponse couponUsedInfoResponse = couponUseService.useCoupon(memberId, couponTokenDiscount, prePrice);
+        CouponUsedInfoResponse couponUsedInfoResponse = couponUseService.useCoupon(memberId, CouponPublishToken, prePrice);
 
         assertAll(
                 () -> assertThat(couponUsedInfoResponse.discountPrice()).isEqualTo(discountPrice),
@@ -111,7 +111,7 @@ class CouponUseServiceTest {
     void couponUsedDeduction(int prePrice, int discountPrice, int result) {
         couponPublishCommand.save(new CouponPublish(1L, CouponPublishToken, member, couponDeduction, false));
 
-        CouponUsedInfoResponse couponUsedInfoResponse = couponUseService.useCoupon(memberId, couponTokenDeduction, prePrice);
+        CouponUsedInfoResponse couponUsedInfoResponse = couponUseService.useCoupon(memberId, CouponPublishToken, prePrice);
 
         assertAll(
                 () -> assertThat(couponUsedInfoResponse.discountPrice()).isEqualTo(discountPrice),
@@ -148,9 +148,9 @@ class CouponUseServiceTest {
     void couponUsedCancelDiscount(int prePrice, int result) {
         couponPublishCommand.save(new CouponPublish(1L, CouponPublishToken, member, couponDiscount, false));
 
-        couponUseService.useCoupon(memberId, couponTokenDiscount, prePrice);
+        couponUseService.useCoupon(memberId, CouponPublishToken, prePrice);
 
-        CouponUsedCancelInfoResponse couponUsedCancelInfoResponse = couponUseService.usedCouponCancel(memberId, couponTokenDiscount, prePrice);
+        CouponUsedCancelInfoResponse couponUsedCancelInfoResponse = couponUseService.usedCouponCancel(memberId, CouponPublishToken, prePrice);
 
         assertThat(couponUsedCancelInfoResponse.resultPrice()).isEqualTo(result);
     }
@@ -161,9 +161,9 @@ class CouponUseServiceTest {
     void couponUsedCancelDeduction(int prePrice, int result) {
         couponPublishCommand.save(new CouponPublish(1L, CouponPublishToken, member, couponDeduction, false));
 
-        couponUseService.useCoupon(memberId, couponTokenDeduction, prePrice);
+        couponUseService.useCoupon(memberId, CouponPublishToken, prePrice);
 
-        CouponUsedCancelInfoResponse couponUsedCancelInfoResponse = couponUseService.usedCouponCancel(memberId, couponTokenDeduction, prePrice);
+        CouponUsedCancelInfoResponse couponUsedCancelInfoResponse = couponUseService.usedCouponCancel(memberId, CouponPublishToken, prePrice);
 
         assertThat(couponUsedCancelInfoResponse.resultPrice()).isEqualTo(result);
     }
@@ -242,12 +242,13 @@ class CouponUseServiceTest {
         );
     }
 
-    @DisplayName("존재하지 않은 회원이 가진 쿠폰 목록 조회시 에러")
+    @DisplayName("쿠폰을 가지지 않은 회원이 쿠폰 조회시 빈 목록 리턴")
     @Test
     void NoneMemberGetCouponList() {
         couponUseService.createCouponPublish(memberId, couponTokenDiscount);
 
-        assertThatThrownBy(() -> couponUseService.getMemberCoupon(noneMemberId))
-                .isInstanceOf(IllegalArgumentException.class);
+        List<MemberSpecificCouponResponse> result = couponUseService.getMemberCoupon(noneMemberId);
+
+        assertThat(result.size()).isEqualTo(0);
     }
 }

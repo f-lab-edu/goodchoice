@@ -36,7 +36,7 @@ public class CouponCommandService {
     }
 
     public UUID modifyCoupon(UUID couponToken, String couponName, int stock) {
-        Coupon coupon = couponQuery.findByCouponToken(couponToken);
+        Coupon coupon = getCoupon(couponToken);
 
         coupon.modify(couponName, stock);
         couponCommand.modify(coupon);
@@ -45,11 +45,15 @@ public class CouponCommandService {
     }
 
     public UUID removeCoupon(UUID couponToken) {
-        Coupon coupon = couponQuery.findByCouponToken(couponToken);
+        Coupon coupon = getCoupon(couponToken);
 
         coupon.delete();
         couponCommand.modify(coupon);
 
         return coupon.getCouponToken();
+    }
+
+    private Coupon getCoupon(UUID couponToken) {
+        return couponQuery.findByCouponToken(couponToken);
     }
 }

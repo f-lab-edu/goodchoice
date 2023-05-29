@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface CouponPublishRepository {
     CouponPublishEntity save(CouponPublishEntity couponPublishHistory);
@@ -14,5 +15,5 @@ public interface CouponPublishRepository {
     @Query("select cph from CouponPublishEntity cph join fetch cph.couponEntity")
     List<CouponPublishEntity> findCouponHistoryFetchByMemberId(Long memberId);
 
-    Optional<CouponPublishEntity> findByCouponEntityIdAndMemberEntityId(Long couponId, Long memberId);
+    Optional<CouponPublishEntity> findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId);
 }

@@ -20,12 +20,12 @@ public class CouponQueryService {
 
     public List<CouponInfoResponse> getAllCoupons() {
         return couponQuery.findAll().stream()
-                .map(coupon -> new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState()))
+                .map(CouponInfoResponse::of)
                 .toList();
     }
 
     public CouponInfoResponse getCoupon(final UUID couponToken) {
         Coupon coupon = couponQuery.findByCouponToken(couponToken);
-        return new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState());
+        return CouponInfoResponse.of(coupon);
     }
 }

@@ -27,4 +27,19 @@ public class FakeCouponUseHistoryCommand implements CouponUseHistoryCommand {
 
         return couponUseHistoryRepository.save(couponUseHistoryEntity).toCouponUseHistory();
     }
+
+    @Override
+    public void modify(CouponUseHistory couponUseHistory) {
+        CouponUseHistoryEntity couponUseHistoryEntity = CouponUseHistoryEntity.builder()
+                .id(couponUseHistory.getId())
+                .member(MemberEntity.of(couponUseHistory.getMember()))
+                .couponEntity(CouponEntity.of(couponUseHistory.getCoupon()))
+                .price(couponUseHistory.getPrice())
+                .discountPrice(couponUseHistory.getDiscountPrice())
+                .useState(couponUseHistory.getUseState())
+                .createdAt(couponUseHistory.getCreatedAt())
+                .build();
+
+        couponUseHistoryRepository.save(couponUseHistoryEntity);
+    }
 }

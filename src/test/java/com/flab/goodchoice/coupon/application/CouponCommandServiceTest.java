@@ -1,5 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
+import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
 import com.flab.goodchoice.coupon.infrastructure.*;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.domain.CouponType;
@@ -43,7 +44,9 @@ class CouponCommandServiceTest {
         final String couponName = "10%할인";
         final int stock = 100;
 
-        couponCommandService.createCoupon(couponName, stock, CouponType.DISCOUNT, 10);
+        CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
+
+        couponCommandService.createCoupon(createCouponRequest);
 
         CouponEntity coupon = couponRepository.findById(1L).get();
 
@@ -59,7 +62,9 @@ class CouponCommandServiceTest {
         final String couponName = "";
         final int stock = 100;
 
-        assertThatThrownBy(() -> couponCommandService.createCoupon(couponName, stock, CouponType.DISCOUNT, 10))
+        CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
+
+        assertThatThrownBy(() -> couponCommandService.createCoupon(createCouponRequest))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -69,7 +74,8 @@ class CouponCommandServiceTest {
         final String couponName = "10%할인";
         final int stock = -1;
 
-        assertThatThrownBy(() -> couponCommandService.createCoupon(couponName, stock, CouponType.DISCOUNT, 10))
+        CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
+        assertThatThrownBy(() -> couponCommandService.createCoupon(createCouponRequest))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

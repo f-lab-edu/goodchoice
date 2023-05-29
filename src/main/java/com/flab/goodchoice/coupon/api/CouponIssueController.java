@@ -30,11 +30,11 @@ public class CouponIssueController {
 
     @PostMapping("/use")
     public CouponUsedInfoResponse useCoupon(@RequestBody @Valid CouponUsedRequest request) {
-        return couponUseService.useCoupon(request.memberId(), request.couponToken(), request.price());
+        return couponUseService.useCoupon(request.memberId(), request.couponPublishToken(), request.price());
     }
 
     @PostMapping("/cancel")
     public CouponUsedCancelInfoResponse usedCouponCancel(@RequestBody @Valid CouponUsedRequest request) {
-        return couponUseService.usedCouponCancel(request.memberId(), request.couponToken(), request.price());
+        return couponUseService.usedCouponCancel(request.memberId(), request.couponPublishToken(), request.price());
     }
 }

@@ -3,11 +3,10 @@ package com.flab.goodchoice.coupon.application;
 import com.flab.goodchoice.coupon.domain.CouponPublish;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CouponPublishQuery {
-    int countByCouponEntityId(Long couponId);
-
     List<CouponPublish> findCouponHistoryFetchByMemberId(Long memberId);
 
-    CouponPublish findByCouponEntityIdAndMemberEntityId(Long couponId, Long memberId);
+    CouponPublish findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId);
 }
