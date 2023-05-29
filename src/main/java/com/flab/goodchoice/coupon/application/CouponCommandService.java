@@ -20,7 +20,7 @@ public class CouponCommandService {
         this.couponCommand = couponCommand;
     }
 
-    public UUID create(final String couponName, final int stock, CouponType couponType, int discoutValue) {
+    public UUID createCoupon(final String couponName, final int stock, CouponType couponType, int discoutValue) {
         Coupon coupon = new Coupon(UUID.randomUUID(), couponName, stock, couponType, discoutValue, State.ACTIVITY);
         couponCommand.save(coupon);
 
@@ -36,7 +36,7 @@ public class CouponCommandService {
         return coupon.getCouponToken();
     }
 
-    public UUID deleteCoupon(UUID couponToken) {
+    public UUID removeCoupon(UUID couponToken) {
         Coupon coupon = couponQuery.findByCouponToken(couponToken);
 
         coupon.delete();

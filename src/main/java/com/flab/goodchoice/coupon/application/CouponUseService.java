@@ -38,7 +38,7 @@ public class CouponUseService {
 
         Coupon coupon = couponQuery.findByCouponToken(couponToken);
 
-        CouponPublish couponPublish = couponPublishQuery.findByCouponEntityIdAndMemberId(coupon.getId(), memberId);
+        CouponPublish couponPublish = couponPublishQuery.findByCouponEntityIdAndMemberEntityId(coupon.getId(), memberId);
 
         couponPublish.used();
         couponPublishCommand.modify(couponPublish);
@@ -58,7 +58,7 @@ public class CouponUseService {
 
         Coupon coupon = couponQuery.findByCouponToken(couponToken);
 
-        CouponPublish couponPublish = couponPublishQuery.findByCouponEntityIdAndMemberId(coupon.getId(), memberId);
+        CouponPublish couponPublish = couponPublishQuery.findByCouponEntityIdAndMemberEntityId(coupon.getId(), memberId);
 
         couponPublish.cancel();
         couponPublishCommand.modify(couponPublish);
@@ -89,8 +89,6 @@ public class CouponUseService {
 
     @Transactional(readOnly = true)
     public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
-        getMemberById(memberId);
-
         List<CouponPublish> couponPublishes = couponPublishQuery.findCouponHistoryFetchByMemberId(memberId);
 
         return couponPublishes.stream()

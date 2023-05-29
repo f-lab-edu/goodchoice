@@ -43,7 +43,7 @@ class CouponCommandServiceTest {
         final String couponName = "10%할인";
         final int stock = 100;
 
-        couponCommandService.create(couponName, stock, CouponType.DISCOUNT, 10);
+        couponCommandService.createCoupon(couponName, stock, CouponType.DISCOUNT, 10);
 
         CouponEntity coupon = couponRepository.findById(1L).get();
 
@@ -59,7 +59,7 @@ class CouponCommandServiceTest {
         final String couponName = "";
         final int stock = 100;
 
-        assertThatThrownBy(() -> couponCommandService.create(couponName, stock, CouponType.DISCOUNT, 10))
+        assertThatThrownBy(() -> couponCommandService.createCoupon(couponName, stock, CouponType.DISCOUNT, 10))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -69,7 +69,7 @@ class CouponCommandServiceTest {
         final String couponName = "10%할인";
         final int stock = -1;
 
-        assertThatThrownBy(() -> couponCommandService.create(couponName, stock, CouponType.DISCOUNT, 10))
+        assertThatThrownBy(() -> couponCommandService.createCoupon(couponName, stock, CouponType.DISCOUNT, 10))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -109,7 +109,7 @@ class CouponCommandServiceTest {
     @DisplayName("쿠폰 삭제")
     @Test
     void deleteCoupon() {
-        couponCommandService.deleteCoupon(coupon.getCouponToken());
+        couponCommandService.removeCoupon(coupon.getCouponToken());
 
         CouponEntity findCouponEntity = couponRepository.findByCouponToken(coupon.getCouponToken()).orElseThrow();
 

@@ -39,13 +39,8 @@ public class Coupon {
 
     @Builder
     public Coupon(Long id, UUID couponToken, String couponName, int stock, CouponType couponType, int discountValue, State state, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(couponToken, couponName, stock, couponType, discountValue, state);
         this.id = id;
-        this.couponToken = couponToken;
-        this.couponName = couponName;
-        this.stock = stock;
-        this.couponType = couponType;
-        this.discountValue = discountValue;
-        this.state = state;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

@@ -6,9 +6,7 @@ import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponPublishEntity;
 import com.flab.goodchoice.coupon.infrastructure.entity.MemberEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponPublishRepository;
-import org.springframework.stereotype.Component;
 
-@Component
 public class FakeCouponPublishCommand implements CouponPublishCommand {
 
     private final CouponPublishRepository couponPublishRepository;

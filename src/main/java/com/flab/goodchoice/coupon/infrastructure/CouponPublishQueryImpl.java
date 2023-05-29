@@ -32,8 +32,8 @@ public class CouponPublishQueryImpl implements CouponPublishQuery {
     }
 
     @Override
-    public CouponPublish findByCouponEntityIdAndMemberId(Long couponId, Long memberId) {
-        CouponPublishEntity couponPublishEntity = couponPublishRepository.findByCouponEntityIdAndMemberId(couponId, memberId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 보유하고 있지 않습니다."));
+    public CouponPublish findByCouponEntityIdAndMemberEntityId(Long couponId, Long memberId) {
+        CouponPublishEntity couponPublishEntity = couponPublishRepository.findByCouponEntityIdAndMemberEntityId(couponId, memberId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 보유하고 있지 않습니다."));
         return couponPublishEntity.toCouponPublish();
     }
 }

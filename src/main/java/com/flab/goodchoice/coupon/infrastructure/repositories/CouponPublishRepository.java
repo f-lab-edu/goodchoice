@@ -14,5 +14,5 @@ public interface CouponPublishRepository {
     @Query("select cph from CouponPublishEntity cph join fetch cph.couponEntity")
     List<CouponPublishEntity> findCouponHistoryFetchByMemberId(Long memberId);
 
-    Optional<CouponPublishEntity> findByCouponEntityIdAndMemberId(Long couponId, Long memberId);
+    Optional<CouponPublishEntity> findByCouponEntityIdAndMemberEntityId(Long couponId, Long memberId);
 }

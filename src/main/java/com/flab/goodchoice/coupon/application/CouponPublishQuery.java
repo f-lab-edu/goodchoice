@@ -9,5 +9,5 @@ public interface CouponPublishQuery {
 
     List<CouponPublish> findCouponHistoryFetchByMemberId(Long memberId);
 
-    CouponPublish findByCouponEntityIdAndMemberId(Long couponId, Long memberId);
+    CouponPublish findByCouponEntityIdAndMemberEntityId(Long couponId, Long memberId);
 }

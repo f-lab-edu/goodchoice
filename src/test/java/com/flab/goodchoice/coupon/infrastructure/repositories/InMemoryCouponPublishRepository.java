@@ -38,7 +38,7 @@ public class InMemoryCouponPublishRepository implements CouponPublishRepository 
     }
 
     @Override
-    public Optional<CouponPublishEntity> findByCouponEntityIdAndMemberId(Long couponId, Long memberId) {
+    public Optional<CouponPublishEntity> findByCouponEntityIdAndMemberEntityId(Long couponId, Long memberId) {
         return couponPublishs.values().stream()
                 .filter(couponPublish -> couponPublish.getCouponEntity().getId().equals(couponId))
                 .filter(couponPublish -> couponPublish.getMemberEntity().getId().equals(memberId))

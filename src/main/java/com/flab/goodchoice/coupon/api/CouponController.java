@@ -24,10 +24,10 @@ public class CouponController {
     }
 
     @PostMapping
-    public UUID create(@RequestBody final CreateCouponRequest createCouponRequest) {
+    public UUID createCoupon(@RequestBody final CreateCouponRequest createCouponRequest) {
         validation(createCouponRequest.couponName(), createCouponRequest.stock());
 
-        return couponCommandService.create(createCouponRequest.couponName(), createCouponRequest.stock(), createCouponRequest.couponType(), createCouponRequest.discountValue());
+        return couponCommandService.createCoupon(createCouponRequest.couponName(), createCouponRequest.stock(), createCouponRequest.couponType(), createCouponRequest.discountValue());
     }
 
     @GetMapping
@@ -48,8 +48,8 @@ public class CouponController {
     }
 
     @DeleteMapping("/{couponToken}")
-    public UUID deleteCoupon(@PathVariable final UUID couponToken) {
-        return couponCommandService.deleteCoupon(couponToken);
+    public UUID removeCoupon(@PathVariable final UUID couponToken) {
+        return couponCommandService.removeCoupon(couponToken);
     }
 
     private void validation(final String couponName, final int stock) {
