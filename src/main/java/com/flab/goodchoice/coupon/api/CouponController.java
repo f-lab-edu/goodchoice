@@ -5,9 +5,9 @@ import com.flab.goodchoice.coupon.application.CouponQueryService;
 import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
 import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
 import com.flab.goodchoice.coupon.dto.ModifyCouponRequest;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,10 +24,8 @@ public class CouponController {
     }
 
     @PostMapping
-    public UUID createCoupon(@RequestBody final CreateCouponRequest createCouponRequest) {
-        validation(createCouponRequest.couponName(), createCouponRequest.stock());
-
-        return couponCommandService.createCoupon(createCouponRequest.couponName(), createCouponRequest.stock(), createCouponRequest.couponType(), createCouponRequest.discountValue());
+    public UUID createCoupon(final @RequestBody @Valid CreateCouponRequest createCouponRequest) {
+        return couponCommandService.createCoupon(createCouponRequest);
     }
 
     @GetMapping
@@ -41,24 +39,12 @@ public class CouponController {
     }
 
     @PutMapping("/{couponToken}")
-    public UUID modifyCoupon(@PathVariable final UUID couponToken, @RequestBody final ModifyCouponRequest modifyCouponRequest) {
-        validation(modifyCouponRequest.couponName(), modifyCouponRequest.stock());
-
+    public UUID modifyCoupon(@PathVariable final UUID couponToken, final @RequestBody @Valid ModifyCouponRequest modifyCouponRequest) {
         return couponCommandService.modifyCoupon(couponToken, modifyCouponRequest.couponName(), modifyCouponRequest.stock());
     }
 
     @DeleteMapping("/{couponToken}")
     public UUID removeCoupon(@PathVariable final UUID couponToken) {
         return couponCommandService.removeCoupon(couponToken);
-    }
-
-    private void validation(final String couponName, final int stock) {
-        if (!StringUtils.hasText(couponName)) {
-            throw new IllegalArgumentException("쿠폰명을 입력해주세요.");
-        }
-
-        if (stock < 0) {
-            throw new IllegalArgumentException("쿠폰 갯수는 음수가 될수 없습니다.");
-        }
     }
 }

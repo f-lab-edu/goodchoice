@@ -1,8 +1,8 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.domain.Coupon;
-import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
+import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +20,22 @@ public class CouponCommandService {
         this.couponCommand = couponCommand;
     }
 
-    public UUID createCoupon(final String couponName, final int stock, CouponType couponType, int discoutValue) {
-        Coupon coupon = new Coupon(UUID.randomUUID(), couponName, stock, couponType, discoutValue, State.ACTIVITY);
+    public UUID createCoupon(CreateCouponRequest createCouponRequest) {
+        Coupon coupon = Coupon.builder()
+                .couponToken(UUID.randomUUID())
+                .couponName(createCouponRequest.couponName())
+                .stock(createCouponRequest.stock())
+                .couponType(createCouponRequest.couponType())
+                .discountValue(createCouponRequest.discountValue())
+                .state(State.ACTIVITY)
+                .build();
+
         couponCommand.save(coupon);
 
         return coupon.getCouponToken();
     }
 
-    public UUID modifyCoupon(final UUID couponToken, final String couponName, final int stock) {
+    public UUID modifyCoupon(UUID couponToken, String couponName, int stock) {
         Coupon coupon = couponQuery.findByCouponToken(couponToken);
 
         coupon.modify(couponName, stock);

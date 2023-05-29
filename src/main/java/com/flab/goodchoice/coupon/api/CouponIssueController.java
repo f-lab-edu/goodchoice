@@ -4,6 +4,7 @@ import com.flab.goodchoice.coupon.application.CouponUseService;
 import com.flab.goodchoice.coupon.dto.*;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,12 +29,12 @@ public class CouponIssueController {
     }
 
     @PostMapping("/use")
-    public CouponUsedInfoResponse useCoupon(@RequestBody CouponUsedRequest request) {
+    public CouponUsedInfoResponse useCoupon(@RequestBody @Valid CouponUsedRequest request) {
         return couponUseService.useCoupon(request.memberId(), request.couponToken(), request.price());
     }
 
     @PostMapping("/cancel")
-    public CouponUsedCancelInfoResponse usedCouponCancel(@RequestBody CouponUsedRequest request) {
+    public CouponUsedCancelInfoResponse usedCouponCancel(@RequestBody @Valid CouponUsedRequest request) {
         return couponUseService.usedCouponCancel(request.memberId(), request.couponToken(), request.price());
     }
 }
