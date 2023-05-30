@@ -23,7 +23,20 @@ public class ItemReaderImpl implements ItemReader {
     }
 
     @Override
+    public Item getItemByPessimisticLock(String itemToken) {
+        return itemRepository.findByItemTokenWithPessimisticLock(itemToken)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public Item getItemByOptimisticLock(String itemToken) {
+        return itemRepository.findByItemTokenWithPessimisticLock(itemToken)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
     public List<Item> getItems() {
         return itemRepository.findAll();
     }
+
 }
