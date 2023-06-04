@@ -11,6 +11,11 @@ spring:
         username: root
         password: 1234
         driver-class-name: com.mysql.cj.jdbc.Driver
+      maximum-pool-size: 200
+
+  redis:
+    host: 118.67.135.217
+    port: 6379
 
   jpa:
     hibernate:
