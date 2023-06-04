@@ -39,7 +39,7 @@ public class FakeCouponQuery implements CouponQuery {
 
     @Override
     public Coupon findByCouponTokenLock(UUID couponToken) {
-        CouponEntity couponEntity = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+        CouponEntity couponEntity = couponRepository.findLockByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
         return couponEntity.toCoupon();
     }
 }
