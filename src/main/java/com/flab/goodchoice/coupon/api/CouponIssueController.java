@@ -23,11 +23,6 @@ public class CouponIssueController {
         return couponUseService.createCouponPublish(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
     }
 
-    @PostMapping("/publish/rettuce")
-    public UUID createCouponPublishRettuceAop(@RequestBody CouponPublishRequest couponPublishRequest) {
-        return couponUseService.createCouponPublishRettuceAop(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
-    }
-
     @PostMapping("/publish/redisson")
     public UUID createCouponPublishRedissonAop(@RequestBody CouponPublishRequest couponPublishRequest) {
         return couponUseService.createCouponPublishRedissonAop(couponPublishRequest.memberId(), couponPublishRequest.couponToken());

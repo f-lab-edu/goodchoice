@@ -1,7 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.common.aop.RedissonLock;
-import com.flab.goodchoice.common.aop.RettuceLock;
 import com.flab.goodchoice.coupon.domain.*;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
@@ -71,20 +70,6 @@ public class CouponUseService {
     }
 
     public UUID createCouponPublish(final Long memberId, final UUID couponToken) {
-        Member member = getMemberById(memberId);
-        Coupon coupon = couponQuery.findByCouponTokenLock(couponToken);
-
-        CouponPublish couponPublish = new CouponPublish(UUID.randomUUID(), member, coupon, false);
-        couponPublishCommand.save(couponPublish);
-
-        coupon.useCoupon();
-        couponCommand.modify(coupon);
-
-        return couponPublish.getCouponPublishToken();
-    }
-
-    @RettuceLock(key = "key")
-    public UUID createCouponPublishRettuceAop(final Long memberId, final UUID couponToken) {
         Member member = getMemberById(memberId);
         Coupon coupon = couponQuery.findByCouponTokenLock(couponToken);
 
