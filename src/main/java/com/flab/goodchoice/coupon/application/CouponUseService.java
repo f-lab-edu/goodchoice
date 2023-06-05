@@ -39,10 +39,11 @@ public class CouponUseService {
         CouponPublish couponPublish = couponPublishQuery.findByCouponPublishTokenAndMemberEntityId(couponPublishToken, memberId);
 
         Coupon coupon = couponPublish.getCoupon();
-        CouponType couponType = coupon.getCouponType();
 
-        int discountPrice = couponType.discountPriceCalculation(price, coupon.getDiscountValue());
-        int resultPrice = couponType.useCalculation(price, coupon.getDiscountValue());
+        CouponCalculator couponCalculator = coupon.getCouponType().couponCalculator(price, coupon.getDiscountValue());
+        int discountPrice = couponCalculator.discountPriceCalculation();
+        int resultPrice = couponCalculator.useCalculation();
+
         couponUseHistoryCommand.save(new CouponUseHistory(member, coupon, price, discountPrice, UseState.USE));
 
         couponPublish.used();
@@ -63,10 +64,9 @@ public class CouponUseService {
         couponPublish.cancel();
         couponPublishCommand.modify(couponPublish);
 
-        CouponType couponType = coupon.getCouponType();
-        int usedCancelPrice = couponType.usedCancelCalculation(price, coupon.getDiscountValue());
+        CouponCalculator couponCalculator = coupon.getCouponType().couponCalculator(price, coupon.getDiscountValue());
 
-        return new CouponUsedCancelInfoResponse(couponPublishToken, price, usedCancelPrice);
+        return new CouponUsedCancelInfoResponse(couponPublishToken, price, couponCalculator.usedCancelCalculation());
     }
 
     public UUID createCouponPublish(final Long memberId, final UUID couponToken) {
