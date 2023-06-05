@@ -73,8 +73,7 @@ public class CouponUseService {
         Member member = getMemberById(memberId);
         Coupon coupon = couponQuery.findByCouponTokenLock(couponToken);
 
-        CouponPublish couponPublish = new CouponPublish(UUID.randomUUID(), member, coupon, false);
-        couponPublishCommand.save(couponPublish);
+        CouponPublish couponPublish = saveCouponPublish( member, coupon);
 
         coupon.useCoupon();
         couponCommand.modify(coupon);
@@ -85,15 +84,19 @@ public class CouponUseService {
     @RedissonLock(key = "key")
     public UUID createCouponPublishRedissonAop(final Long memberId, final UUID key) {
         Member member = getMemberById(memberId);
-        Coupon coupon = couponQuery.findByCouponTokenLock(key);
+        Coupon coupon = couponQuery.findByCouponToken(key);
 
-        CouponPublish couponPublish = new CouponPublish(UUID.randomUUID(), member, coupon, false);
-        couponPublishCommand.save(couponPublish);
+        CouponPublish couponPublish = saveCouponPublish( member, coupon);
 
         coupon.useCoupon();
         couponCommand.modify(coupon);
 
         return couponPublish.getCouponPublishToken();
+    }
+
+    private CouponPublish saveCouponPublish(Member member, Coupon coupon) {
+        CouponPublish couponPublish = new CouponPublish(UUID.randomUUID(), member, coupon, false);
+        return couponPublishCommand.save(couponPublish);
     }
 
     @Transactional(readOnly = true)
