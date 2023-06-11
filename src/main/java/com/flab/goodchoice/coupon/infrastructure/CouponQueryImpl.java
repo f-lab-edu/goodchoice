@@ -2,6 +2,8 @@ package com.flab.goodchoice.coupon.infrastructure;
 
 import com.flab.goodchoice.coupon.application.CouponQuery;
 import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.exception.CouponError;
+import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponRepository;
 import org.springframework.stereotype.Component;
@@ -29,19 +31,19 @@ public class CouponQueryImpl implements CouponQuery {
 
     @Override
     public Coupon findById(Long couponId) {
-        CouponEntity couponEntity = couponRepository.findById(couponId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+        CouponEntity couponEntity = couponRepository.findById(couponId).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }
 
     @Override
     public Coupon findByCouponToken(UUID couponToken) {
-        CouponEntity couponEntity = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+        CouponEntity couponEntity = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }
 
     @Override
     public Coupon findByCouponTokenLock(UUID couponToken) {
-        CouponEntity couponEntity = couponRepository.findLockByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
+        CouponEntity couponEntity = couponRepository.findLockByCouponToken(couponToken).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }
 }

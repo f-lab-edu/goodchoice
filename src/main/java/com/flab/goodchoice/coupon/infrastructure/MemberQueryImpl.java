@@ -2,6 +2,8 @@ package com.flab.goodchoice.coupon.infrastructure;
 
 import com.flab.goodchoice.coupon.application.MemberQuery;
 import com.flab.goodchoice.coupon.domain.Member;
+import com.flab.goodchoice.coupon.exception.MemberError;
+import com.flab.goodchoice.coupon.exception.MemberException;
 import com.flab.goodchoice.coupon.infrastructure.entity.MemberEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.MemberRepository;
 import org.springframework.stereotype.Component;
@@ -17,7 +19,7 @@ public class MemberQueryImpl implements MemberQuery {
 
     @Override
     public Member findById(Long memberId) {
-        MemberEntity memberEntity = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+        MemberEntity memberEntity = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberError.NOT_FOUND_MEMBER));
         return memberEntity.toMember();
     }
 }

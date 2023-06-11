@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BaseException extends RuntimeException {
 
-    private String errorCode;
-    private String message;
+    protected String errorCode;
+    protected String message;
 
     public BaseException(String errorCode, String message) {
         this.errorCode = errorCode;
