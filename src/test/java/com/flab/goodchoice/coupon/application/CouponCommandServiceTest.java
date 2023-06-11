@@ -1,6 +1,7 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
+import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.*;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.domain.CouponType;
@@ -99,7 +100,7 @@ class CouponCommandServiceTest {
         final int stock = 200;
 
         assertThatThrownBy(() -> couponCommandService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("쿠폰 정보 수정시 쿠폰 갯수가 음수이면 에러")
@@ -109,7 +110,7 @@ class CouponCommandServiceTest {
         final int stock = -1;
 
         assertThatThrownBy(() -> couponCommandService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("쿠폰 삭제")

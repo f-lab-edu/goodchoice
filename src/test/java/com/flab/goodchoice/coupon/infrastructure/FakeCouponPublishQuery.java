@@ -2,6 +2,8 @@ package com.flab.goodchoice.coupon.infrastructure;
 
 import com.flab.goodchoice.coupon.application.CouponPublishQuery;
 import com.flab.goodchoice.coupon.domain.CouponPublish;
+import com.flab.goodchoice.coupon.exception.CouponError;
+import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponPublishEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponPublishRepository;
 
@@ -27,7 +29,12 @@ public class FakeCouponPublishQuery implements CouponPublishQuery {
 
     @Override
     public CouponPublish findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId) {
-        CouponPublishEntity couponPublishEntity = couponPublishRepository.findByCouponPublishTokenAndMemberEntityId(couponPublishToken, memberId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 보유하고 있지 않습니다."));
+        CouponPublishEntity couponPublishEntity = couponPublishRepository.findByCouponPublishTokenAndMemberEntityId(couponPublishToken, memberId).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponPublishEntity.toCouponPublish();
+    }
+
+    @Override
+    public boolean existsByMemberEntityIdAndCouponPublishToken(Long memberId, UUID couponToken) {
+        return couponPublishRepository.existsByMemberEntityIdAndCouponEntity_CouponToken(memberId, couponToken);
     }
 }

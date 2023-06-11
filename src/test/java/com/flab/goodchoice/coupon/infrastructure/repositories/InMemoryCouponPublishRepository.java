@@ -41,4 +41,10 @@ public class InMemoryCouponPublishRepository implements CouponPublishRepository 
                 .filter(couponPublish -> couponPublish.getMemberEntity().getId().equals(memberId))
                 .findFirst();
     }
+
+    @Override
+    public boolean existsByMemberEntityIdAndCouponEntity_CouponToken(Long memberId, UUID couponToken) {
+        return couponPublishs.values().stream()
+                .anyMatch(entity -> Objects.equals(entity.getMemberEntity().getId(), memberId) && Objects.equals(entity.getCouponEntity().getCouponToken(), couponToken));
+    }
 }

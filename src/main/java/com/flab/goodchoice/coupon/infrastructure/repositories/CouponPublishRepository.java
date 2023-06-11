@@ -16,4 +16,6 @@ public interface CouponPublishRepository {
     List<CouponPublishEntity> findCouponHistoryFetchByMemberId(Long memberId);
 
     Optional<CouponPublishEntity> findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId);
+
+    boolean existsByMemberEntityIdAndCouponEntity_CouponToken(Long memberId, UUID couponToken);
 }

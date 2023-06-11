@@ -4,6 +4,8 @@ import com.flab.goodchoice.coupon.domain.*;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
+import com.flab.goodchoice.coupon.exception.CouponException;
+import com.flab.goodchoice.coupon.exception.MemberException;
 import com.flab.goodchoice.coupon.infrastructure.*;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.*;
@@ -36,6 +38,7 @@ class CouponUseServiceTest {
     private CouponPublishCommand couponPublishCommand;
     private CouponUseHistoryQuery couponUseHistoryQuery;
     private CouponUseHistoryCommand couponUseHistoryCommand;
+    private AppliedUserRepository appliedUserRepository;
 
     Member member;
     final Long memberId = 1L;
@@ -75,8 +78,9 @@ class CouponUseServiceTest {
         couponPublishCommand = new FakeCouponPublishCommand(couponPublishRepository);
         couponUseHistoryQuery = new FakeCouponUseHistoryQuery(couponUseHistoryEntityRepository);
         couponUseHistoryCommand = new FakeCouponUseHistoryCommand(couponUseHistoryEntityRepository);
+        appliedUserRepository = new FakeAppliedUserRepository();
 
-        couponUseService = new CouponUseService(memberQuery, couponQuery, couponCommand, couponPublishQuery, couponPublishCommand, couponUseHistoryQuery, couponUseHistoryCommand);
+        couponUseService = new CouponUseService(memberQuery, couponQuery, couponCommand, couponPublishQuery, couponPublishCommand, couponUseHistoryQuery, couponUseHistoryCommand, appliedUserRepository);
 
         member = memberCommand.save(new Member(memberId));
 
@@ -123,14 +127,14 @@ class CouponUseServiceTest {
     @Test
     void noneMemberCouponUsedDeduction() {
         assertThatThrownBy(() -> couponUseService.useCoupon(noneMemberId, couponTokenDeduction, 10000))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(MemberException.class);
     }
 
     @DisplayName("존재하지 않은 쿠폰 사용시 에러")
     @Test
     void noneCouponUsedDeduction() {
         assertThatThrownBy(() -> couponUseService.useCoupon(memberId, UUID.randomUUID(), 10000))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("가지고 있지 않은 쿠폰 사용시 에러")
@@ -139,7 +143,7 @@ class CouponUseServiceTest {
         couponPublishCommand.save(new CouponPublish(1L, CouponPublishToken, member, couponDiscount, false));
 
         assertThatThrownBy(() -> couponUseService.useCoupon(memberId, couponTokenDeduction, 10000))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("쿠폰 사용 취소-금액 할인")
@@ -172,14 +176,14 @@ class CouponUseServiceTest {
     @Test
     void noneMemberCouponUsedCancelDiscount() {
         assertThatThrownBy(() -> couponUseService.usedCouponCancel(noneMemberId, couponTokenDiscount, 10000))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(MemberException.class);
     }
 
     @DisplayName("존재하지 않은 쿠폰 취소시 에러")
     @Test
     void noneCouponUsedCancelDiscount() {
         assertThatThrownBy(() -> couponUseService.usedCouponCancel(memberId, UUID.randomUUID(), 10000))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("가지고 있지 않은 쿠폰 취소시 에러")
@@ -188,7 +192,7 @@ class CouponUseServiceTest {
         couponPublishCommand.save(new CouponPublish(1L, CouponPublishToken, member, couponDiscount, false));
 
         assertThatThrownBy(() -> couponUseService.usedCouponCancel(memberId, couponTokenDeduction, 10000))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("사용하지 않은 쿠폰 취소시 에러")
@@ -197,7 +201,7 @@ class CouponUseServiceTest {
         couponPublishCommand.save(new CouponPublish(1L, UUID.randomUUID(), member, couponDiscount, false));
 
         assertThatThrownBy(() -> couponUseService.usedCouponCancel(memberId, couponTokenDiscount, 10000))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("회원별 쿠폰 등록")
@@ -211,11 +215,20 @@ class CouponUseServiceTest {
         assertThat(couponPublishRepository.countByCouponEntityId(couponDiscount.getId())).isEqualTo(1);
     }
 
+    @DisplayName("한 계정당 하나의 쿠폰만 등록 가능 중복 등록시 에러")
+    @Test
+    void oneMemberOneCouponPublish() {
+        couponUseService.createCouponPublish(memberId, couponTokenDiscount);
+
+        assertThatThrownBy(() -> couponUseService.createCouponPublish(memberId, couponTokenDiscount))
+                .isInstanceOf(CouponException.class);
+    }
+
     @DisplayName("존재하지 않은 회원 쿠폰 등록시 에러")
     @Test
     void noneMemberCouponPublish() {
         assertThatThrownBy(() -> couponUseService.createCouponPublish(noneMemberId, couponTokenDiscount))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(MemberException.class);
     }
 
     @DisplayName("모두 소진된 쿠폰을 회원이 등록하면 에러")
@@ -225,7 +238,7 @@ class CouponUseServiceTest {
         couponRepository.save(couponEntity);
 
         assertThatThrownBy(() -> couponUseService.createCouponPublish(memberId, couponEntity.getCouponToken()))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("회원이 가진 쿠폰 목록 조회")
