@@ -1,6 +1,6 @@
-package com.flab.goodchoice.coupon.infrastructure.entity;
+package com.flab.goodchoice.member.infrastructure.entity;
 
-import com.flab.goodchoice.coupon.domain.Member;
+import com.flab.goodchoice.member.domain.model.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

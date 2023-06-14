@@ -2,6 +2,7 @@ package com.flab.goodchoice.coupon.infrastructure.entity;
 
 import com.flab.goodchoice.coupon.domain.CouponUseHistory;
 import com.flab.goodchoice.coupon.domain.UseState;
+import com.flab.goodchoice.member.infrastructure.entity.MemberEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

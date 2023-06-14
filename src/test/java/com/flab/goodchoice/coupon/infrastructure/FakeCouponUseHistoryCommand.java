@@ -4,7 +4,7 @@ import com.flab.goodchoice.coupon.application.CouponUseHistoryCommand;
 import com.flab.goodchoice.coupon.domain.CouponUseHistory;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponUseHistoryEntity;
-import com.flab.goodchoice.coupon.infrastructure.entity.MemberEntity;
+import com.flab.goodchoice.member.infrastructure.entity.MemberEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponUseHistoryRepository;
 
 public class FakeCouponUseHistoryCommand implements CouponUseHistoryCommand {
