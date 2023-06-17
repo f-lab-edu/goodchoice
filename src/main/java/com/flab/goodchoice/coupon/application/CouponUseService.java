@@ -7,7 +7,6 @@ import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
 import com.flab.goodchoice.coupon.exception.CouponError;
 import com.flab.goodchoice.coupon.exception.CouponException;
-import com.flab.goodchoice.coupon.infrastructure.repositories.AppliedUserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +24,9 @@ public class CouponUseService {
     private final CouponPublishCommand couponPublishCommand;
     private final CouponUseHistoryQuery couponUseHistoryQuery;
     private final CouponUseHistoryCommand couponUseHistoryCommand;
-    private final AppliedUserRepository appliedUserRepository;
 
     public CouponUseService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponPublishQuery couponPublishQuery, CouponPublishCommand couponPublishCommand,
-                            CouponUseHistoryQuery couponUseHistoryQuery, CouponUseHistoryCommand couponUseHistoryCommand, AppliedUserRepository appliedUserRepository) {
+                            CouponUseHistoryQuery couponUseHistoryQuery, CouponUseHistoryCommand couponUseHistoryCommand) {
         this.memberQuery = memberQuery;
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
@@ -36,7 +34,6 @@ public class CouponUseService {
         this.couponPublishCommand = couponPublishCommand;
         this.couponUseHistoryQuery = couponUseHistoryQuery;
         this.couponUseHistoryCommand = couponUseHistoryCommand;
-        this.appliedUserRepository = appliedUserRepository;
     }
 
     public CouponUsedInfoResponse useCoupon(final Long memberId, final UUID couponPublishToken, final int price) {
@@ -92,15 +89,9 @@ public class CouponUseService {
         return couponPublish.getCouponPublishToken();
     }
 
-    @RedissonLock(key = "key", waitTime = 20L)
-    public UUID createCouponPublishRedissonAop(final Long memberId, final UUID key) {
+    @RedissonLock(key = "key", target = "memberId", waitTime = 20L)
+    public UUID createCouponPublishRedissonAop(UUID key, Long memberId) {
         Member member = getMemberById(memberId);
-
-        Long apply = appliedUserRepository.addRedisSet(key, memberId);
-
-        if (apply != 1) {
-            throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
-        }
 
         Coupon coupon = couponQuery.findByCouponToken(key);
 

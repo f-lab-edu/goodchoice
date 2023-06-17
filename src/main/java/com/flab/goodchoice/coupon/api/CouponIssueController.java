@@ -25,7 +25,7 @@ public class CouponIssueController {
 
     @PostMapping("/publish/redisson")
     public UUID createCouponPublishRedissonAop(@RequestBody CouponPublishRequest couponPublishRequest) {
-        return couponUseService.createCouponPublishRedissonAop(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
+        return couponUseService.createCouponPublishRedissonAop(couponPublishRequest.couponToken(), couponPublishRequest.memberId());
     }
 
     @GetMapping("/publish/{memberId}")

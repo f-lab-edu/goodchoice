@@ -1,5 +1,8 @@
 package com.flab.goodchoice.common.aop;
 
+import com.flab.goodchoice.coupon.exception.CouponError;
+import com.flab.goodchoice.coupon.exception.CouponException;
+import com.flab.goodchoice.coupon.infrastructure.repositories.AppliedUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -19,9 +22,11 @@ import java.lang.reflect.Method;
 public class RedissonLockAop {
 
     private final RedissonClient redissonClient;
+    private final AppliedUserRepository appliedUserRepository;
 
-    public RedissonLockAop(RedissonClient redissonClient) {
+    public RedissonLockAop(RedissonClient redissonClient, AppliedUserRepository appliedUserRepository) {
         this.redissonClient = redissonClient;
+        this.appliedUserRepository = appliedUserRepository;
     }
 
     @Around("@annotation(com.flab.goodchoice.common.aop.RedissonLock)")
@@ -30,9 +35,16 @@ public class RedissonLockAop {
         Method method = signature.getMethod();
         RedissonLock redissonLock = method.getAnnotation(RedissonLock.class);
 
-        String key = createKey(signature.getParameterNames(), joinPoint.getArgs(), redissonLock.key());
+        String key = createParameter(signature.getParameterNames(), joinPoint.getArgs(), redissonLock.key());
+        String target = createParameter(signature.getParameterNames(), joinPoint.getArgs(), redissonLock.target());
 
-        RLock lock = redissonClient.getLock(key);
+        Long apply = appliedUserRepository.addRedisSet(key, target);
+
+        if (apply != 1) {
+            throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
+        }
+
+        RLock lock = redissonClient.getLock("key" + key);
         try {
             boolean available = lock.tryLock(redissonLock.waitTime(), redissonLock.leaseTime(), redissonLock.timeUnit());
 
@@ -48,16 +60,16 @@ public class RedissonLockAop {
         }
     }
 
-    private String createKey(String[] parameterNames, Object[] args, String key) {
-        String resultKey = key;
+    private String createParameter(String[] parameterNames, Object[] args, String param) {
+        String result = param;
 
         for (int i = 0; i < parameterNames.length; i++) {
-            if (parameterNames[i].equals(key)) {
-                resultKey += args[i];
+            if (parameterNames[i].equals(param)) {
+                result = String.valueOf(args[i]);
                 break;
             }
         }
 
-        return resultKey;
+        return result;
     }
 }
