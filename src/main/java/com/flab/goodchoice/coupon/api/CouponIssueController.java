@@ -1,5 +1,6 @@
 package com.flab.goodchoice.coupon.api;
 
+import com.flab.goodchoice.coupon.application.CouponPublishService;
 import com.flab.goodchoice.coupon.application.CouponUseService;
 import com.flab.goodchoice.coupon.dto.*;
 import org.springframework.web.bind.annotation.*;
@@ -13,24 +14,26 @@ import java.util.UUID;
 public class CouponIssueController {
 
     private final CouponUseService couponUseService;
+    private final CouponPublishService couponPublishService;
 
-    public CouponIssueController(CouponUseService couponUseService) {
+    public CouponIssueController(CouponUseService couponUseService, CouponPublishService couponPublishService) {
         this.couponUseService = couponUseService;
+        this.couponPublishService = couponPublishService;
     }
 
     @PostMapping("/publish")
     public UUID createCouponPublish(@RequestBody CouponPublishRequest couponPublishRequest) {
-        return couponUseService.createCouponPublish(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
+        return couponPublishService.createCouponPublish(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
     }
 
     @PostMapping("/publish/redisson")
     public UUID createCouponPublishRedissonAop(@RequestBody CouponPublishRequest couponPublishRequest) {
-        return couponUseService.createCouponPublishRedissonAop(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
+        return couponPublishService.createCouponPublishRedissonAop(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
     }
 
     @GetMapping("/publish/{memberId}")
     public List<MemberSpecificCouponResponse> getMemberCoupon(@PathVariable Long memberId) {
-        return couponUseService.getMemberCoupon(memberId);
+        return couponPublishService.getMemberCoupon(memberId);
     }
 
     @PostMapping("/use")

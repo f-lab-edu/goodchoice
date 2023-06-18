@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CouponUseSynchronismTest {
+class CouponPublishSynchronismTest {
     @Autowired
     protected MockMvc mvc;
     @Autowired
