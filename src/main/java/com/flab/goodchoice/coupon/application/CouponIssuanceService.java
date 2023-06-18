@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.common.aop.RedissonLock;
+import com.flab.goodchoice.common.aop.LimitedCountLock;
 import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponPublish;
 import com.flab.goodchoice.coupon.domain.Member;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Transactional
 @Service
-public class CouponPublishService {
+public class CouponIssuanceService {
 
     private final MemberQuery memberQuery;
     private final CouponQuery couponQuery;
@@ -25,7 +25,7 @@ public class CouponPublishService {
     private final CouponPublishCommand couponPublishCommand;
     private final AppliedUserRepository appliedUserRepository;
 
-    public CouponPublishService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponPublishQuery couponPublishQuery, CouponPublishCommand couponPublishCommand, AppliedUserRepository appliedUserRepository) {
+    public CouponIssuanceService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponPublishQuery couponPublishQuery, CouponPublishCommand couponPublishCommand, AppliedUserRepository appliedUserRepository) {
         this.memberQuery = memberQuery;
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
@@ -34,8 +34,8 @@ public class CouponPublishService {
         this.appliedUserRepository = appliedUserRepository;
     }
 
-    public UUID createCouponPublish(final Long memberId, final UUID couponToken) {
-        Member member = getMemberById(memberId);
+    public UUID couponIssuance(final Long memberId, final UUID couponToken) {
+        Member member = getMember(memberId);
 
         boolean existsCoupon = couponPublishQuery.existsByMemberEntityIdAndCouponPublishToken(memberId, couponToken);
         if (existsCoupon) {
@@ -52,9 +52,9 @@ public class CouponPublishService {
         return couponPublish.getCouponPublishToken();
     }
 
-    @RedissonLock(key = "key", waitTime = 20L)
-    public UUID createCouponPublishRedissonAop(final Long memberId, final UUID key) {
-        Member member = getMemberById(memberId);
+    @LimitedCountLock(key = "key", waitTime = 20L)
+    public UUID couponIssuanceRedissonAop(final Long memberId, final UUID key) {
+        Member member = getMember(memberId);
 
         Long apply = appliedUserRepository.addRedisSet(key, memberId);
 
@@ -77,7 +77,7 @@ public class CouponPublishService {
         return couponPublishCommand.save(couponPublish);
     }
 
-    private Member getMemberById(Long memberId) {
+    private Member getMember(Long memberId) {
         return memberQuery.findById(memberId);
     }
 

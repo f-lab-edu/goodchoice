@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.api;
 
-import com.flab.goodchoice.coupon.application.CouponPublishService;
+import com.flab.goodchoice.coupon.application.CouponIssuanceService;
 import com.flab.goodchoice.coupon.application.CouponUseService;
 import com.flab.goodchoice.coupon.dto.*;
 import org.springframework.web.bind.annotation.*;
@@ -14,26 +14,26 @@ import java.util.UUID;
 public class CouponIssueController {
 
     private final CouponUseService couponUseService;
-    private final CouponPublishService couponPublishService;
+    private final CouponIssuanceService couponIssuanceService;
 
-    public CouponIssueController(CouponUseService couponUseService, CouponPublishService couponPublishService) {
+    public CouponIssueController(CouponUseService couponUseService, CouponIssuanceService couponIssuanceService) {
         this.couponUseService = couponUseService;
-        this.couponPublishService = couponPublishService;
+        this.couponIssuanceService = couponIssuanceService;
     }
 
     @PostMapping("/publish")
     public UUID createCouponPublish(@RequestBody CouponPublishRequest couponPublishRequest) {
-        return couponPublishService.createCouponPublish(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
+        return couponIssuanceService.couponIssuance(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
     }
 
     @PostMapping("/publish/redisson")
     public UUID createCouponPublishRedissonAop(@RequestBody CouponPublishRequest couponPublishRequest) {
-        return couponPublishService.createCouponPublishRedissonAop(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
+        return couponIssuanceService.couponIssuanceRedissonAop(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
     }
 
     @GetMapping("/publish/{memberId}")
     public List<MemberSpecificCouponResponse> getMemberCoupon(@PathVariable Long memberId) {
-        return couponPublishService.getMemberCoupon(memberId);
+        return couponIssuanceService.getMemberCoupon(memberId);
     }
 
     @PostMapping("/use")

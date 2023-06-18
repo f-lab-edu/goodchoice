@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class CouponPublishServiceTest {
 
     private MemberRepository memberRepository;
-    private CouponPublishService couponPublishService;
+    private CouponIssuanceService couponIssuanceService;
     private CouponRepository couponRepository;
     private CouponPublishRepository couponPublishRepository;
 
@@ -71,7 +71,7 @@ class CouponPublishServiceTest {
         couponPublishCommand = new FakeCouponPublishCommand(couponPublishRepository);
         appliedUserRepository = new FakeAppliedUserRepository();
 
-        couponPublishService = new CouponPublishService(memberQuery, couponQuery, couponCommand, couponPublishQuery, couponPublishCommand, appliedUserRepository);
+        couponIssuanceService = new CouponIssuanceService(memberQuery, couponQuery, couponCommand, couponPublishQuery, couponPublishCommand, appliedUserRepository);
 
         member = memberCommand.save(new Member(memberId));
 
@@ -89,7 +89,7 @@ class CouponPublishServiceTest {
     @DisplayName("회원별 쿠폰 등록")
     @Test
     void couponPublish() {
-        couponPublishService.createCouponPublish(memberId, couponTokenDiscount);
+        couponIssuanceService.couponIssuance(memberId, couponTokenDiscount);
 
         Coupon result = couponQuery.findByCouponToken(couponTokenDiscount);
 
@@ -100,16 +100,16 @@ class CouponPublishServiceTest {
     @DisplayName("한 계정당 하나의 쿠폰만 등록 가능 중복 등록시 에러")
     @Test
     void oneMemberOneCouponPublish() {
-        couponPublishService.createCouponPublish(memberId, couponTokenDiscount);
+        couponIssuanceService.couponIssuance(memberId, couponTokenDiscount);
 
-        assertThatThrownBy(() -> couponPublishService.createCouponPublish(memberId, couponTokenDiscount))
+        assertThatThrownBy(() -> couponIssuanceService.couponIssuance(memberId, couponTokenDiscount))
                 .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("존재하지 않은 회원 쿠폰 등록시 에러")
     @Test
     void noneMemberCouponPublish() {
-        assertThatThrownBy(() -> couponPublishService.createCouponPublish(noneMemberId, couponTokenDiscount))
+        assertThatThrownBy(() -> couponIssuanceService.couponIssuance(noneMemberId, couponTokenDiscount))
                 .isInstanceOf(MemberException.class);
     }
 
@@ -119,16 +119,16 @@ class CouponPublishServiceTest {
         CouponEntity couponEntity = new CouponEntity(3L, UUID.randomUUID(), couponNameDeduction, 0, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
         couponRepository.save(couponEntity);
 
-        assertThatThrownBy(() -> couponPublishService.createCouponPublish(memberId, couponEntity.getCouponToken()))
+        assertThatThrownBy(() -> couponIssuanceService.couponIssuance(memberId, couponEntity.getCouponToken()))
                 .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("회원이 가진 쿠폰 목록 조회")
     @Test
     void memberGetCouponList() {
-        couponPublishService.createCouponPublish(memberId, couponTokenDiscount);
+        couponIssuanceService.couponIssuance(memberId, couponTokenDiscount);
 
-        List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponPublishService.getMemberCoupon(memberId);
+        List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponIssuanceService.getMemberCoupon(memberId);
 
         assertAll(
                 () -> assertThat(memberSpecificCouponResponses.get(0).couponId()).isEqualTo(couponTokenDiscount),
@@ -140,9 +140,9 @@ class CouponPublishServiceTest {
     @DisplayName("쿠폰을 가지지 않은 회원이 쿠폰 조회시 빈 목록 리턴")
     @Test
     void NoneMemberGetCouponList() {
-        couponPublishService.createCouponPublish(memberId, couponTokenDiscount);
+        couponIssuanceService.couponIssuance(memberId, couponTokenDiscount);
 
-        List<MemberSpecificCouponResponse> result = couponPublishService.getMemberCoupon(noneMemberId);
+        List<MemberSpecificCouponResponse> result = couponIssuanceService.getMemberCoupon(noneMemberId);
 
         assertThat(result.size()).isEqualTo(0);
     }
