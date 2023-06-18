@@ -16,25 +16,25 @@ import java.lang.reflect.Method;
 @Order(1)
 @Component
 @Slf4j
-public class RedissonLockAop {
+public class LimitedCountLockAop {
 
     private final RedissonClient redissonClient;
 
-    public RedissonLockAop(RedissonClient redissonClient) {
+    public LimitedCountLockAop(RedissonClient redissonClient) {
         this.redissonClient = redissonClient;
     }
 
-    @Around("@annotation(com.flab.goodchoice.common.aop.RedissonLock)")
+    @Around("@annotation(com.flab.goodchoice.common.aop.LimitedCountLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-        RedissonLock redissonLock = method.getAnnotation(RedissonLock.class);
+        LimitedCountLock limitedCountLock = method.getAnnotation(LimitedCountLock.class);
 
-        String key = createKey(signature.getParameterNames(), joinPoint.getArgs(), redissonLock.key());
+        String key = createKey(signature.getParameterNames(), joinPoint.getArgs(), limitedCountLock.key());
 
         RLock lock = redissonClient.getLock(key);
         try {
-            boolean available = lock.tryLock(redissonLock.waitTime(), redissonLock.leaseTime(), redissonLock.timeUnit());
+            boolean available = lock.tryLock(limitedCountLock.waitTime(), limitedCountLock.leaseTime(), limitedCountLock.timeUnit());
 
             if (!available) {
                 return false;
