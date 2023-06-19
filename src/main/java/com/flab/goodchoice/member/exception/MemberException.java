@@ -1,4 +1,4 @@
-package com.flab.goodchoice.coupon.exception;
+package com.flab.goodchoice.member.exception;
 
 import com.flab.goodchoice.common.exception.BaseException;
 

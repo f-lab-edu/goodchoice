@@ -8,6 +8,8 @@ import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
 import com.flab.goodchoice.coupon.exception.CouponError;
 import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.repositories.AppliedUserRepository;
+import com.flab.goodchoice.member.application.MemberQuery;
+import com.flab.goodchoice.member.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
