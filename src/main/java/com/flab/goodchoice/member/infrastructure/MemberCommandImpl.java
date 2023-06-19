@@ -1,9 +1,9 @@
-package com.flab.goodchoice.coupon.infrastructure;
+package com.flab.goodchoice.member.infrastructure;
 
-import com.flab.goodchoice.coupon.application.MemberCommand;
-import com.flab.goodchoice.coupon.domain.Member;
-import com.flab.goodchoice.coupon.infrastructure.entity.MemberEntity;
-import com.flab.goodchoice.coupon.infrastructure.repositories.MemberRepository;
+import com.flab.goodchoice.member.application.MemberCommand;
+import com.flab.goodchoice.member.domain.model.Member;
+import com.flab.goodchoice.member.infrastructure.entity.MemberEntity;
+import com.flab.goodchoice.member.domain.repositories.MemberRepository;
 import org.springframework.stereotype.Component;
 
 @Component

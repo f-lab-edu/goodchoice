@@ -1,6 +1,6 @@
-package com.flab.goodchoice.coupon.infrastructure.repositories;
+package com.flab.goodchoice.member.domain.repositories;
 
-import com.flab.goodchoice.coupon.infrastructure.entity.MemberEntity;
+import com.flab.goodchoice.member.infrastructure.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaMemberRepository extends MemberRepository, JpaRepository<MemberEntity, Long> {
