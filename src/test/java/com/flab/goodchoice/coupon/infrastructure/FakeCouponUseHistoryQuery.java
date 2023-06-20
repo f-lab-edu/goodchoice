@@ -3,7 +3,7 @@ package com.flab.goodchoice.coupon.infrastructure;
 import com.flab.goodchoice.coupon.application.CouponUseHistoryQuery;
 import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponUseHistory;
-import com.flab.goodchoice.coupon.domain.Member;
+import com.flab.goodchoice.member.domain.model.Member;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponUseHistoryEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponUseHistoryRepository;
 

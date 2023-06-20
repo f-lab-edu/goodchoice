@@ -1,5 +1,6 @@
 package com.flab.goodchoice.coupon.domain;
 
+import com.flab.goodchoice.member.domain.model.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
