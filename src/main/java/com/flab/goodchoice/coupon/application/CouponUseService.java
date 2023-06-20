@@ -7,6 +7,8 @@ import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
 import com.flab.goodchoice.coupon.exception.CouponError;
 import com.flab.goodchoice.coupon.exception.CouponException;
+import com.flab.goodchoice.member.application.MemberQuery;
+import com.flab.goodchoice.member.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,8 +95,9 @@ public class CouponUseService {
     public UUID createCouponPublishRedissonAop(UUID key, Long memberId) {
         Member member = getMemberById(memberId);
 
-        Coupon coupon = couponQuery.findByCouponToken(key);
+        couponIssueValidation(key, memberId);
 
+        Coupon coupon = couponQuery.findByCouponToken(key);
         CouponPublish couponPublish = saveCouponPublish( member, coupon);
 
         coupon.useCoupon();
@@ -106,6 +109,14 @@ public class CouponUseService {
     private CouponPublish saveCouponPublish(Member member, Coupon coupon) {
         CouponPublish couponPublish = new CouponPublish(UUID.randomUUID(), member, coupon, false);
         return couponPublishCommand.save(couponPublish);
+    }
+
+    private void couponIssueValidation(UUID key, Long memberId) {
+        boolean apply = couponPublishQuery.existsByMemberEntityIdAndCouponPublishToken(memberId, key);
+
+        if (apply) {
+            throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
+        }
     }
 
     @Transactional(readOnly = true)

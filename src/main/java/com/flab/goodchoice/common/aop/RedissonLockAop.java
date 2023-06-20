@@ -1,8 +1,5 @@
 package com.flab.goodchoice.common.aop;
 
-import com.flab.goodchoice.coupon.exception.CouponError;
-import com.flab.goodchoice.coupon.exception.CouponException;
-import com.flab.goodchoice.coupon.infrastructure.repositories.AppliedUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -22,11 +19,9 @@ import java.lang.reflect.Method;
 public class RedissonLockAop {
 
     private final RedissonClient redissonClient;
-    private final AppliedUserRepository appliedUserRepository;
 
-    public RedissonLockAop(RedissonClient redissonClient, AppliedUserRepository appliedUserRepository) {
+    public RedissonLockAop(RedissonClient redissonClient) {
         this.redissonClient = redissonClient;
-        this.appliedUserRepository = appliedUserRepository;
     }
 
     @Around("@annotation(com.flab.goodchoice.common.aop.RedissonLock)")
@@ -36,15 +31,8 @@ public class RedissonLockAop {
         RedissonLock redissonLock = method.getAnnotation(RedissonLock.class);
 
         String key = createParameter(signature.getParameterNames(), joinPoint.getArgs(), redissonLock.key());
-        String target = createParameter(signature.getParameterNames(), joinPoint.getArgs(), redissonLock.target());
 
-        Long apply = appliedUserRepository.addRedisSet(key, target);
-
-        if (apply != 1) {
-            throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
-        }
-
-        RLock lock = redissonClient.getLock("key" + key);
+        RLock lock = redissonClient.getLock(key);
         try {
             boolean available = lock.tryLock(redissonLock.waitTime(), redissonLock.leaseTime(), redissonLock.timeUnit());
 
@@ -65,7 +53,7 @@ public class RedissonLockAop {
 
         for (int i = 0; i < parameterNames.length; i++) {
             if (parameterNames[i].equals(param)) {
-                result = String.valueOf(args[i]);
+                result += args[i];
                 break;
             }
         }
