@@ -3,6 +3,8 @@ package com.flab.goodchoice.coupon.application;
 import com.flab.goodchoice.coupon.domain.*;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
+import com.flab.goodchoice.member.application.MemberQuery;
+import com.flab.goodchoice.member.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
