@@ -41,7 +41,7 @@ public class CouponUseService {
 
         couponUseHistoryCommand.save(new CouponUseHistory(member, coupon, price, discountPrice, UseState.USE));
 
-        couponPublish.used();
+        couponPublish.use();
         couponPublishCommand.modify(couponPublish);
 
         return new CouponUsedInfoResponse(couponPublishToken, price, discountPrice, resultPrice);

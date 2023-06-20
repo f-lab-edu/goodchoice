@@ -3,7 +3,6 @@ package com.flab.goodchoice.coupon.application;
 import com.flab.goodchoice.common.aop.LimitedCountLock;
 import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponPublish;
-import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
 import com.flab.goodchoice.coupon.exception.CouponError;
 import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.repositories.AppliedUserRepository;
@@ -12,12 +11,11 @@ import com.flab.goodchoice.member.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Transactional
 @Service
-public class CouponIssuanceService {
+public class CouponIssueService {
 
     private final MemberQuery memberQuery;
     private final CouponQuery couponQuery;
@@ -26,7 +24,7 @@ public class CouponIssuanceService {
     private final CouponPublishCommand couponPublishCommand;
     private final AppliedUserRepository appliedUserRepository;
 
-    public CouponIssuanceService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponPublishQuery couponPublishQuery, CouponPublishCommand couponPublishCommand, AppliedUserRepository appliedUserRepository) {
+    public CouponIssueService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponPublishQuery couponPublishQuery, CouponPublishCommand couponPublishCommand, AppliedUserRepository appliedUserRepository) {
         this.memberQuery = memberQuery;
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
@@ -80,13 +78,5 @@ public class CouponIssuanceService {
 
     private Member getMember(Long memberId) {
         return memberQuery.findById(memberId);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
-        List<CouponPublish> couponPublishes = couponPublishQuery.findCouponHistoryFetchByMemberId(memberId);
-        return couponPublishes.stream()
-                .map(couponPublish -> MemberSpecificCouponResponse.of(couponPublish.getCoupon()))
-                .toList();
     }
 }

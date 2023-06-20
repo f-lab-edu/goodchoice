@@ -10,12 +10,12 @@ import java.util.UUID;
 
 @Transactional
 @Service
-public class CouponCommandService {
+public class CouponSaveService {
 
     private final CouponQuery couponQuery;
     private final CouponCommand couponCommand;
 
-    public CouponCommandService(CouponQuery couponQuery, CouponCommand couponCommand) {
+    public CouponSaveService(CouponQuery couponQuery, CouponCommand couponCommand) {
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
     }

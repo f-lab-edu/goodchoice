@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.api;
 
-import com.flab.goodchoice.coupon.application.CouponIssuanceService;
+import com.flab.goodchoice.coupon.application.CouponIssueInfoService;
 import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,14 +13,14 @@ import java.util.List;
 @RestController
 public class CouponIssueInfoController {
 
-    private final CouponIssuanceService couponIssuanceService;
+    private final CouponIssueInfoService couponIssueInfoService;
 
-    public CouponIssueInfoController(CouponIssuanceService couponIssuanceService) {
-        this.couponIssuanceService = couponIssuanceService;
+    public CouponIssueInfoController(CouponIssueInfoService couponIssueInfoService) {
+        this.couponIssueInfoService = couponIssueInfoService;
     }
 
     @GetMapping("/publish/{memberId}")
     public List<MemberSpecificCouponResponse> getMemberCoupon(@PathVariable Long memberId) {
-        return couponIssuanceService.getMemberCoupon(memberId);
+        return couponIssueInfoService.getMemberCoupon(memberId);
     }
 }

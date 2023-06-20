@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CouponQueryServiceTest {
 
-    private CouponQueryService couponQueryService;
+    private CouponInfoService couponQueryService;
     private CouponQuery couponQuery;
     private CouponRepository couponRepository;
 
@@ -33,7 +33,7 @@ class CouponQueryServiceTest {
         couponRepository = new InMemoryCouponRepository();
         couponQuery = new FakeCouponQuery(couponRepository);
 
-        couponQueryService = new CouponQueryService(couponQuery);
+        couponQueryService = new CouponInfoService(couponQuery);
 
         final CouponEntity coupon = new CouponEntity(couponToken, couponName, stock, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);

@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.api;
 
-import com.flab.goodchoice.coupon.application.CouponQueryService;
+import com.flab.goodchoice.coupon.application.CouponInfoService;
 import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,19 +11,19 @@ import java.util.UUID;
 @RestController
 public class CouponInfoController {
 
-    private final CouponQueryService couponQueryService;
+    private final CouponInfoService couponInfoService;
 
-    public CouponInfoController(CouponQueryService couponQueryService) {
-        this.couponQueryService = couponQueryService;
+    public CouponInfoController(CouponInfoService couponInfoService) {
+        this.couponInfoService = couponInfoService;
     }
 
     @GetMapping
     public List<CouponInfoResponse> getAllCoupons() {
-        return couponQueryService.getAllCoupons();
+        return couponInfoService.getAllCoupons();
     }
 
     @GetMapping("/{couponToken}")
     public CouponInfoResponse getCoupon(@PathVariable final UUID couponToken) {
-        return couponQueryService.getCoupon(couponToken);
+        return couponInfoService.getCoupon(couponToken);
     }
 }

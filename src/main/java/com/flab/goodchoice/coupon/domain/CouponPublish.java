@@ -40,7 +40,7 @@ public class CouponPublish {
         this.usedAt = usedAt;
     }
 
-    public void used() {
+    public void use() {
         this.usedYn = true;
         this.usedAt = LocalDateTime.now();
     }
