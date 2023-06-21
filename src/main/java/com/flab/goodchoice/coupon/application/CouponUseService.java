@@ -31,7 +31,7 @@ public class CouponUseService {
 
     public CouponUsedInfoResponse useCoupon(final Long memberId, final UUID couponPublishToken, final int price) {
         Member member = getMemberById(memberId);
-        CouponPublish couponPublish = couponPublishQuery.findByCouponPublishTokenAndMemberEntityId(couponPublishToken, memberId);
+        CouponPublish couponPublish = couponPublishQuery.getCouponPublishInfo(couponPublishToken, memberId);
 
         Coupon coupon = couponPublish.getCoupon();
 
@@ -49,10 +49,10 @@ public class CouponUseService {
 
     public CouponUsedCancelInfoResponse usedCouponCancel(final Long memberId, final UUID couponPublishToken, final int price) {
         Member member = getMemberById(memberId);
-        CouponPublish couponPublish = couponPublishQuery.findByCouponPublishTokenAndMemberEntityId(couponPublishToken, memberId);
+        CouponPublish couponPublish = couponPublishQuery.getCouponPublishInfo(couponPublishToken, memberId);
         Coupon coupon = couponPublish.getCoupon();
 
-        CouponUseHistory couponUseHistory = couponUseHistoryQuery.findByMemberIdAndCouponEntityId(member, coupon);
+        CouponUseHistory couponUseHistory = couponUseHistoryQuery.getCouponUseHistory(member, coupon);
         couponUseHistory.cancel();
         couponUseHistoryCommand.modify(couponUseHistory);
 

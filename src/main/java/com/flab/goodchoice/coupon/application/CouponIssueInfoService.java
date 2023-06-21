@@ -18,7 +18,7 @@ public class CouponIssueInfoService {
     }
 
     public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
-        List<CouponPublish> couponPublishes = couponPublishQuery.findCouponHistoryFetchByMemberId(memberId);
+        List<CouponPublish> couponPublishes = couponPublishQuery.getCouponIssue(memberId);
         return couponPublishes.stream()
                 .map(couponPublish -> MemberSpecificCouponResponse.of(couponPublish.getCoupon()))
                 .toList();

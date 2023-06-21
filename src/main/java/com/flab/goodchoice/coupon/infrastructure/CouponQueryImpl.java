@@ -23,26 +23,26 @@ public class CouponQueryImpl implements CouponQuery {
     }
 
     @Override
-    public List<Coupon> findAll() {
+    public List<Coupon> getCoupons() {
         return couponRepository.findAll().stream()
                 .map(CouponEntity::toCoupon)
                 .collect(toList());
     }
 
     @Override
-    public Coupon findById(Long couponId) {
+    public Coupon getCouponInfo(Long couponId) {
         CouponEntity couponEntity = couponRepository.findById(couponId).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }
 
     @Override
-    public Coupon findByCouponToken(UUID couponToken) {
+    public Coupon getCouponInfo(UUID couponToken) {
         CouponEntity couponEntity = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }
 
     @Override
-    public Coupon findByCouponTokenLock(UUID couponToken) {
+    public Coupon getCouponInfoLock(UUID couponToken) {
         CouponEntity couponEntity = couponRepository.findLockByCouponToken(couponToken).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }

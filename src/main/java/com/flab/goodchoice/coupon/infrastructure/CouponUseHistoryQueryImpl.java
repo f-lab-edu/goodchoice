@@ -18,7 +18,7 @@ public class CouponUseHistoryQueryImpl implements CouponUseHistoryQuery {
     }
 
     @Override
-    public CouponUseHistory findByMemberIdAndCouponEntityId(Member member, Coupon coupon) {
+    public CouponUseHistory getCouponUseHistory(Member member, Coupon coupon) {
         CouponUseHistoryEntity couponUseHistoryEntity = couponUseHistoryRepository.findByMemberIdAndCouponEntityId(member.getId(), coupon.getId()).orElseThrow();
         return couponUseHistoryEntity.toCouponUseHistory();
     }

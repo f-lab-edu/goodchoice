@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CouponQuery {
-    List<Coupon> findAll();
+    List<Coupon> getCoupons();
 
-    Coupon findById(Long couponId);
+    Coupon getCouponInfo(Long couponId);
 
-    Coupon findByCouponToken(UUID couponToken);
+    Coupon getCouponInfo(UUID couponToken);
 
-    Coupon findByCouponTokenLock(@Param("couponToken") UUID couponToken);
+    Coupon getCouponInfoLock(@Param("couponToken") UUID couponToken);
 }

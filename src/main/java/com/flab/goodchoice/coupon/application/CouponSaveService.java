@@ -54,6 +54,6 @@ public class CouponSaveService {
     }
 
     private Coupon getCoupon(UUID couponToken) {
-        return couponQuery.findByCouponToken(couponToken);
+        return couponQuery.getCouponInfo(couponToken);
     }
 }

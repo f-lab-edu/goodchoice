@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CouponPublishQuery {
-    List<CouponPublish> findCouponHistoryFetchByMemberId(Long memberId);
+    List<CouponPublish> getCouponIssue(Long memberId);
 
-    CouponPublish findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId);
-
-    boolean existsByMemberEntityIdAndCouponPublishToken(Long memberId, UUID couponToken);
+    CouponPublish getCouponPublishInfo(UUID couponPublishToken, Long memberId);
 }

@@ -19,13 +19,13 @@ public class CouponInfoService {
     }
 
     public List<CouponInfoResponse> getAllCoupons() {
-        return couponQuery.findAll().stream()
+        return couponQuery.getCoupons().stream()
                 .map(CouponInfoResponse::of)
                 .toList();
     }
 
     public CouponInfoResponse getCoupon(final UUID couponToken) {
-        Coupon coupon = couponQuery.findByCouponToken(couponToken);
+        Coupon coupon = couponQuery.getCouponInfo(couponToken);
         return CouponInfoResponse.of(coupon);
     }
 }
