@@ -85,12 +85,12 @@ class CouponUseServiceTest {
         couponDiscountEntity = new CouponEntity(couponIdDiscount, couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
         couponRepository.save(couponDiscountEntity);
 
-        couponDiscount = couponQuery.findById(couponIdDiscount);
+        couponDiscount = couponQuery.getCouponInfo(couponIdDiscount);
 
         couponDeductionEntity = new CouponEntity(couponIdDeduction, couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
         couponRepository.save(couponDeductionEntity);
 
-        couponDeduction = couponQuery.findById(couponIdDeduction);
+        couponDeduction = couponQuery.getCouponInfo(couponIdDeduction);
     }
 
     @DisplayName("쿠폰 사용-금액 할인")

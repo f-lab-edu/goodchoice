@@ -31,7 +31,7 @@ class CouponPublishSynchronismTest {
     @Autowired
     protected MockMvc mvc;
     @Autowired
-    private CouponQueryService couponQueryService;
+    private CouponInfoService couponQueryService;
     @Autowired
     private CouponCommand couponCommand;
 

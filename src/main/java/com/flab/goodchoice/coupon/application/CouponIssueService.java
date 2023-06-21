@@ -5,7 +5,6 @@ import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponPublish;
 import com.flab.goodchoice.coupon.exception.CouponError;
 import com.flab.goodchoice.coupon.exception.CouponException;
-import com.flab.goodchoice.coupon.infrastructure.CouponPublishExistCheckImpl;
 import com.flab.goodchoice.coupon.infrastructure.repositories.AppliedUserRepository;
 import com.flab.goodchoice.member.application.MemberQuery;
 import com.flab.goodchoice.member.domain.model.Member;
@@ -22,11 +21,11 @@ public class CouponIssueService {
     private final CouponQuery couponQuery;
     private final CouponCommand couponCommand;
     private final CouponPublishCommand couponPublishCommand;
-    private final CouponPublishExistCheckImpl couponPublishExistCheck;
+    private final CouponPublishExistCheck couponPublishExistCheck;
     private final AppliedUserRepository appliedUserRepository;
 
     public CouponIssueService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponPublishCommand couponPublishCommand,
-                              CouponPublishExistCheckImpl couponPublishExistCheck, AppliedUserRepository appliedUserRepository) {
+                              CouponPublishExistCheck couponPublishExistCheck, AppliedUserRepository appliedUserRepository) {
         this.memberQuery = memberQuery;
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
@@ -44,7 +43,6 @@ public class CouponIssueService {
         }
 
         Coupon coupon = couponQuery.getCouponInfoLock(couponToken);
-
         CouponPublish couponPublish = saveCouponPublish( member, coupon);
 
         coupon.useCoupon();
@@ -64,7 +62,6 @@ public class CouponIssueService {
         }
 
         Coupon coupon = couponQuery.getCouponInfo(key);
-
         CouponPublish couponPublish = saveCouponPublish(member, coupon);
 
         coupon.useCoupon();

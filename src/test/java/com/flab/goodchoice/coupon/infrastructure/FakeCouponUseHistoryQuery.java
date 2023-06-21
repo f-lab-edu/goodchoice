@@ -16,7 +16,7 @@ public class FakeCouponUseHistoryQuery implements CouponUseHistoryQuery {
     }
 
     @Override
-    public CouponUseHistory findByMemberIdAndCouponEntityId(Member member, Coupon coupon) {
+    public CouponUseHistory getCouponUseHistory(Member member, Coupon coupon) {
         CouponUseHistoryEntity couponUseHistoryEntity = couponUseHistoryRepository.findByMemberIdAndCouponEntityId(member.getId(), coupon.getId()).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
         return couponUseHistoryEntity.toCouponUseHistory();
     }

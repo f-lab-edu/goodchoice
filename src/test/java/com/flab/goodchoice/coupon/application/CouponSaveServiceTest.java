@@ -18,9 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class CouponCommandServiceTest {
+class CouponSaveServiceTest {
 
-    private CouponCommandService couponCommandService;
+    private CouponSaveService couponSaveService;
     private CouponQuery couponQuery;
     private CouponCommand couponCommand;
     private CouponRepository couponRepository;
@@ -33,7 +33,7 @@ class CouponCommandServiceTest {
         couponQuery = new FakeCouponQuery(couponRepository);
         couponCommand = new FakeCouponCommand(couponRepository);
 
-        couponCommandService = new CouponCommandService(couponQuery, couponCommand);
+        couponSaveService = new CouponSaveService(couponQuery, couponCommand);
 
         coupon = new CouponEntity(UUID.randomUUID(), "10%할인", 100, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);
@@ -47,7 +47,7 @@ class CouponCommandServiceTest {
 
         CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
 
-        couponCommandService.createCoupon(createCouponRequest);
+        couponSaveService.createCoupon(createCouponRequest);
 
         CouponEntity coupon = couponRepository.findById(1L).get();
 
@@ -65,7 +65,7 @@ class CouponCommandServiceTest {
 
         CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
 
-        assertThatThrownBy(() -> couponCommandService.createCoupon(createCouponRequest))
+        assertThatThrownBy(() -> couponSaveService.createCoupon(createCouponRequest))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -76,14 +76,14 @@ class CouponCommandServiceTest {
         final int stock = -1;
 
         CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
-        assertThatThrownBy(() -> couponCommandService.createCoupon(createCouponRequest))
+        assertThatThrownBy(() -> couponSaveService.createCoupon(createCouponRequest))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("쿠폰 정보 수정")
     @Test
     void modifyCoupon() {
-        couponCommandService.modifyCoupon(coupon.getCouponToken(), "15%할인", 200);
+        couponSaveService.modifyCoupon(coupon.getCouponToken(), "15%할인", 200);
 
         CouponEntity findCouponEntity = couponRepository.findByCouponToken(coupon.getCouponToken()).orElseThrow();
 
@@ -99,7 +99,7 @@ class CouponCommandServiceTest {
         final String couponName = "";
         final int stock = 200;
 
-        assertThatThrownBy(() -> couponCommandService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
+        assertThatThrownBy(() -> couponSaveService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
                 .isInstanceOf(CouponException.class);
     }
 
@@ -109,14 +109,14 @@ class CouponCommandServiceTest {
         final String couponName = "15%할인";
         final int stock = -1;
 
-        assertThatThrownBy(() -> couponCommandService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
+        assertThatThrownBy(() -> couponSaveService.modifyCoupon(coupon.getCouponToken(), couponName, stock))
                 .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("쿠폰 삭제")
     @Test
     void deleteCoupon() {
-        couponCommandService.removeCoupon(coupon.getCouponToken());
+        couponSaveService.removeCoupon(coupon.getCouponToken());
 
         CouponEntity findCouponEntity = couponRepository.findByCouponToken(coupon.getCouponToken()).orElseThrow();
 

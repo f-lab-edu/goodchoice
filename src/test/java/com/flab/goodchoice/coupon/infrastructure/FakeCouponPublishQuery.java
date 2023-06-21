@@ -21,20 +21,15 @@ public class FakeCouponPublishQuery implements CouponPublishQuery {
     }
 
     @Override
-    public List<CouponPublish> findCouponHistoryFetchByMemberId(Long memberId) {
+    public List<CouponPublish> getCouponIssue(Long memberId) {
         return couponPublishRepository.findCouponHistoryFetchByMemberId(memberId).stream()
                 .map(CouponPublishEntity::toCouponPublish)
                 .collect(toList());
     }
 
     @Override
-    public CouponPublish findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId) {
+    public CouponPublish getCouponPublishInfo(UUID couponPublishToken, Long memberId) {
         CouponPublishEntity couponPublishEntity = couponPublishRepository.findByCouponPublishTokenAndMemberEntityId(couponPublishToken, memberId).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponPublishEntity.toCouponPublish();
-    }
-
-    @Override
-    public boolean existsByMemberEntityIdAndCouponPublishToken(Long memberId, UUID couponToken) {
-        return couponPublishRepository.existsByMemberEntityIdAndCouponEntity_CouponToken(memberId, couponToken);
     }
 }
