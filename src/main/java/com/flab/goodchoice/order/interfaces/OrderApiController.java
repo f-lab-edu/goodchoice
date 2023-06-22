@@ -22,7 +22,7 @@ public class OrderApiController {
     private final OrderDtoMapper orderDtoMapper;
 
     @PostMapping("/init")
-    public ResponseEntity registerOrder(@RequestBody @Valid OrderDto.RegisterOrderRequest request) {
+    public ResponseEntity registerOrder(@RequestBody @Valid OrderDto.RegisterOrderRequest request) throws Exception {
         var orderCommand = orderDtoMapper.of(request);
         var orderToken = orderFacade.registerOrder(orderCommand);
         var response = orderDtoMapper.of(orderToken);

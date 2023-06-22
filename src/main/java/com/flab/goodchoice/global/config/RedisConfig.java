@@ -1,7 +1,5 @@
 package com.flab.goodchoice.global.config;
 
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,21 +33,8 @@ public class RedisConfig {
     public RedisTemplate<String, String> redisTemplate() {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
-
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
-
-//        // 일반적인 key:value의 경우 시리얼라이저
-//        redisTemplate.setKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setValueSerializer(new StringRedisSerializer());
-//
-//        // Hash를 사용할 경우 시리얼라이저
-//        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-//
-//        // 모든 경우
-//        redisTemplate.setDefaultSerializer(new StringRedisSerializer());
-
         return redisTemplate;
     }
 

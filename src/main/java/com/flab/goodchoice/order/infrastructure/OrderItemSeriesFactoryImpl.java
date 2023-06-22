@@ -15,8 +15,6 @@ public class OrderItemSeriesFactoryImpl implements OrderItemSeriesFactory {
 
     private final ItemReader itemReader;
 
-    private final ItemStore itemStore;
-
     private final OrderStore orderStore;
 
     @Override
@@ -24,37 +22,6 @@ public class OrderItemSeriesFactoryImpl implements OrderItemSeriesFactory {
         return requestOrder.getOrderItemList().stream()
                 .map(orderItemRequest -> {
                     var item = itemReader.getItemBy(orderItemRequest.getItemToken());
-                    item.decrease(1L);
-                    itemStore.store(item);
-
-                    var initOrderItem = orderItemRequest.toEntity(order, item);
-                    var orderItem = orderStore.store(initOrderItem);
-                    return orderItem;
-                }).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<OrderItem> storeWithPessimisticLock(Order order, OrderCommand.RegisterOrder requestOrder) {
-        return requestOrder.getOrderItemList().stream()
-                .map(orderItemRequest -> {
-                    var item = itemReader.getItemByPessimisticLock(orderItemRequest.getItemToken());
-                    item.decrease(1L);
-                    itemStore.store(item);
-
-                    var initOrderItem = orderItemRequest.toEntity(order, item);
-                    var orderItem = orderStore.store(initOrderItem);
-                    return orderItem;
-                }).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<OrderItem> storeWithOptimisticLock(Order order, OrderCommand.RegisterOrder requestOrder) {
-        return requestOrder.getOrderItemList().stream()
-                .map(orderItemRequest -> {
-                    var item = itemReader.getItemByOptimisticLock(orderItemRequest.getItemToken());
-                    item.decrease(1L);
-                    itemStore.store(item);
-
                     var initOrderItem = orderItemRequest.toEntity(order, item);
                     var orderItem = orderStore.store(initOrderItem);
                     return orderItem;
