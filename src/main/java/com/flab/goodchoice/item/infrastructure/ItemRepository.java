@@ -16,7 +16,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select i from Item i where i.itemToken=:itemToken")
     Optional<Item> findByItemTokenWithPessimisticLock(String itemToken);
 
-    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    @Lock(value = LockModeType.OPTIMISTIC)
     @Query("select i from Item i where i.itemToken=:itemToken")
     Optional<Item> findByItemTokenWithOptimisticLock(String itemToken);
 
