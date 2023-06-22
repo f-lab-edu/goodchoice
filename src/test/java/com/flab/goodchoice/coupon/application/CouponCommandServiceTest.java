@@ -1,10 +1,12 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
+import com.flab.goodchoice.coupon.infrastructure.*;
+import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
-import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
-import com.flab.goodchoice.coupon.domain.repositories.InMemoryCouponRepository;
+import com.flab.goodchoice.coupon.infrastructure.repositories.CouponRepository;
+import com.flab.goodchoice.coupon.infrastructure.repositories.InMemoryCouponRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,17 +20,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class CouponCommandServiceTest {
 
     private CouponCommandService couponCommandService;
+    private CouponQuery couponQuery;
+    private CouponCommand couponCommand;
     private CouponRepository couponRepository;
 
-    Coupon coupon;
+    CouponEntity coupon;
 
     @BeforeEach
     void setUp() {
         couponRepository = new InMemoryCouponRepository();
+        couponQuery = new FakeCouponQuery(couponRepository);
+        couponCommand = new FakeCouponCommand(couponRepository);
 
-        couponCommandService = new CouponCommandService(couponRepository);
+        couponCommandService = new CouponCommandService(couponQuery, couponCommand);
 
-        coupon = new Coupon(UUID.randomUUID(), "10%할인", 100, CouponType.DISCOUNT, 10, State.ACTIVITY);
+        coupon = new CouponEntity(UUID.randomUUID(), "10%할인", 100, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);
     }
 
@@ -38,9 +44,11 @@ class CouponCommandServiceTest {
         final String couponName = "10%할인";
         final int stock = 100;
 
-        couponCommandService.create(couponName, stock, CouponType.DISCOUNT, 10);
+        CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
 
-        Coupon coupon = couponRepository.findById(1L).get();
+        couponCommandService.createCoupon(createCouponRequest);
+
+        CouponEntity coupon = couponRepository.findById(1L).get();
 
         assertAll(
                 () -> assertThat(coupon.getCouponName()).isEqualTo(couponName),
@@ -54,7 +62,9 @@ class CouponCommandServiceTest {
         final String couponName = "";
         final int stock = 100;
 
-        assertThatThrownBy(() -> couponCommandService.create(couponName, stock, CouponType.DISCOUNT, 10))
+        CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
+
+        assertThatThrownBy(() -> couponCommandService.createCoupon(createCouponRequest))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -64,7 +74,8 @@ class CouponCommandServiceTest {
         final String couponName = "10%할인";
         final int stock = -1;
 
-        assertThatThrownBy(() -> couponCommandService.create(couponName, stock, CouponType.DISCOUNT, 10))
+        CreateCouponRequest createCouponRequest = new CreateCouponRequest(couponName, stock, CouponType.DISCOUNT, 10);
+        assertThatThrownBy(() -> couponCommandService.createCoupon(createCouponRequest))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -73,9 +84,11 @@ class CouponCommandServiceTest {
     void modifyCoupon() {
         couponCommandService.modifyCoupon(coupon.getCouponToken(), "15%할인", 200);
 
+        CouponEntity findCouponEntity = couponRepository.findByCouponToken(coupon.getCouponToken()).orElseThrow();
+
         assertAll(
-                () -> assertThat(coupon.getCouponName()).isEqualTo("15%할인"),
-                () -> assertThat(coupon.getStock()).isEqualTo(200)
+                () -> assertThat(findCouponEntity.getCouponName()).isEqualTo("15%할인"),
+                () -> assertThat(findCouponEntity.getStock()).isEqualTo(200)
         );
     }
 
@@ -102,8 +115,10 @@ class CouponCommandServiceTest {
     @DisplayName("쿠폰 삭제")
     @Test
     void deleteCoupon() {
-        couponCommandService.deleteCoupon(coupon.getCouponToken());
+        couponCommandService.removeCoupon(coupon.getCouponToken());
 
-        assertThat(coupon.getState()).isEqualTo(State.INACTIVITY);
+        CouponEntity findCouponEntity = couponRepository.findByCouponToken(coupon.getCouponToken()).orElseThrow();
+
+        assertThat(findCouponEntity.getState()).isEqualTo(State.INACTIVITY);
     }
 }

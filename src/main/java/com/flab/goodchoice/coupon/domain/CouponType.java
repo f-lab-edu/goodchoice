@@ -10,7 +10,7 @@ public enum CouponType {
         }
 
         @Override
-        public int usedCalculation(int price, int couponValue) {
+        public int useCalculation(int price, int couponValue) {
             double resultValue = (100 - couponValue) / 100.0;
 
             return (int) Math.ceil(price * resultValue);
@@ -28,7 +28,7 @@ public enum CouponType {
         }
 
         @Override
-        public int usedCalculation(int price, int couponValue) {
+        public int useCalculation(int price, int couponValue) {
             return (int) Math.ceil( price - couponValue);
         }
         @Override
@@ -44,6 +44,6 @@ public enum CouponType {
     }
 
     public abstract int discountPriceCalculation(int price, int couponValue);
-    public abstract int usedCalculation(int price, int couponValue);
+    public abstract int useCalculation(int price, int couponValue);
     public abstract int usedCancelCalculation(int price, int couponValue);
 }
