@@ -1,11 +1,12 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
-import com.flab.goodchoice.coupon.domain.repositories.CouponRepository;
-import com.flab.goodchoice.coupon.domain.repositories.InMemoryCouponRepository;
 import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
+import com.flab.goodchoice.coupon.infrastructure.FakeCouponQuery;
+import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
+import com.flab.goodchoice.coupon.infrastructure.repositories.CouponRepository;
+import com.flab.goodchoice.coupon.infrastructure.repositories.InMemoryCouponRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class CouponQueryServiceTest {
 
     private CouponQueryService couponQueryService;
+    private CouponQuery couponQuery;
     private CouponRepository couponRepository;
 
     final UUID couponToken = UUID.randomUUID();
@@ -29,10 +31,11 @@ class CouponQueryServiceTest {
     @BeforeEach
     void setUp() {
         couponRepository = new InMemoryCouponRepository();
+        couponQuery = new FakeCouponQuery(couponRepository);
 
-        couponQueryService = new CouponQueryService(couponRepository);
+        couponQueryService = new CouponQueryService(couponQuery);
 
-        final Coupon coupon = new Coupon(couponToken, couponName, stock, CouponType.DISCOUNT, 10, State.ACTIVITY);
+        final CouponEntity coupon = new CouponEntity(couponToken, couponName, stock, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);
     }
 
@@ -42,7 +45,7 @@ class CouponQueryServiceTest {
         final String couponNameSecond = "10%할인";
         final int stockSecond = 100;
 
-        final Coupon couponSecond = new Coupon(UUID.randomUUID(), couponNameSecond, stockSecond, CouponType.DISCOUNT, 10, State.ACTIVITY);
+        final CouponEntity couponSecond = new CouponEntity(UUID.randomUUID(), couponNameSecond, stockSecond, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(couponSecond);
 
         final List<CouponInfoResponse> result = couponQueryService.getAllCoupons();
@@ -59,7 +62,7 @@ class CouponQueryServiceTest {
     @DisplayName("쿠폰 단건 조회")
     @Test
     void getCouponDetail() {
-        final CouponInfoResponse result = couponQueryService.getCouponDetail(couponToken);
+        final CouponInfoResponse result = couponQueryService.getCoupon(couponToken);
 
         assertAll(
                 () -> assertThat(result.couponName()).isEqualTo(couponName),
@@ -70,7 +73,7 @@ class CouponQueryServiceTest {
     @DisplayName("해당 쿠폰이 없다면 에러")
     @Test
     void notFoundCoupon() {
-        assertThatThrownBy(() -> couponQueryService.getCouponDetail(UUID.randomUUID()))
+        assertThatThrownBy(() -> couponQueryService.getCoupon(UUID.randomUUID()))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
