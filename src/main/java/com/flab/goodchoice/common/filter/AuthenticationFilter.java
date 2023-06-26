@@ -15,7 +15,7 @@ import java.io.IOException;
 @Slf4j
 public class AuthenticationFilter implements Filter {
 
-    private final static String key = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
+    private final static String key = "auth_key";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

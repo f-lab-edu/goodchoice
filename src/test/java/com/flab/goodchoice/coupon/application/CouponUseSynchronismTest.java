@@ -84,6 +84,7 @@ class CouponUseSynchronismTest {
         CouponPublishRequest request = new CouponPublishRequest(memberId, couponToken);
 
         mvc.perform(post("/api/coupons/publish")
+                        .header("Authentication", "auth_key")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .accept(MediaType.APPLICATION_JSON))
