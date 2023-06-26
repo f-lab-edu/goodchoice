@@ -11,8 +11,6 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 @Slf4j
 public class AuthenticationFilter implements Filter {
@@ -25,9 +23,8 @@ public class AuthenticationFilter implements Filter {
 
         try {
             String authenticationKey = httpServletRequest.getHeader("Authentication");
-            String encryptKey = toEncrypt(authenticationKey.getBytes());
 
-            if (!key.equals(encryptKey)) {
+            if (!key.equals(authenticationKey)) {
                 log.info("다른 인증키 입력");
                 throw new BaseException("401", "인증되지 않은 key 입니다.");
             }
@@ -37,25 +34,6 @@ public class AuthenticationFilter implements Filter {
         } catch (BaseException exception) {
             errorResponse(response, exception);
         }
-    }
-
-    private String toEncrypt(byte[] keys) {
-        MessageDigest messageDigest = null;
-        try {
-            messageDigest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            log.error("api key 변환중 에러 발생");
-            throw new RuntimeException(e);
-        }
-        messageDigest.reset();
-        byte[] encryptKeys = messageDigest.digest(keys);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (byte encryptKey : encryptKeys) {
-            stringBuilder.append(String.format("%02x", encryptKey));
-        }
-
-        return stringBuilder.toString();
     }
 
     private void errorResponse(ServletResponse response, BaseException exception) {
