@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.common.aop.RedissonLock;
+import com.flab.goodchoice.common.aop.LimitedCountLock;
 import com.flab.goodchoice.coupon.domain.*;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
@@ -91,7 +91,7 @@ public class CouponUseService {
         return couponPublish.getCouponPublishToken();
     }
 
-    @RedissonLock(key = "key", waitTime = 20L)
+    @LimitedCountLock(key = "key", waitTime = 20L)
     public UUID createCouponPublishRedissonAop(UUID key, Long memberId) {
         Member member = getMemberById(memberId);
 
