@@ -37,3 +37,6 @@ out/
 .vscode/
 
 .fake
+
+# ignore properties file
+application-API-KEY.properties
