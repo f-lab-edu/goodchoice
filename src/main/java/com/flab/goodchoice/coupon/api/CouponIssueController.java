@@ -1,7 +1,7 @@
 package com.flab.goodchoice.coupon.api;
 
 import com.flab.goodchoice.coupon.application.CouponIssueService;
-import com.flab.goodchoice.coupon.dto.CouponPublishRequest;
+import com.flab.goodchoice.coupon.dto.CouponIssueRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +20,12 @@ public class CouponIssueController {
     }
 
     @PostMapping("/publish")
-    public UUID createCouponPublish(@RequestBody CouponPublishRequest couponPublishRequest) {
-        return couponIssueService.couponIssuance(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
+    public UUID createCouponPublish(@RequestBody CouponIssueRequest couponIssueRequest) {
+        return couponIssueService.couponIssuance(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
     }
 
     @PostMapping("/publish/redisson")
-    public UUID createCouponPublishRedissonAop(@RequestBody CouponPublishRequest couponPublishRequest) {
+    public UUID createCouponPublishRedissonAop(@RequestBody CouponIssueRequest couponPublishRequest) {
         return couponIssueService.couponIssuanceRedissonAop(couponPublishRequest.memberId(), couponPublishRequest.couponToken());
     }
 }

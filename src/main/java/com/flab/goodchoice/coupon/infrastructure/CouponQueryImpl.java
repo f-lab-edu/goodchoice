@@ -30,13 +30,13 @@ public class CouponQueryImpl implements CouponQuery {
     }
 
     @Override
-    public Coupon getCouponInfo(Long couponId) {
+    public Coupon getCoupon(Long couponId) {
         CouponEntity couponEntity = couponRepository.findById(couponId).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }
 
     @Override
-    public Coupon getCouponInfo(UUID couponToken) {
+    public Coupon getCoupon(UUID couponToken) {
         CouponEntity couponEntity = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }

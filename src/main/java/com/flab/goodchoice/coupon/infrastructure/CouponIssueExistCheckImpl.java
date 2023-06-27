@@ -1,17 +1,17 @@
 package com.flab.goodchoice.coupon.infrastructure;
 
-import com.flab.goodchoice.coupon.application.CouponPublishExistCheck;
-import com.flab.goodchoice.coupon.infrastructure.repositories.CouponPublishRepository;
+import com.flab.goodchoice.coupon.application.CouponIssueExistCheck;
+import com.flab.goodchoice.coupon.infrastructure.repositories.CouponIssueRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
-public class CouponPublishExistCheckImpl implements CouponPublishExistCheck {
+public class CouponIssueExistCheckImpl implements CouponIssueExistCheck {
 
-    private final CouponPublishRepository couponPublishRepository;
+    private final CouponIssueRepository couponPublishRepository;
 
-    public CouponPublishExistCheckImpl(CouponPublishRepository couponPublishRepository) {
+    public CouponIssueExistCheckImpl(CouponIssueRepository couponPublishRepository) {
         this.couponPublishRepository = couponPublishRepository;
     }
 

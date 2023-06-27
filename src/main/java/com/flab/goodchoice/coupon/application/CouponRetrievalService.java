@@ -25,7 +25,7 @@ public class CouponRetrievalService {
     }
 
     public CouponRetrievalResponse getCoupon(final UUID couponToken) {
-        Coupon coupon = couponQuery.getCouponInfo(couponToken);
+        Coupon coupon = couponQuery.getCoupon(couponToken);
         return CouponRetrievalResponse.of(coupon);
     }
 }

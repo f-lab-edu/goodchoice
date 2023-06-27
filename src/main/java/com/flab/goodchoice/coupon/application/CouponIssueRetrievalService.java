@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.coupon.domain.CouponPublish;
+import com.flab.goodchoice.coupon.domain.CouponIssue;
 import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,16 +11,16 @@ import java.util.List;
 @Service
 public class CouponIssueRetrievalService {
 
-    private final CouponPublishQuery couponPublishQuery;
+    private final CouponIssueQuery couponIssueQuery;
 
-    public CouponIssueRetrievalService(CouponPublishQuery couponPublishQuery) {
-        this.couponPublishQuery = couponPublishQuery;
+    public CouponIssueRetrievalService(CouponIssueQuery couponIssueQuery) {
+        this.couponIssueQuery = couponIssueQuery;
     }
 
     public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
-        List<CouponPublish> couponPublishes = couponPublishQuery.getCouponIssue(memberId);
-        return couponPublishes.stream()
-                .map(couponPublish -> MemberSpecificCouponResponse.of(couponPublish.getCoupon()))
+        List<CouponIssue> couponIssues = couponIssueQuery.getCouponIssue(memberId);
+        return couponIssues.stream()
+                .map(couponIssue -> MemberSpecificCouponResponse.of(couponIssue.getCoupon()))
                 .toList();
     }
 }

@@ -9,9 +9,9 @@ import java.util.UUID;
 public interface CouponQuery {
     List<Coupon> getCoupons();
 
-    Coupon getCouponInfo(Long couponId);
+    Coupon getCoupon(Long couponId);
 
-    Coupon getCouponInfo(UUID couponToken);
+    Coupon getCoupon(UUID couponToken);
 
     Coupon getCouponInfoLock(@Param("couponToken") UUID couponToken);
 }

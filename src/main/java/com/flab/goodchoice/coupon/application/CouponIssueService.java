@@ -2,7 +2,7 @@ package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.common.aop.LimitedCountLock;
 import com.flab.goodchoice.coupon.domain.Coupon;
-import com.flab.goodchoice.coupon.domain.CouponPublish;
+import com.flab.goodchoice.coupon.domain.CouponIssue;
 import com.flab.goodchoice.coupon.exception.CouponError;
 import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.repositories.AppliedUserRepository;
@@ -20,35 +20,35 @@ public class CouponIssueService {
     private final MemberQuery memberQuery;
     private final CouponQuery couponQuery;
     private final CouponCommand couponCommand;
-    private final CouponPublishCommand couponPublishCommand;
-    private final CouponPublishExistCheck couponPublishExistCheck;
+    private final CouponIssueCommand couponIssueCommand;
+    private final CouponIssueExistCheck couponIssueExistCheck;
     private final AppliedUserRepository appliedUserRepository;
 
-    public CouponIssueService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponPublishCommand couponPublishCommand,
-                              CouponPublishExistCheck couponPublishExistCheck, AppliedUserRepository appliedUserRepository) {
+    public CouponIssueService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponIssueCommand couponIssueCommand,
+                              CouponIssueExistCheck couponIssueExistCheck, AppliedUserRepository appliedUserRepository) {
         this.memberQuery = memberQuery;
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
-        this.couponPublishCommand = couponPublishCommand;
-        this.couponPublishExistCheck = couponPublishExistCheck;
+        this.couponIssueCommand = couponIssueCommand;
+        this.couponIssueExistCheck = couponIssueExistCheck;
         this.appliedUserRepository = appliedUserRepository;
     }
 
     public UUID couponIssuance(final Long memberId, final UUID couponToken) {
         Member member = getMember(memberId);
 
-        boolean existsCoupon = couponPublishExistCheck.couponIssueCheck(memberId, couponToken);
+        boolean existsCoupon = couponIssueExistCheck.couponIssueCheck(memberId, couponToken);
         if (existsCoupon) {
             throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
         }
 
         Coupon coupon = couponQuery.getCouponInfoLock(couponToken);
-        CouponPublish couponPublish = saveCouponPublish( member, coupon);
+        CouponIssue couponPublish = saveCouponIssue( member, coupon);
 
         coupon.useCoupon();
         couponCommand.modify(coupon);
 
-        return couponPublish.getCouponPublishToken();
+        return couponPublish.getCouponIssueToken();
     }
 
     @LimitedCountLock(key = "key", waitTime = 20L)
@@ -62,17 +62,17 @@ public class CouponIssueService {
         }
 
         Coupon coupon = couponQuery.getCouponInfo(key);
-        CouponPublish couponPublish = saveCouponPublish(member, coupon);
+        CouponIssue couponPublish = saveCouponIssue(member, coupon);
 
         coupon.useCoupon();
         couponCommand.modify(coupon);
 
-        return couponPublish.getCouponPublishToken();
+        return couponPublish.getCouponIssueToken();
     }
 
-    private CouponPublish saveCouponPublish(Member member, Coupon coupon) {
-        CouponPublish couponPublish = new CouponPublish(UUID.randomUUID(), member, coupon, false);
-        return couponPublishCommand.save(couponPublish);
+    private CouponIssue saveCouponIssue(Member member, Coupon coupon) {
+        CouponIssue couponIssue = new CouponIssue(UUID.randomUUID(), member, coupon, false);
+        return couponIssueCommand.save(couponIssue);
     }
 
     private Member getMember(Long memberId) {

@@ -5,14 +5,14 @@ import com.flab.goodchoice.coupon.domain.State;
 
 import java.util.UUID;
 
-public record CouponInfoResponse(
+public record CouponRetrievalResponse(
         UUID couponToken,
         String couponName,
         int stock,
         State state
 ) {
 
-    public static CouponInfoResponse of (Coupon coupon) {
-        return new CouponInfoResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState());
+    public static CouponRetrievalResponse of (Coupon coupon) {
+        return new CouponRetrievalResponse(coupon.getCouponToken(), coupon.getCouponName(), coupon.getStock(), coupon.getState());
     }
 }

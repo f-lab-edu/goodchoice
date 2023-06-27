@@ -15,23 +15,23 @@ import java.util.UUID;
 public class CouponUseService {
 
     private final MemberQuery memberQuery;
-    private final CouponPublishQuery couponPublishQuery;
-    private final CouponPublishCommand couponPublishCommand;
+    private final CouponIssueQuery couponIssueQuery;
+    private final CouponIssueCommand couponIssueCommand;
     private final CouponUseHistoryQuery couponUseHistoryQuery;
     private final CouponUseHistoryCommand couponUseHistoryCommand;
 
-    public CouponUseService(MemberQuery memberQuery, CouponPublishQuery couponPublishQuery, CouponPublishCommand couponPublishCommand,
+    public CouponUseService(MemberQuery memberQuery, CouponIssueQuery couponIssueQuery, CouponIssueCommand couponIssueCommand,
                             CouponUseHistoryQuery couponUseHistoryQuery, CouponUseHistoryCommand couponUseHistoryCommand) {
         this.memberQuery = memberQuery;
-        this.couponPublishQuery = couponPublishQuery;
-        this.couponPublishCommand = couponPublishCommand;
+        this.couponIssueQuery = couponIssueQuery;
+        this.couponIssueCommand = couponIssueCommand;
         this.couponUseHistoryQuery = couponUseHistoryQuery;
         this.couponUseHistoryCommand = couponUseHistoryCommand;
     }
 
-    public CouponUsedInfoResponse useCoupon(final Long memberId, final UUID couponPublishToken, final int price) {
+    public CouponUsedInfoResponse useCoupon(final Long memberId, final UUID couponIssueToken, final int price) {
         Member member = getMemberById(memberId);
-        CouponPublish couponPublish = couponPublishQuery.getCouponPublishInfo(couponPublishToken, memberId);
+        CouponIssue couponPublish = couponIssueQuery.getCouponIssue(couponIssueToken, memberId);
 
         Coupon coupon = couponPublish.getCoupon();
 
@@ -42,14 +42,14 @@ public class CouponUseService {
         couponUseHistoryCommand.save(new CouponUseHistory(member, coupon, price, discountPrice, UseState.USE));
 
         couponPublish.use();
-        couponPublishCommand.modify(couponPublish);
+        couponIssueCommand.modify(couponPublish);
 
-        return new CouponUsedInfoResponse(couponPublishToken, price, discountPrice, resultPrice);
+        return new CouponUsedInfoResponse(couponIssueToken, price, discountPrice, resultPrice);
     }
 
-    public CouponUsedCancelInfoResponse usedCouponCancel(final Long memberId, final UUID couponPublishToken, final int price) {
+    public CouponUsedCancelInfoResponse usedCouponCancel(final Long memberId, final UUID couponIssueToken, final int price) {
         Member member = getMemberById(memberId);
-        CouponPublish couponPublish = couponPublishQuery.getCouponPublishInfo(couponPublishToken, memberId);
+        CouponIssue couponPublish = couponIssueQuery.getCouponIssue(couponIssueToken, memberId);
         Coupon coupon = couponPublish.getCoupon();
 
         CouponUseHistory couponUseHistory = couponUseHistoryQuery.getCouponUseHistory(member, coupon);
@@ -57,11 +57,11 @@ public class CouponUseService {
         couponUseHistoryCommand.modify(couponUseHistory);
 
         couponPublish.cancel();
-        couponPublishCommand.modify(couponPublish);
+        couponIssueCommand.modify(couponPublish);
 
         CouponCalculator couponCalculator = coupon.getCouponType().couponCalculator(price, coupon.getDiscountValue());
 
-        return new CouponUsedCancelInfoResponse(couponPublishToken, price, couponCalculator.usedCancelCalculation());
+        return new CouponUsedCancelInfoResponse(couponIssueToken, price, couponCalculator.usedCancelCalculation());
     }
 
     private Member getMemberById(Long memberId) {

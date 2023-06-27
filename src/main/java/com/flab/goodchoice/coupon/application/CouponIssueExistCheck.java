@@ -2,7 +2,7 @@ package com.flab.goodchoice.coupon.application;
 
 import java.util.UUID;
 
-public interface CouponPublishExistCheck {
+public interface CouponIssueExistCheck {
 
     boolean couponIssueCheck(Long memberId, UUID couponToken);
 }
