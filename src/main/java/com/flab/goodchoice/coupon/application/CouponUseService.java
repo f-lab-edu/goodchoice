@@ -91,7 +91,7 @@ public class CouponUseService {
         return couponPublish.getCouponPublishToken();
     }
 
-    @RedissonLock(key = "key", target = "memberId", waitTime = 20L)
+    @RedissonLock(key = "key", waitTime = 20L)
     public UUID createCouponPublishRedissonAop(UUID key, Long memberId) {
         Member member = getMemberById(memberId);
 

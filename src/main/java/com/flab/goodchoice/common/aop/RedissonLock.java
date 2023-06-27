@@ -12,8 +12,6 @@ public @interface RedissonLock {
 
     String key();
 
-    String target();
-
     long waitTime() default 10L;
 
     long leaseTime() default 1L;
