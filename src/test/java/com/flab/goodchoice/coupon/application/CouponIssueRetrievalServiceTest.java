@@ -21,23 +21,23 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class CouponIssueInfoServiceTest {
+class CouponIssueRetrievalServiceTest {
 
     private MemberRepository memberRepository;
     private CouponIssueService couponIssueService;
     private CouponRepository couponRepository;
-    private CouponPublishRepository couponPublishRepository;
+    private CouponIssueRepository couponIssueRepository;
 
     private MemberQuery memberQuery;
     private MemberCommand memberCommand;
     private CouponQuery couponQuery;
     private CouponCommand couponCommand;
-    private CouponPublishCommand couponPublishCommand;
+    private CouponIssueCommand couponIssueCommand;
     private AppliedUserRepository appliedUserRepository;
-    private CouponPublishExistCheck couponPublishExistCheck;
-    private CouponPublishQuery couponPublishQuery;
+    private CouponIssueExistCheck couponIssueExistCheck;
+    private CouponIssueQuery couponIssueQuery;
 
-    private CouponIssueInfoService couponIssueInfoService;
+    private CouponIssueRetrievalService couponIssueRetrievalService;
 
     Member member;
     final Long memberId = 1L;
@@ -64,31 +64,31 @@ class CouponIssueInfoServiceTest {
     void setUp() {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
-        couponPublishRepository = new InMemoryCouponPublishRepository();
+        couponIssueRepository = new InMemoryCouponIssueRepository();
 
         memberQuery = new FakeMemberQuery(memberRepository);
         memberCommand = new FakeMemberCommand(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
         couponCommand = new FakeCouponCommand(couponRepository);
-        couponPublishCommand = new FakeCouponPublishCommand(couponPublishRepository);
+        couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
         appliedUserRepository = new FakeAppliedUserRepository();
-        couponPublishExistCheck = new FakeCouponPublishExistCheck(couponPublishRepository);
-        couponPublishQuery = new FakeCouponPublishQuery(couponPublishRepository);
+        couponIssueExistCheck = new FakeCouponIssueExistCheck(couponIssueRepository);
+        couponIssueQuery = new FakeCouponIssueQuery(couponIssueRepository);
 
-        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponPublishCommand, couponPublishExistCheck,  appliedUserRepository);
-        couponIssueInfoService = new CouponIssueInfoService(couponPublishQuery);
+        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistCheck,  appliedUserRepository);
+        couponIssueRetrievalService = new CouponIssueRetrievalService(couponIssueQuery);
 
         member = memberCommand.save(new Member(memberId));
 
         couponDiscountEntity = new CouponEntity(couponIdDiscount, couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
         couponRepository.save(couponDiscountEntity);
 
-        couponDiscount = couponQuery.getCouponInfo(couponIdDiscount);
+        couponDiscount = couponQuery.getCoupon(couponIdDiscount);
 
         couponDeductionEntity = new CouponEntity(couponIdDeduction, couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
         couponRepository.save(couponDeductionEntity);
 
-        couponDeduction = couponQuery.getCouponInfo(couponIdDeduction);
+        couponDeduction = couponQuery.getCoupon(couponIdDeduction);
     }
 
     @DisplayName("회원이 가진 쿠폰 목록 조회")
@@ -96,7 +96,7 @@ class CouponIssueInfoServiceTest {
     void memberGetCouponList() {
         couponIssueService.couponIssuance(memberId, couponTokenDiscount);
 
-        List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponIssueInfoService.getMemberCoupon(memberId);
+        List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponIssueRetrievalService.getMemberCoupon(memberId);
 
         assertAll(
                 () -> assertThat(memberSpecificCouponResponses.get(0).couponId()).isEqualTo(couponTokenDiscount),
@@ -110,7 +110,7 @@ class CouponIssueInfoServiceTest {
     void NoneMemberGetCouponList() {
         couponIssueService.couponIssuance(memberId, couponTokenDiscount);
 
-        List<MemberSpecificCouponResponse> result = couponIssueInfoService.getMemberCoupon(noneMemberId);
+        List<MemberSpecificCouponResponse> result = couponIssueRetrievalService.getMemberCoupon(noneMemberId);
 
         assertThat(result.size()).isEqualTo(0);
     }

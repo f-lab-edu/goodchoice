@@ -2,7 +2,7 @@ package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
-import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
+import com.flab.goodchoice.coupon.dto.CouponRetrievalResponse;
 import com.flab.goodchoice.coupon.infrastructure.FakeCouponQuery;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponRepository;
@@ -18,9 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class CouponInfoServiceTest {
+class CouponRetrievalServiceTest {
 
-    private CouponInfoService couponQueryService;
+    private CouponRetrievalService couponRetrievalService;
     private CouponQuery couponQuery;
     private CouponRepository couponRepository;
 
@@ -33,7 +33,7 @@ class CouponInfoServiceTest {
         couponRepository = new InMemoryCouponRepository();
         couponQuery = new FakeCouponQuery(couponRepository);
 
-        couponQueryService = new CouponInfoService(couponQuery);
+        couponRetrievalService = new CouponRetrievalService(couponQuery);
 
         final CouponEntity coupon = new CouponEntity(couponToken, couponName, stock, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);
@@ -49,7 +49,7 @@ class CouponInfoServiceTest {
         final CouponEntity couponSecond = new CouponEntity(UUID.randomUUID(), couponNameSecond, stockSecond, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(couponSecond);
 
-        final List<CouponInfoResponse> result = couponQueryService.getAllCoupons();
+        final List<CouponRetrievalResponse> result = couponRetrievalService.getAllCoupons();
 
         assertAll(
                 () -> assertThat(result).hasSize(2),
@@ -63,7 +63,7 @@ class CouponInfoServiceTest {
     @DisplayName("쿠폰 단건 조회")
     @Test
     void getCouponInfo() {
-        final CouponInfoResponse result = couponQueryService.getCoupon(couponToken);
+        final CouponRetrievalResponse result = couponRetrievalService.getCoupon(couponToken);
 
         assertAll(
                 () -> assertThat(result.couponName()).isEqualTo(couponName),
@@ -74,7 +74,7 @@ class CouponInfoServiceTest {
     @DisplayName("해당 쿠폰이 없다면 에러")
     @Test
     void notFoundCoupon() {
-        assertThatThrownBy(() -> couponQueryService.getCoupon(UUID.randomUUID()))
+        assertThatThrownBy(() -> couponRetrievalService.getCoupon(UUID.randomUUID()))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

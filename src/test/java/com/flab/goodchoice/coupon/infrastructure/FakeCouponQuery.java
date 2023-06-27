@@ -26,13 +26,13 @@ public class FakeCouponQuery implements CouponQuery {
     }
 
     @Override
-    public Coupon getCouponInfo(Long couponId) {
+    public Coupon getCoupon(Long couponId) {
         CouponEntity couponEntity = couponRepository.findById(couponId).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
         return couponEntity.toCoupon();
     }
 
     @Override
-    public Coupon getCouponInfo(UUID couponToken) {
+    public Coupon getCoupon(UUID couponToken) {
         CouponEntity couponEntity = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new IllegalArgumentException("해당 쿠폰을 찾을 수 없습니다."));
         return couponEntity.toCoupon();
     }

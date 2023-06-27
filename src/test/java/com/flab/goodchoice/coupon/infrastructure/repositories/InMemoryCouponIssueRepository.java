@@ -1,14 +1,14 @@
 package com.flab.goodchoice.coupon.infrastructure.repositories;
 
-import com.flab.goodchoice.coupon.infrastructure.entity.CouponPublishEntity;
+import com.flab.goodchoice.coupon.infrastructure.entity.CouponIssueEntity;
 
 import java.util.*;
 
-public class InMemoryCouponPublishRepository implements CouponPublishRepository {
-    private final Map<Long, CouponPublishEntity> couponPublishs = new HashMap<>();
+public class InMemoryCouponIssueRepository implements CouponIssueRepository {
+    private final Map<Long, CouponIssueEntity> couponPublishs = new HashMap<>();
 
     @Override
-    public CouponPublishEntity save(CouponPublishEntity couponPublishHistory) {
+    public CouponIssueEntity save(CouponIssueEntity couponPublishHistory) {
         if (couponPublishs.containsValue(couponPublishHistory)) {
             for (Long key : couponPublishs.keySet()) {
                 if (couponPublishs.get(key).equals(couponPublishHistory)) {
@@ -28,16 +28,16 @@ public class InMemoryCouponPublishRepository implements CouponPublishRepository 
     }
 
     @Override
-    public List<CouponPublishEntity> findCouponHistoryFetchByMemberId(Long memberId) {
+    public List<CouponIssueEntity> findCouponHistoryFetchByMemberId(Long memberId) {
         return couponPublishs.values().stream()
                 .filter(couponPublishHistory -> couponPublishHistory.getMemberEntity().getId().equals(memberId))
                 .toList();
     }
 
     @Override
-    public Optional<CouponPublishEntity> findByCouponPublishTokenAndMemberEntityId(UUID couponPublishToken, Long memberId) {
+    public Optional<CouponIssueEntity> findByCouponIssueTokenAndMemberEntityId(UUID couponPublishToken, Long memberId) {
         return couponPublishs.values().stream()
-                .filter(couponPublish -> couponPublish.getCouponPublishToken().equals(couponPublishToken))
+                .filter(couponPublish -> couponPublish.getCouponIssueToken().equals(couponPublishToken))
                 .filter(couponPublish -> couponPublish.getMemberEntity().getId().equals(memberId))
                 .findFirst();
     }

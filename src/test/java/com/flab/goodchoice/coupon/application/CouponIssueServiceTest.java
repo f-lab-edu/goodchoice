@@ -26,15 +26,15 @@ class CouponIssueServiceTest {
     private MemberRepository memberRepository;
     private CouponIssueService couponIssueService;
     private CouponRepository couponRepository;
-    private CouponPublishRepository couponPublishRepository;
+    private CouponIssueRepository couponIssueRepository;
 
     private MemberQuery memberQuery;
     private MemberCommand memberCommand;
     private CouponQuery couponQuery;
     private CouponCommand couponCommand;
-    private CouponPublishCommand couponPublishCommand;
+    private CouponIssueCommand couponIssueCommand;
     private AppliedUserRepository appliedUserRepository;
-    private CouponPublishExistCheck couponPublishExistCheck;
+    private CouponIssueExistCheck couponIssueExistCheck;
 
     Member member;
     final Long memberId = 1L;
@@ -61,29 +61,29 @@ class CouponIssueServiceTest {
     void setUp() {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
-        couponPublishRepository = new InMemoryCouponPublishRepository();
+        couponIssueRepository = new InMemoryCouponIssueRepository();
 
         memberQuery = new FakeMemberQuery(memberRepository);
         memberCommand = new FakeMemberCommand(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
         couponCommand = new FakeCouponCommand(couponRepository);
-        couponPublishCommand = new FakeCouponPublishCommand(couponPublishRepository);
+        couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
         appliedUserRepository = new FakeAppliedUserRepository();
-        couponPublishExistCheck = new FakeCouponPublishExistCheck(couponPublishRepository);
+        couponIssueExistCheck = new FakeCouponIssueExistCheck(couponIssueRepository);
 
-        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponPublishCommand, couponPublishExistCheck,  appliedUserRepository);
+        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistCheck,  appliedUserRepository);
 
         member = memberCommand.save(new Member(memberId));
 
         couponDiscountEntity = new CouponEntity(couponIdDiscount, couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
         couponRepository.save(couponDiscountEntity);
 
-        couponDiscount = couponQuery.getCouponInfo(couponIdDiscount);
+        couponDiscount = couponQuery.getCoupon(couponIdDiscount);
 
         couponDeductionEntity = new CouponEntity(couponIdDeduction, couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
         couponRepository.save(couponDeductionEntity);
 
-        couponDeduction = couponQuery.getCouponInfo(couponIdDeduction);
+        couponDeduction = couponQuery.getCoupon(couponIdDeduction);
     }
 
     @DisplayName("회원별 쿠폰 등록")
@@ -91,10 +91,10 @@ class CouponIssueServiceTest {
     void couponPublish() {
         couponIssueService.couponIssuance(memberId, couponTokenDiscount);
 
-        Coupon result = couponQuery.getCouponInfo(couponTokenDiscount);
+        Coupon result = couponQuery.getCoupon(couponTokenDiscount);
 
         assertThat(result.getStock()).isEqualTo(99);
-        assertThat(couponPublishRepository.countByCouponEntityId(couponDiscount.getId())).isEqualTo(1);
+        assertThat(couponIssueRepository.countByCouponEntityId(couponDiscount.getId())).isEqualTo(1);
     }
 
     @DisplayName("한 계정당 하나의 쿠폰만 등록 가능 중복 등록시 에러")

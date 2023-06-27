@@ -61,7 +61,7 @@ public class CouponIssueService {
             throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
         }
 
-        Coupon coupon = couponQuery.getCouponInfo(key);
+        Coupon coupon = couponQuery.getCoupon(key);
         CouponIssue couponPublish = saveCouponIssue(member, coupon);
 
         coupon.useCoupon();
