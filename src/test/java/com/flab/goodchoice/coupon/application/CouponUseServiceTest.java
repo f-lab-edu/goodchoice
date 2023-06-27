@@ -42,7 +42,6 @@ class CouponUseServiceTest {
     private CouponPublishCommand couponPublishCommand;
     private CouponUseHistoryQuery couponUseHistoryQuery;
     private CouponUseHistoryCommand couponUseHistoryCommand;
-    private AppliedUserRepository appliedUserRepository;
 
     Member member;
     final Long memberId = 1L;
@@ -82,9 +81,8 @@ class CouponUseServiceTest {
         couponPublishCommand = new FakeCouponPublishCommand(couponPublishRepository);
         couponUseHistoryQuery = new FakeCouponUseHistoryQuery(couponUseHistoryEntityRepository);
         couponUseHistoryCommand = new FakeCouponUseHistoryCommand(couponUseHistoryEntityRepository);
-        appliedUserRepository = new FakeAppliedUserRepository();
 
-        couponUseService = new CouponUseService(memberQuery, couponQuery, couponCommand, couponPublishQuery, couponPublishCommand, couponUseHistoryQuery, couponUseHistoryCommand, appliedUserRepository);
+        couponUseService = new CouponUseService(memberQuery, couponQuery, couponCommand, couponPublishQuery, couponPublishCommand, couponUseHistoryQuery, couponUseHistoryCommand);
 
         member = memberCommand.save(new Member(memberId));
 

@@ -30,7 +30,7 @@ public class RedissonLockAop {
         Method method = signature.getMethod();
         RedissonLock redissonLock = method.getAnnotation(RedissonLock.class);
 
-        String key = createKey(signature.getParameterNames(), joinPoint.getArgs(), redissonLock.key());
+        String key = createParameter(signature.getParameterNames(), joinPoint.getArgs(), redissonLock.key());
 
         RLock lock = redissonClient.getLock(key);
         try {
@@ -48,16 +48,16 @@ public class RedissonLockAop {
         }
     }
 
-    private String createKey(String[] parameterNames, Object[] args, String key) {
-        String resultKey = key;
+    private String createParameter(String[] parameterNames, Object[] args, String param) {
+        String result = param;
 
         for (int i = 0; i < parameterNames.length; i++) {
-            if (parameterNames[i].equals(key)) {
-                resultKey += args[i];
+            if (parameterNames[i].equals(param)) {
+                result += args[i];
                 break;
             }
         }
 
-        return resultKey;
+        return result;
     }
 }
