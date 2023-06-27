@@ -9,11 +9,11 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 @Service
-public class CouponIssueInfoService {
+public class CouponIssueRetrievalService {
 
     private final CouponPublishQuery couponPublishQuery;
 
-    public CouponIssueInfoService(CouponPublishQuery couponPublishQuery) {
+    public CouponIssueRetrievalService(CouponPublishQuery couponPublishQuery) {
         this.couponPublishQuery = couponPublishQuery;
     }
 

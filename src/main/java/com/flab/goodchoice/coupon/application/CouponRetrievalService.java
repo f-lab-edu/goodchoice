@@ -1,7 +1,7 @@
 package com.flab.goodchoice.coupon.application;
 
 import com.flab.goodchoice.coupon.domain.Coupon;
-import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
+import com.flab.goodchoice.coupon.dto.CouponRetrievalResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,22 +10,22 @@ import java.util.UUID;
 
 @Transactional(readOnly = true)
 @Service
-public class CouponInfoService {
+public class CouponRetrievalService {
 
     private final CouponQuery couponQuery;
 
-    public CouponInfoService(CouponQuery couponQuery) {
+    public CouponRetrievalService(CouponQuery couponQuery) {
         this.couponQuery = couponQuery;
     }
 
-    public List<CouponInfoResponse> getAllCoupons() {
+    public List<CouponRetrievalResponse> getAllCoupons() {
         return couponQuery.getCoupons().stream()
-                .map(CouponInfoResponse::of)
+                .map(CouponRetrievalResponse::of)
                 .toList();
     }
 
-    public CouponInfoResponse getCoupon(final UUID couponToken) {
+    public CouponRetrievalResponse getCoupon(final UUID couponToken) {
         Coupon coupon = couponQuery.getCouponInfo(couponToken);
-        return CouponInfoResponse.of(coupon);
+        return CouponRetrievalResponse.of(coupon);
     }
 }
