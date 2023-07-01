@@ -21,7 +21,7 @@ public class FakeCouponIssueQuery implements CouponIssueQuery {
     }
 
     @Override
-    public List<CouponIssue> getCouponIssue(Long memberId) {
+    public List<CouponIssue> getCouponIssues(Long memberId) {
         return couponPublishRepository.findCouponHistoryFetchByMemberId(memberId).stream()
                 .map(CouponIssueEntity::toCouponIssue)
                 .collect(toList());

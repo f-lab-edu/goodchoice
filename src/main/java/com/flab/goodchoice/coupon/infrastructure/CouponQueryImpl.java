@@ -7,12 +7,14 @@ import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
+@Transactional(readOnly = true)
 @Component
 public class CouponQueryImpl implements CouponQuery {
 

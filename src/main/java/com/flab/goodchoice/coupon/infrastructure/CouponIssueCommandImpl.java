@@ -7,7 +7,9 @@ import com.flab.goodchoice.coupon.infrastructure.entity.CouponIssueEntity;
 import com.flab.goodchoice.member.infrastructure.entity.MemberEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponIssueRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Component
 public class CouponIssueCommandImpl implements CouponIssueCommand {
 

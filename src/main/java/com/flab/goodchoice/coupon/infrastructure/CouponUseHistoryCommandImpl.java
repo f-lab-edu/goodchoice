@@ -7,7 +7,9 @@ import com.flab.goodchoice.coupon.infrastructure.entity.CouponUseHistoryEntity;
 import com.flab.goodchoice.member.infrastructure.entity.MemberEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponUseHistoryRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Component
 public class CouponUseHistoryCommandImpl implements CouponUseHistoryCommand {
 

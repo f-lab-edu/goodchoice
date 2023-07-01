@@ -18,7 +18,7 @@ public class CouponIssueRetrievalService {
     }
 
     public List<MemberSpecificCouponResponse> getMemberCoupon(Long memberId) {
-        List<CouponIssue> couponIssues = couponIssueQuery.getCouponIssue(memberId);
+        List<CouponIssue> couponIssues = couponIssueQuery.getCouponIssues(memberId);
         return couponIssues.stream()
                 .map(couponIssue -> MemberSpecificCouponResponse.of(couponIssue.getCoupon()))
                 .toList();

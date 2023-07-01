@@ -7,12 +7,14 @@ import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponIssueEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponIssueRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
+@Transactional(readOnly = true)
 @Component
 public class CouponIssueQueryImpl implements CouponIssueQuery {
 
@@ -23,7 +25,7 @@ public class CouponIssueQueryImpl implements CouponIssueQuery {
     }
 
     @Override
-    public List<CouponIssue> getCouponIssue(Long memberId) {
+    public List<CouponIssue> getCouponIssues(Long memberId) {
         return couponPublishRepository.findCouponHistoryFetchByMemberId(memberId).stream()
                 .map(CouponIssueEntity::toCouponIssue)
                 .collect(toList());

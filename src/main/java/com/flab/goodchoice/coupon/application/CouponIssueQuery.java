@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CouponIssueQuery {
-    List<CouponIssue> getCouponIssue(Long memberId);
+    List<CouponIssue> getCouponIssues(Long memberId);
 
     CouponIssue getCouponIssue(UUID couponIssueToken, Long memberId);
 }
