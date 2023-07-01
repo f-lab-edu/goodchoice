@@ -34,10 +34,10 @@ public class CouponIssueService {
         this.appliedUserRepository = appliedUserRepository;
     }
 
-    public UUID couponIssuance(final Long memberId, final UUID couponToken) {
+    public UUID couponIssue(final Long memberId, final UUID couponToken) {
         Member member = getMember(memberId);
 
-        boolean existsCoupon = couponIssueExistCheck.couponIssueCheck(memberId, couponToken);
+        boolean existsCoupon = couponIssueExistCheck.duplicateCouponIssue(memberId, couponToken);
         if (existsCoupon) {
             throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
         }
@@ -52,7 +52,7 @@ public class CouponIssueService {
     }
 
     @LimitedCountLock(key = "key", waitTime = 20L)
-    public UUID couponIssuanceRedissonAop(final Long memberId, final UUID key) {
+    public UUID couponIssueRedissonAop(final Long memberId, final UUID key) {
         Member member = getMember(memberId);
 
         Long apply = appliedUserRepository.addRedisSet(key.toString(), memberId.toString());

@@ -21,11 +21,11 @@ public class CouponIssueController {
 
     @PostMapping("/issue")
     public UUID createCouponIssue(@RequestBody CouponIssueRequest couponIssueRequest) {
-        return couponIssueService.couponIssuance(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
+        return couponIssueService.couponIssue(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
     }
 
     @PostMapping("/issue/redisson")
     public UUID createCouponIssueRedissonAop(@RequestBody CouponIssueRequest couponIssueRequest) {
-        return couponIssueService.couponIssuanceRedissonAop(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
+        return couponIssueService.couponIssueRedissonAop(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
     }
 }

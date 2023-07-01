@@ -10,11 +10,11 @@ import java.util.UUID;
 
 @RequestMapping("/api/coupons")
 @RestController
-public class CouponSaveController {
+public class CouponController {
 
     private final CouponSaveService couponSaveService;
 
-    public CouponSaveController(CouponSaveService couponSaveService) {
+    public CouponController(CouponSaveService couponSaveService) {
         this.couponSaveService = couponSaveService;
     }
 

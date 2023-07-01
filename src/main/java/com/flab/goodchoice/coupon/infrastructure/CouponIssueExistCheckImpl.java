@@ -9,14 +9,14 @@ import java.util.UUID;
 @Component
 public class CouponIssueExistCheckImpl implements CouponIssueExistCheck {
 
-    private final CouponIssueRepository couponPublishRepository;
+    private final CouponIssueRepository couponIssueRepository;
 
-    public CouponIssueExistCheckImpl(CouponIssueRepository couponPublishRepository) {
-        this.couponPublishRepository = couponPublishRepository;
+    public CouponIssueExistCheckImpl(CouponIssueRepository couponIssueRepository) {
+        this.couponIssueRepository = couponIssueRepository;
     }
 
     @Override
-    public boolean couponIssueCheck(Long memberId, UUID couponToken) {
-        return couponPublishRepository.existsByMemberEntityIdAndCouponEntity_CouponToken(memberId, couponToken);
+    public boolean duplicateCouponIssue(Long memberId, UUID couponToken) {
+        return couponIssueRepository.existsByMemberEntityIdAndCouponEntity_CouponToken(memberId, couponToken);
     }
 }

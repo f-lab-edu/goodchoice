@@ -14,7 +14,7 @@ public class FakeCouponIssueExistCheck implements CouponIssueExistCheck {
     }
 
     @Override
-    public boolean couponIssueCheck(Long memberId, UUID couponToken) {
+    public boolean duplicateCouponIssue(Long memberId, UUID couponToken) {
         return couponIssueRepository.existsByMemberEntityIdAndCouponEntity_CouponToken(memberId, couponToken);
     }
 }

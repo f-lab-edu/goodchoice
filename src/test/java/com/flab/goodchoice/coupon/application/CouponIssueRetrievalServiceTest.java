@@ -94,7 +94,7 @@ class CouponIssueRetrievalServiceTest {
     @DisplayName("회원이 가진 쿠폰 목록 조회")
     @Test
     void memberGetCouponList() {
-        couponIssueService.couponIssuance(memberId, couponTokenDiscount);
+        couponIssueService.couponIssue(memberId, couponTokenDiscount);
 
         List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponIssueRetrievalService.getMemberCoupon(memberId);
 
@@ -108,7 +108,7 @@ class CouponIssueRetrievalServiceTest {
     @DisplayName("쿠폰을 가지지 않은 회원이 쿠폰 조회시 빈 목록 리턴")
     @Test
     void NoneMemberGetCouponList() {
-        couponIssueService.couponIssuance(memberId, couponTokenDiscount);
+        couponIssueService.couponIssue(memberId, couponTokenDiscount);
 
         List<MemberSpecificCouponResponse> result = couponIssueRetrievalService.getMemberCoupon(noneMemberId);
 

@@ -4,5 +4,5 @@ import java.util.UUID;
 
 public interface CouponIssueExistCheck {
 
-    boolean couponIssueCheck(Long memberId, UUID couponToken);
+    boolean duplicateCouponIssue(Long memberId, UUID couponToken);
 }

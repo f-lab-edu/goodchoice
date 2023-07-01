@@ -89,7 +89,7 @@ class CouponIssueServiceTest {
     @DisplayName("회원별 쿠폰 등록")
     @Test
     void couponPublish() {
-        couponIssueService.couponIssuance(memberId, couponTokenDiscount);
+        couponIssueService.couponIssue(memberId, couponTokenDiscount);
 
         Coupon result = couponQuery.getCoupon(couponTokenDiscount);
 
@@ -100,16 +100,16 @@ class CouponIssueServiceTest {
     @DisplayName("한 계정당 하나의 쿠폰만 등록 가능 중복 등록시 에러")
     @Test
     void oneMemberOneCouponPublish() {
-        couponIssueService.couponIssuance(memberId, couponTokenDiscount);
+        couponIssueService.couponIssue(memberId, couponTokenDiscount);
 
-        assertThatThrownBy(() -> couponIssueService.couponIssuance(memberId, couponTokenDiscount))
+        assertThatThrownBy(() -> couponIssueService.couponIssue(memberId, couponTokenDiscount))
                 .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("존재하지 않은 회원 쿠폰 등록시 에러")
     @Test
     void noneMemberCouponPublish() {
-        assertThatThrownBy(() -> couponIssueService.couponIssuance(noneMemberId, couponTokenDiscount))
+        assertThatThrownBy(() -> couponIssueService.couponIssue(noneMemberId, couponTokenDiscount))
                 .isInstanceOf(MemberException.class);
     }
 
@@ -119,7 +119,7 @@ class CouponIssueServiceTest {
         CouponEntity couponEntity = new CouponEntity(3L, UUID.randomUUID(), couponNameDeduction, 0, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
         couponRepository.save(couponEntity);
 
-        assertThatThrownBy(() -> couponIssueService.couponIssuance(memberId, couponEntity.getCouponToken()))
+        assertThatThrownBy(() -> couponIssueService.couponIssue(memberId, couponEntity.getCouponToken()))
                 .isInstanceOf(CouponException.class);
     }
 }
