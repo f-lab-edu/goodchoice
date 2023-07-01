@@ -96,7 +96,7 @@ class CouponIssueRetrievalServiceTest {
     void memberGetCouponList() {
         couponIssueService.couponIssue(memberId, couponTokenDiscount);
 
-        List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponIssueRetrievalService.getMemberCoupon(memberId);
+        List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponIssueRetrievalService.getIssuedMemberCoupon(memberId);
 
         assertAll(
                 () -> assertThat(memberSpecificCouponResponses.get(0).couponId()).isEqualTo(couponTokenDiscount),
@@ -110,7 +110,7 @@ class CouponIssueRetrievalServiceTest {
     void NoneMemberGetCouponList() {
         couponIssueService.couponIssue(memberId, couponTokenDiscount);
 
-        List<MemberSpecificCouponResponse> result = couponIssueRetrievalService.getMemberCoupon(noneMemberId);
+        List<MemberSpecificCouponResponse> result = couponIssueRetrievalService.getIssuedMemberCoupon(noneMemberId);
 
         assertThat(result.size()).isEqualTo(0);
     }

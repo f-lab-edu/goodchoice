@@ -20,7 +20,7 @@ public class CouponIssueRetrievalController {
     }
 
     @GetMapping("/issue/{memberId}")
-    public List<MemberSpecificCouponResponse> getMemberCoupon(@PathVariable Long memberId) {
-        return couponIssueRetrievalService.getMemberCoupon(memberId);
+    public List<MemberSpecificCouponResponse> getIssuedMemberCoupon(@PathVariable Long memberId) {
+        return couponIssueRetrievalService.getIssuedMemberCoupon(memberId);
     }
 }
