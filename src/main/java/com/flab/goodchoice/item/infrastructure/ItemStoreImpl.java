@@ -19,7 +19,7 @@ public class ItemStoreImpl implements ItemStore {
     @Override
     public Item store(Item item) {
         validCheck(item);
-        return itemRepository.save(item);
+        return itemRepository.saveAndFlush(item);
     }
 
     private void validCheck(Item item) {

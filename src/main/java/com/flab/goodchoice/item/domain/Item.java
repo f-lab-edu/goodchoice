@@ -79,4 +79,12 @@ public class Item {
         this.status = Status.END_OF_SALE;
     }
 
+    public void decrease(Long itemStock) {
+        if (this.itemStock - itemStock < 0) {
+            throw new RuntimeException("수량이 부족합니다.");
+        }
+
+        this.itemStock = this.itemStock - itemStock;
+    }
+
 }

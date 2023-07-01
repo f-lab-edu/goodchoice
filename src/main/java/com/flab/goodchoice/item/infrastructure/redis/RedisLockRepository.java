@@ -1,4 +1,4 @@
-package com.flab.goodchoice.coupon.infrastructure.repositories;
+package com.flab.goodchoice.item.infrastructure.redis;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -14,13 +14,17 @@ public class RedisLockRepository {
         this.redisTemplate = redisTemplate;
     }
 
-    public Boolean lock(final String key) {
+    public Boolean lock(Long key) {
         return redisTemplate
                 .opsForValue()
-                .setIfAbsent(key, "lock", Duration.ofMillis(3_000));
+                .setIfAbsent(generateKey(key), "lock", Duration.ofMillis(3_000));
     }
 
-    public Boolean unLock(final String key) {
-        return redisTemplate.delete(key);
+    public Boolean unlock(Long key) {
+        return redisTemplate.delete(generateKey(key));
+    }
+
+    public String generateKey(Long key) {
+        return key.toString();
     }
 }
