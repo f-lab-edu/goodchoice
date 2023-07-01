@@ -55,19 +55,19 @@ public class CouponIssueService {
     public UUID couponIssuanceRedissonAop(final Long memberId, final UUID key) {
         Member member = getMember(memberId);
 
-        Long apply = appliedUserRepository.addRedisSet(key, memberId);
+        Long apply = appliedUserRepository.addRedisSet(key.toString(), memberId.toString());
 
         if (apply != 1) {
             throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
         }
 
         Coupon coupon = couponQuery.getCoupon(key);
-        CouponIssue couponPublish = saveCouponIssue(member, coupon);
+        CouponIssue couponIssue = saveCouponIssue(member, coupon);
 
         coupon.useCoupon();
         couponCommand.modify(coupon);
 
-        return couponPublish.getCouponIssueToken();
+        return couponIssue.getCouponIssueToken();
     }
 
     private CouponIssue saveCouponIssue(Member member, Coupon coupon) {

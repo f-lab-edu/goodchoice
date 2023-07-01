@@ -3,7 +3,7 @@ package com.flab.goodchoice.coupon.api;
 import com.flab.goodchoice.coupon.application.CouponUseService;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
-import com.flab.goodchoice.coupon.dto.CouponUsedRequest;
+import com.flab.goodchoice.coupon.dto.CouponUseRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +22,12 @@ public class CouponUseController {
     }
 
     @PostMapping("/use")
-    public CouponUsedInfoResponse useCoupon(@RequestBody @Valid CouponUsedRequest request) {
+    public CouponUsedInfoResponse useCoupon(@RequestBody @Valid CouponUseRequest request) {
         return couponUseService.useCoupon(request.memberId(), request.couponPublishToken(), request.price());
     }
 
     @PostMapping("/cancel")
-    public CouponUsedCancelInfoResponse usedCouponCancel(@RequestBody @Valid CouponUsedRequest request) {
+    public CouponUsedCancelInfoResponse usedCouponCancel(@RequestBody @Valid CouponUseRequest request) {
         return couponUseService.usedCouponCancel(request.memberId(), request.couponPublishToken(), request.price());
     }
 }

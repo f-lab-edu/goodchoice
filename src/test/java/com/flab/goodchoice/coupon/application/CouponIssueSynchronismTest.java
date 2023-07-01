@@ -56,7 +56,7 @@ class CouponIssueSynchronismTest {
 
         createCoupon(couponCount);
 
-        couponSynchroniseTest(couponCount, "/api/coupons/publish");
+        couponSynchroniseTest(couponCount, "/api/coupons/issue");
 
         CouponRetrievalResponse response = couponRetrievalService.getCoupon(couponToken);
         assertThat(response.stock()).isEqualTo(0);
@@ -70,7 +70,7 @@ class CouponIssueSynchronismTest {
 
         createCoupon(couponCount);
 
-        couponSynchroniseTest(couponCount, "/api/coupons/publish/redisson");
+        couponSynchroniseTest(couponCount, "/api/coupons/issue/redisson");
 
         CouponRetrievalResponse response = couponRetrievalService.getCoupon(couponToken);
         assertThat(response.stock()).isEqualTo(0);
@@ -99,7 +99,7 @@ class CouponIssueSynchronismTest {
     @Test
     @Disabled
     void userDuplicationCouponSynchroniseTestWithRedissonAop() throws InterruptedException {
-        duplicationCouponSynchroniseTest("/api/coupons/publish/redisson");
+        duplicationCouponSynchroniseTest("/api/coupons/issue/redisson");
 
         CouponRetrievalResponse response = couponRetrievalService.getCoupon(couponToken);
         assertThat(response.stock()).isEqualTo(100);
