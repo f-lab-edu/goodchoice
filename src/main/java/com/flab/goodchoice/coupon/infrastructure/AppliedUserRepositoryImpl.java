@@ -4,8 +4,6 @@ import com.flab.goodchoice.coupon.infrastructure.repositories.AppliedUserReposit
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
 public class AppliedUserRepositoryImpl implements AppliedUserRepository {
 
@@ -16,9 +14,9 @@ public class AppliedUserRepositoryImpl implements AppliedUserRepository {
     }
 
     @Override
-    public Long addRedisSet(UUID key, Long memberId) {
+    public Long addRedisSet(String key, String memberId) {
         return redisTemplate
                 .opsForSet()
-                .add(key.toString(), memberId.toString());
+                .add(key, memberId);
     }
 }
