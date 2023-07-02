@@ -34,7 +34,7 @@ class CouponIssueRetrievalServiceTest {
     private CouponCommand couponCommand;
     private CouponIssueCommand couponIssueCommand;
     private AppliedUserRepository appliedUserRepository;
-    private CouponIssueExistCheck couponIssueExistCheck;
+    private CouponIssueChecker couponIssueExistChecker;
     private CouponIssueQuery couponIssueQuery;
 
     private CouponIssueRetrievalService couponIssueRetrievalService;
@@ -72,10 +72,10 @@ class CouponIssueRetrievalServiceTest {
         couponCommand = new FakeCouponCommand(couponRepository);
         couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
         appliedUserRepository = new FakeAppliedUserRepository();
-        couponIssueExistCheck = new FakeCouponIssueExistCheck(couponIssueRepository);
+        couponIssueExistChecker = new FakeCouponIssueExistChecker(couponIssueRepository);
         couponIssueQuery = new FakeCouponIssueQuery(couponIssueRepository);
 
-        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistCheck,  appliedUserRepository);
+        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistChecker, appliedUserRepository);
         couponIssueRetrievalService = new CouponIssueRetrievalService(couponIssueQuery);
 
         member = memberCommand.save(new Member(memberId));

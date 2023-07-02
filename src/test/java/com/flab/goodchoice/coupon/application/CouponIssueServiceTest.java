@@ -34,7 +34,7 @@ class CouponIssueServiceTest {
     private CouponCommand couponCommand;
     private CouponIssueCommand couponIssueCommand;
     private AppliedUserRepository appliedUserRepository;
-    private CouponIssueExistCheck couponIssueExistCheck;
+    private CouponIssueChecker couponIssueExistChecker;
 
     Member member;
     final Long memberId = 1L;
@@ -69,9 +69,9 @@ class CouponIssueServiceTest {
         couponCommand = new FakeCouponCommand(couponRepository);
         couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
         appliedUserRepository = new FakeAppliedUserRepository();
-        couponIssueExistCheck = new FakeCouponIssueExistCheck(couponIssueRepository);
+        couponIssueExistChecker = new FakeCouponIssueExistChecker(couponIssueRepository);
 
-        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistCheck,  appliedUserRepository);
+        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistChecker,  appliedUserRepository);
 
         member = memberCommand.save(new Member(memberId));
 
