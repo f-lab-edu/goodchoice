@@ -4,11 +4,11 @@ import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
 import com.flab.goodchoice.coupon.exception.CouponException;
-import com.flab.goodchoice.coupon.infrastructure.*;
+import com.flab.goodchoice.coupon.infrastructure.FakeCouponQuery;
+import com.flab.goodchoice.coupon.infrastructure.FakeMemberCommand;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.*;
 import com.flab.goodchoice.member.application.MemberCommand;
-import com.flab.goodchoice.member.application.MemberQuery;
 import com.flab.goodchoice.member.domain.model.Member;
 import com.flab.goodchoice.member.domain.repositories.MemberRepository;
 import com.flab.goodchoice.member.exception.MemberException;
@@ -28,13 +28,8 @@ class CouponIssueServiceTest {
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
 
-    private MemberQuery memberQuery;
     private MemberCommand memberCommand;
     private CouponQuery couponQuery;
-    private CouponCommand couponCommand;
-    private CouponIssueCommand couponIssueCommand;
-    private AppliedUserRepository appliedUserRepository;
-    private CouponIssueChecker couponIssueExistChecker;
 
     Member member;
     final Long memberId = 1L;
@@ -46,16 +41,11 @@ class CouponIssueServiceTest {
     final int stockDiscount = 100;
     final int discountValue = 10;
 
-    final Long couponIdDeduction = 2L;
-    final UUID couponTokenDeduction = UUID.randomUUID();
     final String couponNameDeduction = "10000원 차감";
-    final int stockDeduction = 100;
     final int deductionValue = 10000;
 
     CouponEntity couponDiscountEntity;
     Coupon couponDiscount;
-    CouponEntity couponDeductionEntity;
-    Coupon couponDeduction;
 
     @BeforeEach
     void setUp() {
@@ -63,15 +53,10 @@ class CouponIssueServiceTest {
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
 
-        memberQuery = new FakeMemberQuery(memberRepository);
         memberCommand = new FakeMemberCommand(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
-        couponCommand = new FakeCouponCommand(couponRepository);
-        couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
-        appliedUserRepository = new FakeAppliedUserRepository();
-        couponIssueExistChecker = new FakeCouponIssueExistChecker(couponIssueRepository);
 
-        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistChecker,  appliedUserRepository);
+        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository).createCouponIssueService();
 
         member = memberCommand.save(new Member(memberId));
 
@@ -79,11 +64,6 @@ class CouponIssueServiceTest {
         couponRepository.save(couponDiscountEntity);
 
         couponDiscount = couponQuery.getCoupon(couponIdDiscount);
-
-        couponDeductionEntity = new CouponEntity(couponIdDeduction, couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
-        couponRepository.save(couponDeductionEntity);
-
-        couponDeduction = couponQuery.getCoupon(couponIdDeduction);
     }
 
     @DisplayName("회원별 쿠폰 등록")

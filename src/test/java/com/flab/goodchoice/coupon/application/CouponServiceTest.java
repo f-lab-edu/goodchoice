@@ -18,11 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class CouponSaveServiceTest {
+class CouponServiceTest {
 
-    private CouponSaveService couponSaveService;
-    private CouponQuery couponQuery;
-    private CouponCommand couponCommand;
+    private CouponService couponSaveService;
     private CouponRepository couponRepository;
 
     CouponEntity coupon;
@@ -30,10 +28,8 @@ class CouponSaveServiceTest {
     @BeforeEach
     void setUp() {
         couponRepository = new InMemoryCouponRepository();
-        couponQuery = new FakeCouponQuery(couponRepository);
-        couponCommand = new FakeCouponCommand(couponRepository);
 
-        couponSaveService = new CouponSaveService(couponQuery, couponCommand);
+        couponSaveService = new FakeCouponService(couponRepository).createCouponService();
 
         coupon = new CouponEntity(UUID.randomUUID(), "10%할인", 100, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);

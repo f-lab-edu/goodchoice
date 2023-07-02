@@ -1,17 +1,21 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.coupon.domain.*;
+import com.flab.goodchoice.coupon.domain.Coupon;
+import com.flab.goodchoice.coupon.domain.CouponIssue;
+import com.flab.goodchoice.coupon.domain.CouponType;
+import com.flab.goodchoice.coupon.domain.State;
 import com.flab.goodchoice.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoice.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoice.coupon.exception.CouponException;
-import com.flab.goodchoice.member.exception.MemberException;
-import com.flab.goodchoice.coupon.infrastructure.*;
+import com.flab.goodchoice.coupon.infrastructure.FakeCouponIssueCommand;
+import com.flab.goodchoice.coupon.infrastructure.FakeCouponQuery;
+import com.flab.goodchoice.coupon.infrastructure.FakeMemberCommand;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.*;
 import com.flab.goodchoice.member.application.MemberCommand;
-import com.flab.goodchoice.member.application.MemberQuery;
 import com.flab.goodchoice.member.domain.model.Member;
 import com.flab.goodchoice.member.domain.repositories.MemberRepository;
+import com.flab.goodchoice.member.exception.MemberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,13 +36,9 @@ class CouponUseServiceTest {
     private CouponIssueRepository couponIssueRepository;
     private CouponUseHistoryRepository couponUseHistoryEntityRepository;
 
-    private MemberQuery memberQuery;
     private MemberCommand memberCommand;
     private CouponQuery couponQuery;
-    private CouponIssueQuery couponIssueQuery;
     private CouponIssueCommand couponIssueCommand;
-    private CouponUseHistoryQuery couponUseHistoryQuery;
-    private CouponUseHistoryCommand couponUseHistoryCommand;
 
     Member member;
     final Long memberId = 1L;
@@ -70,25 +70,19 @@ class CouponUseServiceTest {
         couponIssueRepository = new InMemoryCouponIssueRepository();
         couponUseHistoryEntityRepository = new InMemoryCouponUseHistoryEntityRepository();
 
-        memberQuery = new FakeMemberQuery(memberRepository);
         memberCommand = new FakeMemberCommand(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
-        couponIssueQuery = new FakeCouponIssueQuery(couponIssueRepository);
         couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
-        couponUseHistoryQuery = new FakeCouponUseHistoryQuery(couponUseHistoryEntityRepository);
-        couponUseHistoryCommand = new FakeCouponUseHistoryCommand(couponUseHistoryEntityRepository);
 
-        couponUseService = new CouponUseService(memberQuery, couponIssueQuery, couponIssueCommand, couponUseHistoryQuery, couponUseHistoryCommand);
+        couponUseService = new FakeCouponUseService(memberRepository, couponIssueRepository, couponUseHistoryEntityRepository).createCouponUseService();
 
         member = memberCommand.save(new Member(memberId));
 
-        couponDiscountEntity = new CouponEntity(couponIdDiscount, couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
-        couponRepository.save(couponDiscountEntity);
+        couponDiscountEntity = createCouponEntity(couponIdDiscount, couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
 
         couponDiscount = couponQuery.getCoupon(couponIdDiscount);
 
-        couponDeductionEntity = new CouponEntity(couponIdDeduction, couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
-        couponRepository.save(couponDeductionEntity);
+        couponDeductionEntity = createCouponEntity(couponIdDeduction, couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
 
         couponDeduction = couponQuery.getCoupon(couponIdDeduction);
     }
@@ -200,5 +194,10 @@ class CouponUseServiceTest {
 
         assertThatThrownBy(() -> couponUseService.usedCouponCancel(memberId, couponTokenDiscount, 10000))
                 .isInstanceOf(CouponException.class);
+    }
+
+    private CouponEntity createCouponEntity(Long id, UUID couponToken, String couponName, int stock, CouponType couponType, int discountValue, State state) {
+        couponDiscountEntity = new CouponEntity(id, couponToken, couponName, stock, couponType, discountValue, state);
+        return couponRepository.save(couponDiscountEntity);
     }
 }

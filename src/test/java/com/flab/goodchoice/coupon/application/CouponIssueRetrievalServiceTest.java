@@ -1,14 +1,12 @@
 package com.flab.goodchoice.coupon.application;
 
-import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
 import com.flab.goodchoice.coupon.dto.MemberSpecificCouponResponse;
-import com.flab.goodchoice.coupon.infrastructure.*;
+import com.flab.goodchoice.coupon.infrastructure.FakeMemberCommand;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.*;
 import com.flab.goodchoice.member.application.MemberCommand;
-import com.flab.goodchoice.member.application.MemberQuery;
 import com.flab.goodchoice.member.domain.model.Member;
 import com.flab.goodchoice.member.domain.repositories.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,14 +26,7 @@ class CouponIssueRetrievalServiceTest {
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
 
-    private MemberQuery memberQuery;
     private MemberCommand memberCommand;
-    private CouponQuery couponQuery;
-    private CouponCommand couponCommand;
-    private CouponIssueCommand couponIssueCommand;
-    private AppliedUserRepository appliedUserRepository;
-    private CouponIssueChecker couponIssueExistChecker;
-    private CouponIssueQuery couponIssueQuery;
 
     private CouponIssueRetrievalService couponIssueRetrievalService;
 
@@ -49,16 +40,7 @@ class CouponIssueRetrievalServiceTest {
     final int stockDiscount = 100;
     final int discountValue = 10;
 
-    final Long couponIdDeduction = 2L;
-    final UUID couponTokenDeduction = UUID.randomUUID();
-    final String couponNameDeduction = "10000원 차감";
-    final int stockDeduction = 100;
-    final int deductionValue = 10000;
-
     CouponEntity couponDiscountEntity;
-    Coupon couponDiscount;
-    CouponEntity couponDeductionEntity;
-    Coupon couponDeduction;
 
     @BeforeEach
     void setUp() {
@@ -66,29 +48,15 @@ class CouponIssueRetrievalServiceTest {
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
 
-        memberQuery = new FakeMemberQuery(memberRepository);
         memberCommand = new FakeMemberCommand(memberRepository);
-        couponQuery = new FakeCouponQuery(couponRepository);
-        couponCommand = new FakeCouponCommand(couponRepository);
-        couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
-        appliedUserRepository = new FakeAppliedUserRepository();
-        couponIssueExistChecker = new FakeCouponIssueExistChecker(couponIssueRepository);
-        couponIssueQuery = new FakeCouponIssueQuery(couponIssueRepository);
 
-        couponIssueService = new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistChecker, appliedUserRepository);
-        couponIssueRetrievalService = new CouponIssueRetrievalService(couponIssueQuery);
+        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository).createCouponIssueService();
+        couponIssueRetrievalService = new FakeCouponIssueRetrievalService(couponIssueRepository).createCouponIssueRetrievalService();
 
         member = memberCommand.save(new Member(memberId));
 
         couponDiscountEntity = new CouponEntity(couponIdDiscount, couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
         couponRepository.save(couponDiscountEntity);
-
-        couponDiscount = couponQuery.getCoupon(couponIdDiscount);
-
-        couponDeductionEntity = new CouponEntity(couponIdDeduction, couponTokenDeduction, couponNameDeduction, stockDeduction, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
-        couponRepository.save(couponDeductionEntity);
-
-        couponDeduction = couponQuery.getCoupon(couponIdDeduction);
     }
 
     @DisplayName("회원이 가진 쿠폰 목록 조회")

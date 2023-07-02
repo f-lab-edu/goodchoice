@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.api;
 
-import com.flab.goodchoice.coupon.application.CouponSaveService;
+import com.flab.goodchoice.coupon.application.CouponService;
 import com.flab.goodchoice.coupon.dto.CreateCouponRequest;
 import com.flab.goodchoice.coupon.dto.ModifyCouponRequest;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,9 @@ import java.util.UUID;
 @RestController
 public class CouponController {
 
-    private final CouponSaveService couponSaveService;
+    private final CouponService couponSaveService;
 
-    public CouponController(CouponSaveService couponSaveService) {
+    public CouponController(CouponService couponSaveService) {
         this.couponSaveService = couponSaveService;
     }
 

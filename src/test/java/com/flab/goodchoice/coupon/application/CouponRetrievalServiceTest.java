@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class CouponRetrievalServiceTest {
 
     private CouponRetrievalService couponRetrievalService;
-    private CouponQuery couponQuery;
     private CouponRepository couponRepository;
 
     final UUID couponToken = UUID.randomUUID();
@@ -31,9 +30,8 @@ class CouponRetrievalServiceTest {
     @BeforeEach
     void setUp() {
         couponRepository = new InMemoryCouponRepository();
-        couponQuery = new FakeCouponQuery(couponRepository);
 
-        couponRetrievalService = new CouponRetrievalService(couponQuery);
+        couponRetrievalService = new FakeCouponRetrievalService(couponRepository).createCouponRetrievalService();
 
         final CouponEntity coupon = new CouponEntity(couponToken, couponName, stock, CouponType.DISCOUNT, 10, State.ACTIVITY);
         couponRepository.save(coupon);
