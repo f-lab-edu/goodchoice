@@ -10,8 +10,4 @@ spring:
         jdbc-url:
         username: username
         password: password
-<<<<<<< HEAD
         driver-class-name: com.mysql.cj.jdbc.Driver
-=======
-        driver-class-name: com.mysql.cj.jdbc.Driver
->>>>>>> 4b869ff6a6be20d1bbf1cdcfd4c8fe9750c58fc9
