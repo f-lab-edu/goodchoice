@@ -2,7 +2,7 @@ package com.flab.goodchoice.coupon.dto;
 
 import java.util.UUID;
 
-public record CouponPublishRequest(
+public record CouponIssueRequest(
         Long memberId,
         UUID couponToken
 ) {

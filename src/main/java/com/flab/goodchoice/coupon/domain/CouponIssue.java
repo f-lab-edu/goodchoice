@@ -11,36 +11,36 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CouponPublish {
+public class CouponIssue {
     private Long id;
-    private UUID couponPublishToken;
+    private UUID couponIssueToken;
     private Member member;
     private Coupon coupon;
     private boolean usedYn;
     private LocalDateTime createdAt;
     private LocalDateTime usedAt;
 
-    public CouponPublish(UUID couponPublishToken, Member member, Coupon coupon, boolean usedYn) {
-        this.couponPublishToken = couponPublishToken;
+    public CouponIssue(UUID couponIssueToken, Member member, Coupon coupon, boolean usedYn) {
+        this.couponIssueToken = couponIssueToken;
         this.member = member;
         this.coupon = coupon;
         this.usedYn = usedYn;
     }
 
-    public CouponPublish(Long id, UUID couponPublishToken, Member member, Coupon coupon, boolean usedYn) {
-        this(couponPublishToken, member, coupon, usedYn);
+    public CouponIssue(Long id, UUID couponIssueToken, Member member, Coupon coupon, boolean usedYn) {
+        this(couponIssueToken, member, coupon, usedYn);
         this.id = id;
     }
 
     @Builder
-    public CouponPublish(Long id, UUID couponPublishToken, Member member, Coupon coupon, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
-        this(couponPublishToken, member, coupon, usedYn);
+    public CouponIssue(Long id, UUID couponIssueToken, Member member, Coupon coupon, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
+        this(couponIssueToken, member, coupon, usedYn);
         this.id = id;
         this.createdAt = createdAt;
         this.usedAt = usedAt;
     }
 
-    public void used() {
+    public void use() {
         this.usedYn = true;
         this.usedAt = LocalDateTime.now();
     }

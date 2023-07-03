@@ -7,12 +7,14 @@ import com.flab.goodchoice.coupon.exception.CouponException;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
+@Transactional(readOnly = true)
 @Component
 public class CouponQueryImpl implements CouponQuery {
 
@@ -23,26 +25,26 @@ public class CouponQueryImpl implements CouponQuery {
     }
 
     @Override
-    public List<Coupon> findAll() {
+    public List<Coupon> getCoupons() {
         return couponRepository.findAll().stream()
                 .map(CouponEntity::toCoupon)
                 .collect(toList());
     }
 
     @Override
-    public Coupon findById(Long couponId) {
+    public Coupon getCoupon(Long couponId) {
         CouponEntity couponEntity = couponRepository.findById(couponId).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }
 
     @Override
-    public Coupon findByCouponToken(UUID couponToken) {
+    public Coupon getCoupon(UUID couponToken) {
         CouponEntity couponEntity = couponRepository.findByCouponToken(couponToken).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }
 
     @Override
-    public Coupon findByCouponTokenLock(UUID couponToken) {
+    public Coupon getCouponInfoLock(UUID couponToken) {
         CouponEntity couponEntity = couponRepository.findLockByCouponToken(couponToken).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponEntity.toCoupon();
     }

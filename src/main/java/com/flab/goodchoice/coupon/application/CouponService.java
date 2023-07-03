@@ -10,12 +10,12 @@ import java.util.UUID;
 
 @Transactional
 @Service
-public class CouponCommandService {
+public class CouponService {
 
     private final CouponQuery couponQuery;
     private final CouponCommand couponCommand;
 
-    public CouponCommandService(CouponQuery couponQuery, CouponCommand couponCommand) {
+    public CouponService(CouponQuery couponQuery, CouponCommand couponCommand) {
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
     }
@@ -54,6 +54,6 @@ public class CouponCommandService {
     }
 
     private Coupon getCoupon(UUID couponToken) {
-        return couponQuery.findByCouponToken(couponToken);
+        return couponQuery.getCoupon(couponToken);
     }
 }

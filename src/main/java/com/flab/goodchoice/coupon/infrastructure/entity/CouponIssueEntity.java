@@ -1,6 +1,6 @@
 package com.flab.goodchoice.coupon.infrastructure.entity;
 
-import com.flab.goodchoice.coupon.domain.CouponPublish;
+import com.flab.goodchoice.coupon.domain.CouponIssue;
 import com.flab.goodchoice.member.infrastructure.entity.MemberEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,15 +19,15 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "coupon_publish")
-public class CouponPublishEntity {
+@Table(name = "coupon_issue")
+public class CouponIssueEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "coupon_publish_token", columnDefinition = "BINARY(16)", nullable = false)
-    private UUID couponPublishToken;
+    @Column(name = "coupon_issue_token", columnDefinition = "BINARY(16)", nullable = false)
+    private UUID couponIssueToken;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -48,29 +48,29 @@ public class CouponPublishEntity {
     @Column(name = "used_at")
     private LocalDateTime usedAt;
 
-    public CouponPublishEntity(UUID couponPublishToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn) {
-        this.couponPublishToken = couponPublishToken;
+    public CouponIssueEntity(UUID couponIssueToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn) {
+        this.couponIssueToken = couponIssueToken;
         this.memberEntity = memberEntity;
         this.couponEntity = couponEntity;
         this.usedYn = usedYn;
     }
 
-    public CouponPublishEntity(Long id, UUID couponPublishToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn) {
-        this(couponPublishToken, memberEntity, couponEntity, usedYn);
+    public CouponIssueEntity(Long id, UUID couponIssueToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn) {
+        this(couponIssueToken, memberEntity, couponEntity, usedYn);
         this.id = id;
     }
 
     @Builder
-    public CouponPublishEntity(Long id, UUID couponPublishToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
-        this(id, couponPublishToken, memberEntity, couponEntity, usedYn);
+    public CouponIssueEntity(Long id, UUID couponIssueToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
+        this(id, couponIssueToken, memberEntity, couponEntity, usedYn);
         this.createdAt = createdAt;
         this.usedAt = usedAt;
     }
 
-    public CouponPublish toCouponPublish() {
-        return CouponPublish.builder()
+    public CouponIssue toCouponIssue() {
+        return CouponIssue.builder()
                 .id(getId())
-                .couponPublishToken(getCouponPublishToken())
+                .couponIssueToken(getCouponIssueToken())
                 .member(getMemberEntity().toMember())
                 .coupon(getCouponEntity().toCoupon())
                 .usedYn(isUsedYn())
@@ -83,12 +83,12 @@ public class CouponPublishEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CouponPublishEntity that)) return false;
-        return Objects.equals(couponPublishToken, that.couponPublishToken);
+        if (!(o instanceof CouponIssueEntity that)) return false;
+        return Objects.equals(couponIssueToken, that.couponIssueToken);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(couponPublishToken);
+        return Objects.hash(couponIssueToken);
     }
 }

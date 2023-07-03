@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
-import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
-import com.flab.goodchoice.coupon.dto.CouponPublishRequest;
+import com.flab.goodchoice.coupon.dto.CouponRetrievalResponse;
+import com.flab.goodchoice.coupon.dto.CouponIssueRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -27,11 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CouponUseSynchronismTest {
+class CouponIssueSynchronismTest {
     @Autowired
     protected MockMvc mvc;
     @Autowired
-    private CouponQueryService couponQueryService;
+    private CouponRetrievalService couponRetrievalService;
     @Autowired
     private CouponCommand couponCommand;
 
@@ -56,9 +56,9 @@ class CouponUseSynchronismTest {
 
         createCoupon(couponCount);
 
-        couponSynchroniseTest(couponCount, "/api/coupons/publish");
+        couponSynchroniseTest(couponCount, "/api/coupons/issue");
 
-        CouponInfoResponse response = couponQueryService.getCoupon(couponToken);
+        CouponRetrievalResponse response = couponRetrievalService.getCoupon(couponToken);
         assertThat(response.stock()).isEqualTo(0);
     }
 
@@ -70,9 +70,9 @@ class CouponUseSynchronismTest {
 
         createCoupon(couponCount);
 
-        couponSynchroniseTest(couponCount, "/api/coupons/publish/redisson");
+        couponSynchroniseTest(couponCount, "/api/coupons/issue/redisson");
 
-        CouponInfoResponse response = couponQueryService.getCoupon(couponToken);
+        CouponRetrievalResponse response = couponRetrievalService.getCoupon(couponToken);
         assertThat(response.stock()).isEqualTo(0);
     }
 
@@ -99,9 +99,9 @@ class CouponUseSynchronismTest {
     @Test
     @Disabled
     void userDuplicationCouponSynchroniseTestWithRedissonAop() throws InterruptedException {
-        duplicationCouponSynchroniseTest("/api/coupons/publish/redisson");
+        duplicationCouponSynchroniseTest("/api/coupons/issue/redisson");
 
-        CouponInfoResponse response = couponQueryService.getCoupon(couponToken);
+        CouponRetrievalResponse response = couponRetrievalService.getCoupon(couponToken);
         assertThat(response.stock()).isEqualTo(100);
     }
 
@@ -138,7 +138,7 @@ class CouponUseSynchronismTest {
     }
 
     private void createCouponPublish(Long memberId, String url) throws Exception {
-        CouponPublishRequest request = new CouponPublishRequest(memberId, couponToken);
+        CouponIssueRequest request = new CouponIssueRequest(memberId, couponToken);
 
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON)
