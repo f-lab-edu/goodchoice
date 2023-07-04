@@ -15,7 +15,11 @@ import java.io.IOException;
 @Slf4j
 public class AuthenticationFilter implements Filter {
 
-    private final static String key = "auth_key";
+    private final FilterAuthConfig filterAuthConfig;
+
+    public AuthenticationFilter(FilterAuthConfig filterAuthConfig) {
+        this.filterAuthConfig = filterAuthConfig;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -24,7 +28,7 @@ public class AuthenticationFilter implements Filter {
         try {
             String authenticationKey = httpServletRequest.getHeader("Authentication");
 
-            if (!key.equals(authenticationKey)) {
+            if (!filterAuthConfig.getKey().equals(authenticationKey)) {
                 log.info("다른 인증키 입력");
                 throw new BaseException("401", "인증되지 않은 key 입니다.");
             }
