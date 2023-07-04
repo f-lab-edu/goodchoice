@@ -5,7 +5,9 @@ import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoice.coupon.infrastructure.repositories.CouponRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Component
 public class CouponCommandImpl implements CouponCommand {
 
