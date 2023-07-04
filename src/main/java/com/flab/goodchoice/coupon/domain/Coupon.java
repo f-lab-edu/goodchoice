@@ -1,5 +1,7 @@
 package com.flab.goodchoice.coupon.domain;
 
+import com.flab.goodchoice.coupon.exception.CouponError;
+import com.flab.goodchoice.coupon.exception.CouponException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,10 +49,10 @@ public class Coupon {
 
     public void modify(String couponName, int stock) {
         if (!StringUtils.hasText(couponName)) {
-            throw new IllegalArgumentException("빈 쿠폰명으로 수정할 수 없습니다.");
+            throw new CouponException(CouponError.EMPTY_COUPON_NAME);
         }
         if (stock < 0) {
-            throw new IllegalArgumentException("쿠폰 갯수는 0보다 작을 수 없습니다.");
+            throw new CouponException(CouponError.NEGATIVE_COUPON_COUNT);
         }
 
         this.couponName = couponName;
@@ -59,7 +61,7 @@ public class Coupon {
 
     public void useCoupon() {
         if (this.stock <= 0) {
-            throw new IllegalArgumentException("선택된 쿠폰이 모두 소진 되었습니다.");
+            throw new CouponException(CouponError.ALL_CREATED_COUPON);
         }
         this.stock--;
     }
