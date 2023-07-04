@@ -22,6 +22,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.redisson:redisson-spring-boot-starter:3.21.1'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.google.guava:guava:31.1-jre'
@@ -29,6 +31,7 @@ dependencies {
 
 	// lombok
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	implementation 'junit:junit:4.13.2'
 	compileOnly 'org.projectlombok:lombok'
 
 	// Mapstruct
@@ -43,6 +46,9 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-core:3.11.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 tasks.named('test') {
