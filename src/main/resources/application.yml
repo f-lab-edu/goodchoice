@@ -2,12 +2,33 @@ spring:
   datasource:
     hikari:
       master:
-        jdbc-url:
-        username: username
-        password: password
+        jdbc-url: jdbc:mysql://118.67.135.217:32770/goodchoice
+        username: root
+        password: 1234
         driver-class-name: com.mysql.cj.jdbc.Driver
       slave:
-        jdbc-url:
-        username: username
-        password: password
+        jdbc-url: jdbc:mysql://118.67.135.217:32769/goodchoice
+        username: root
+        password: 1234
         driver-class-name: com.mysql.cj.jdbc.Driver
+      maximum-pool-size: 200
+
+#  cloud:
+#    vault:
+#      uri: http://118.67.143.140:8200
+#      token: hvs.ZyluZgoggkKqlqagbMj8T8OD
+#      connection-timeout: 5000
+#      read-timeout: 15000
+
+
+  redis:
+    host: 118.67.135.217
+    port: 6379
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+#app:
+#  auth:
+#    key: auth_key
