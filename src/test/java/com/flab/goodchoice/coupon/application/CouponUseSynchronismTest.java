@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.goodchoice.coupon.domain.Coupon;
 import com.flab.goodchoice.coupon.domain.CouponType;
 import com.flab.goodchoice.coupon.domain.State;
-import com.flab.goodchoice.coupon.dto.CouponInfoResponse;
-import com.flab.goodchoice.coupon.dto.CouponPublishRequest;
+import com.flab.goodchoice.coupon.dto.CouponIssueRequest;
+import com.flab.goodchoice.coupon.dto.CouponRetrievalResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,9 +32,9 @@ class CouponUseSynchronismTest {
     @Autowired
     protected MockMvc mvc;
     @Autowired
-    private CouponQueryService couponQueryService;
+    private CouponRetrievalService couponRetrievalService;
     @Autowired
-    private CouponCommandService couponCommandService;
+    private CouponIssueService couponIssueService;
     @Autowired
     private CouponCommand couponCommand;
 
@@ -76,14 +76,14 @@ class CouponUseSynchronismTest {
 
         Thread.sleep(5000);
 
-        CouponInfoResponse response = couponQueryService.getCoupon(couponToken);
+        CouponRetrievalResponse response = couponRetrievalService.getCoupon(couponToken);
         assertThat(response.stock()).isEqualTo(0);
     }
 
     void createCouponPublish(Long memberId) throws Exception {
-        CouponPublishRequest request = new CouponPublishRequest(memberId, couponToken);
+        CouponIssueRequest request = new CouponIssueRequest(memberId, couponToken);
 
-        mvc.perform(post("/api/coupons/publish")
+        mvc.perform(post("/api/coupons/issue")
                         .header("Authentication", "auth_key")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
