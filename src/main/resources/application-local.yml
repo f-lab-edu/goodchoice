@@ -1,0 +1,10 @@
+spring:
+  config:
+    import: vault://
+
+  cloud:
+    vault:
+      kv:
+        enabled: true
+        backend: goodchoice
+        application-name: local

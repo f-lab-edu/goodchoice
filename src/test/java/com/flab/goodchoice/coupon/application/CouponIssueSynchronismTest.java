@@ -141,6 +141,7 @@ class CouponIssueSynchronismTest {
         CouponIssueRequest request = new CouponIssueRequest(memberId, couponToken);
 
         mvc.perform(post(url)
+                        .header("Authentication", "auth_key")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .accept(MediaType.APPLICATION_JSON))
