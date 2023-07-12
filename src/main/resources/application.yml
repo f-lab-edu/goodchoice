@@ -1,7 +1,11 @@
 server:
   shutdown: graceful
 spring:
+  profiles:
+    active: local
   config:
+    #   activate:
+    #     on-profile: loc
     import: vault://
   cloud.vault:
     uri: http://118.67.142.68:8200
