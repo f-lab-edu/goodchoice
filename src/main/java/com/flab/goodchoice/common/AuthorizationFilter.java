@@ -10,17 +10,17 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
+import com.flab.goodchoice.common.config.VaultCredential;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class AuthorizationFilter implements Filter {
 
-    @Value("${API-KEY}")
-    private String API_KEY;
+    final private VaultCredential vaultCredential;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -31,10 +31,9 @@ public class AuthorizationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-
         try {
             String apiKey = req.getHeader("x-api-key");
-            if (!API_KEY.equals(apiKey)) {
+            if (!vaultCredential.getKey().equals(apiKey)) {
                 throw new RuntimeException("invalid api key");
             }
 
