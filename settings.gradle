@@ -6,3 +6,10 @@ pluginManagement {
 	}
 }
 rootProject.name = 'goodchoice'
+
+include 'goodchoice-api'
+include 'goodchoice-member'
+include 'goodchoice-coupon'
+include 'goodchoice-order'
+include 'goodchoice-item'
+include 'goodchoice-batch'
