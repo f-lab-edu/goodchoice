@@ -1,0 +1,24 @@
+package com.flab.goodchoiceapi.coupon.application;
+
+import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponCommand;
+import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponQuery;
+import com.flab.goodchoiceapi.coupon.infrastructure.repositories.CouponRepository;
+
+public class FakeCouponService {
+
+    private final CouponRepository couponRepository;
+
+    private CouponQuery couponQuery;
+    private CouponCommand couponCommand;
+
+    public FakeCouponService(CouponRepository couponRepository) {
+        this.couponRepository = couponRepository;
+    }
+
+    CouponService createCouponService() {
+        couponQuery = new FakeCouponQuery(couponRepository);
+        couponCommand = new FakeCouponCommand(couponRepository);
+
+        return new CouponService(couponQuery, couponCommand);
+    }
+}
