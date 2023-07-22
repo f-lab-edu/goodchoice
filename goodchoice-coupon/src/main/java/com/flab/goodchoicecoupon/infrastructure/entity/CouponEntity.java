@@ -1,8 +1,8 @@
 package com.flab.goodchoicecoupon.infrastructure.entity;
 
-import com.flab.goodchoiceapi.coupon.domain.Coupon;
-import com.flab.goodchoiceapi.coupon.domain.CouponType;
-import com.flab.goodchoiceapi.coupon.domain.State;
+import com.flab.goodchoicecoupon.domain.Coupon;
+import com.flab.goodchoicecoupon.domain.CouponType;
+import com.flab.goodchoicecoupon.domain.State;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

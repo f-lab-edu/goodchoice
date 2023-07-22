@@ -2,7 +2,7 @@ package com.flab.goodchoiceapi.member.infrastructure;
 
 import com.flab.goodchoiceapi.member.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
-import com.flab.goodchoicemember.domain.repositories.MemberRepository;
+import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 import com.flab.goodchoicemember.infrastructure.entity.MemberEntity;
 import org.springframework.stereotype.Component;
 

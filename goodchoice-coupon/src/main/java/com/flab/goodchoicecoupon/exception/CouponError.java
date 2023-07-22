@@ -1,4 +1,4 @@
-package com.flab.goodchoiceapi.coupon.exception;
+package com.flab.goodchoicecoupon.exception;
 
 import lombok.Getter;
 

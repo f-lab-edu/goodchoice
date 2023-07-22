@@ -1,4 +1,4 @@
-package com.flab.goodchoicemember.domain.repositories;
+package com.flab.goodchoicemember.infrastructure.repositories;
 
 import com.flab.goodchoicemember.infrastructure.entity.MemberEntity;
 

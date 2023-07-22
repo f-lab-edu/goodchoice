@@ -1,7 +1,7 @@
 package com.flab.goodchoicecoupon.domain;
 
-import com.flab.goodchoiceapi.coupon.exception.CouponError;
-import com.flab.goodchoiceapi.coupon.exception.CouponException;
+import com.flab.goodchoicecoupon.exception.CouponError;
+import com.flab.goodchoicecoupon.exception.CouponException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

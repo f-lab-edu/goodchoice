@@ -2,8 +2,8 @@ package com.flab.goodchoiceapi.coupon.infrastructure;
 
 import com.flab.goodchoiceapi.coupon.application.CouponQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
-import com.flab.goodchoiceapi.coupon.exception.CouponError;
-import com.flab.goodchoiceapi.coupon.exception.CouponException;
+import com.flab.goodchoicecoupon.exception.CouponError;
+import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
 import org.springframework.stereotype.Component;

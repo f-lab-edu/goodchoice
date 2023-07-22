@@ -4,7 +4,7 @@ import com.flab.goodchoiceapi.member.application.MemberQuery;
 import com.flab.goodchoiceapi.member.exception.MemberError;
 import com.flab.goodchoiceapi.member.exception.MemberException;
 import com.flab.goodchoicemember.domain.model.Member;
-import com.flab.goodchoicemember.domain.repositories.MemberRepository;
+import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 import com.flab.goodchoicemember.infrastructure.entity.MemberEntity;
 import org.springframework.stereotype.Component;
 

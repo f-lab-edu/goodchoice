@@ -15,7 +15,7 @@ public interface CouponIssueRepository {
     @Query("select cih from CouponIssueEntity cih join fetch cih.couponEntity")
     List<CouponIssueEntity> findCouponHistoryFetchByMemberId(Long memberId);
 
-    Optional<CouponIssueEntity> findByCouponIssueTokenAndMemberEntityId(UUID couponIssueToken, Long memberId);
+    Optional<CouponIssueEntity> findByCouponIssueTokenAndMemberId(UUID couponIssueToken, Long memberId);
 
-    boolean existsByMemberEntityIdAndCouponEntity_CouponToken(Long memberId, UUID couponToken);
+    boolean existsByMemberIdAndCouponEntity_CouponToken(Long memberId, UUID couponToken);
 }

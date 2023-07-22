@@ -74,7 +74,7 @@ public class RoutingDataSourceConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setDataSource(dataSource);
-        em.setPackagesToScan(new String[]{"com.flab.goodchoiceapi"});
+        em.setPackagesToScan(new String[]{"com.flab"});
         em.setPersistenceUnitName("master");
 
         Map<String, Object> properties = new HashMap<>();

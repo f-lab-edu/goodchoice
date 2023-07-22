@@ -1,11 +1,11 @@
 package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoiceapi.common.aop.LimitedCountLock;
+import com.flab.goodchoiceapi.member.application.MemberQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
-import com.flab.goodchoiceapi.coupon.infrastructure.repositories.AppliedUserRepository;
-import com.flab.goodchoiceapi.member.application.MemberQuery;
-import com.flab.goodchoiceapi.member.domain.model.Member;
+import com.flab.goodchoicecoupon.infrastructure.repositories.AppliedUserRepository;
+import com.flab.goodchoicemember.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +62,7 @@ public class CouponIssueService {
     }
 
     private CouponIssue saveCouponIssue(Member member, Coupon coupon) {
-        CouponIssue couponIssue = new CouponIssue(UUID.randomUUID(), member, coupon, false);
+        CouponIssue couponIssue = new CouponIssue(UUID.randomUUID(), member.getId(), coupon, false);
         return couponIssueCommand.save(couponIssue);
     }
 

@@ -1,8 +1,7 @@
 package com.flab.goodchoicecoupon.infrastructure.entity;
 
-import com.flab.goodchoiceapi.coupon.domain.CouponUseHistory;
-import com.flab.goodchoiceapi.coupon.domain.UseState;
-import com.flab.goodchoiceapi.member.infrastructure.entity.MemberEntity;
+import com.flab.goodchoicecoupon.domain.CouponUseHistory;
+import com.flab.goodchoicecoupon.domain.UseState;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,9 +23,8 @@ public class CouponUseHistoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private MemberEntity member;
+    @Column(name = "member_id")
+    private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
@@ -46,8 +44,8 @@ public class CouponUseHistoryEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public CouponUseHistoryEntity(MemberEntity member, CouponEntity couponEntity, int price, int discountPrice, UseState useState) {
-        this.member = member;
+    public CouponUseHistoryEntity(Long memberId, CouponEntity couponEntity, int price, int discountPrice, UseState useState) {
+        this.memberId = memberId;
         this.couponEntity = couponEntity;
         this.price = price;
         this.discountPrice = discountPrice;
@@ -55,9 +53,9 @@ public class CouponUseHistoryEntity {
     }
 
     @Builder
-    public CouponUseHistoryEntity(Long id, MemberEntity member, CouponEntity couponEntity, int price, int discountPrice, UseState useState, LocalDateTime createdAt) {
+    public CouponUseHistoryEntity(Long id, Long memberId, CouponEntity couponEntity, int price, int discountPrice, UseState useState, LocalDateTime createdAt) {
         this.id = id;
-        this.member = member;
+        this.memberId = memberId;
         this.couponEntity = couponEntity;
         this.price = price;
         this.discountPrice = discountPrice;
@@ -68,7 +66,7 @@ public class CouponUseHistoryEntity {
     public CouponUseHistory toCouponUseHistory() {
         return CouponUseHistory.builder()
                 .id(getId())
-                .member(getMember().toMember())
+                .memberId(getMemberId())
                 .coupon(getCouponEntity().toCoupon())
                 .price(getPrice())
                 .discountPrice(getDiscountPrice())

@@ -1,8 +1,8 @@
 package com.flab.goodchoiceapi.coupon.infrastructure;
 
 import com.flab.goodchoiceapi.coupon.application.CouponIssueChecker;
-import com.flab.goodchoiceapi.coupon.exception.CouponError;
-import com.flab.goodchoiceapi.coupon.exception.CouponException;
+import com.flab.goodchoicecoupon.exception.CouponError;
+import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class CouponIssueExistCheckImpl implements CouponIssueChecker {
 
     @Override
     public void duplicateCouponIssueCheck(Long memberId, UUID couponToken) {
-        boolean existsCoupon = couponIssueRepository.existsByMemberEntityIdAndCouponEntity_CouponToken(memberId, couponToken);
+        boolean existsCoupon = couponIssueRepository.existsByMemberIdAndCouponEntity_CouponToken(memberId, couponToken);
         if (existsCoupon) {
             throw new CouponException(CouponError.NOT_DUPLICATION_COUPON);
         }

@@ -1,7 +1,6 @@
 package com.flab.goodchoicecoupon.infrastructure.entity;
 
-import com.flab.goodchoiceapi.coupon.domain.CouponIssue;
-import com.flab.goodchoiceapi.member.infrastructure.entity.MemberEntity;
+import com.flab.goodchoicecoupon.domain.CouponIssue;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,9 +28,8 @@ public class CouponIssueEntity {
     @Column(name = "coupon_issue_token", columnDefinition = "BINARY(16)", nullable = false)
     private UUID couponIssueToken;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private MemberEntity memberEntity;
+    @Column(name = "member_id")
+    private Long memberId;
 
     @ManyToOne
     @JoinColumn(name = "coupon_id")
@@ -48,21 +46,21 @@ public class CouponIssueEntity {
     @Column(name = "used_at")
     private LocalDateTime usedAt;
 
-    public CouponIssueEntity(UUID couponIssueToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn) {
+    public CouponIssueEntity(UUID couponIssueToken, Long memberId, CouponEntity couponEntity, boolean usedYn) {
         this.couponIssueToken = couponIssueToken;
-        this.memberEntity = memberEntity;
+        this.memberId = memberId;
         this.couponEntity = couponEntity;
         this.usedYn = usedYn;
     }
 
-    public CouponIssueEntity(Long id, UUID couponIssueToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn) {
-        this(couponIssueToken, memberEntity, couponEntity, usedYn);
+    public CouponIssueEntity(Long id, UUID couponIssueToken, Long memberId, CouponEntity couponEntity, boolean usedYn) {
+        this(couponIssueToken, memberId, couponEntity, usedYn);
         this.id = id;
     }
 
     @Builder
-    public CouponIssueEntity(Long id, UUID couponIssueToken, MemberEntity memberEntity, CouponEntity couponEntity, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
-        this(id, couponIssueToken, memberEntity, couponEntity, usedYn);
+    public CouponIssueEntity(Long id, UUID couponIssueToken, Long memberId, CouponEntity couponEntity, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
+        this(id, couponIssueToken, memberId, couponEntity, usedYn);
         this.createdAt = createdAt;
         this.usedAt = usedAt;
     }
@@ -71,7 +69,7 @@ public class CouponIssueEntity {
         return CouponIssue.builder()
                 .id(getId())
                 .couponIssueToken(getCouponIssueToken())
-                .member(getMemberEntity().toMember())
+                .memberId(getMemberId())
                 .coupon(getCouponEntity().toCoupon())
                 .usedYn(isUsedYn())
                 .createdAt(getCreatedAt())

@@ -1,6 +1,5 @@
 package com.flab.goodchoicecoupon.domain;
 
-import com.flab.goodchoiceapi.member.domain.model.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,27 +13,27 @@ import java.util.UUID;
 public class CouponIssue {
     private Long id;
     private UUID couponIssueToken;
-    private Member member;
+    private Long memberId;
     private Coupon coupon;
     private boolean usedYn;
     private LocalDateTime createdAt;
     private LocalDateTime usedAt;
 
-    public CouponIssue(UUID couponIssueToken, Member member, Coupon coupon, boolean usedYn) {
+    public CouponIssue(UUID couponIssueToken, Long memberId, Coupon coupon, boolean usedYn) {
         this.couponIssueToken = couponIssueToken;
-        this.member = member;
+        this.memberId = memberId;
         this.coupon = coupon;
         this.usedYn = usedYn;
     }
 
-    public CouponIssue(Long id, UUID couponIssueToken, Member member, Coupon coupon, boolean usedYn) {
-        this(couponIssueToken, member, coupon, usedYn);
+    public CouponIssue(Long id, UUID couponIssueToken, Long memberId, Coupon coupon, boolean usedYn) {
+        this(couponIssueToken, memberId, coupon, usedYn);
         this.id = id;
     }
 
     @Builder
-    public CouponIssue(Long id, UUID couponIssueToken, Member member, Coupon coupon, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
-        this(couponIssueToken, member, coupon, usedYn);
+    public CouponIssue(Long id, UUID couponIssueToken, Long memberId, Coupon coupon, boolean usedYn, LocalDateTime createdAt, LocalDateTime usedAt) {
+        this(couponIssueToken, memberId, coupon, usedYn);
         this.id = id;
         this.createdAt = createdAt;
         this.usedAt = usedAt;

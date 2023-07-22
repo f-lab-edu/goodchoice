@@ -1,11 +1,10 @@
 package com.flab.goodchoiceapi.coupon.application;
 
-import com.flab.goodchoiceapi.coupon.domain.*;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoiceapi.member.application.MemberQuery;
-import com.flab.goodchoiceapi.member.domain.model.Member;
 import com.flab.goodchoicecoupon.domain.*;
+import com.flab.goodchoicemember.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,6 @@ public class CouponUseService {
     }
 
     public CouponUsedInfoResponse useCoupon(final Long memberId, final UUID couponIssueToken, final int price) {
-        Member member = getMemberById(memberId);
         CouponIssue couponPublish = couponIssueQuery.getCouponIssue(couponIssueToken, memberId);
 
         Coupon coupon = couponPublish.getCoupon();
@@ -40,7 +38,7 @@ public class CouponUseService {
         int discountPrice = couponCalculator.discountPriceCalculation();
         int resultPrice = couponCalculator.useCalculation();
 
-        couponUseHistoryCommand.save(new CouponUseHistory(member, coupon, price, discountPrice, UseState.USE));
+        couponUseHistoryCommand.save(new CouponUseHistory(memberId, coupon, price, discountPrice, UseState.USE));
 
         couponPublish.use();
         couponIssueCommand.modify(couponPublish);

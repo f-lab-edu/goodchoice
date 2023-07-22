@@ -1,6 +1,5 @@
 package com.flab.goodchoicecoupon.domain;
 
-import com.flab.goodchoiceapi.member.domain.model.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,15 +11,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CouponUseHistory {
     private Long id;
-    private Member member;
+    private Long memberId;
     private Coupon coupon;
     private int price;
     private int discountPrice;
     private UseState useState;
     private LocalDateTime createdAt;
 
-    public CouponUseHistory(Member member, Coupon coupon, int price, int discountPrice, UseState useState) {
-        this.member = member;
+    public CouponUseHistory(Long memberId, Coupon coupon, int price, int discountPrice, UseState useState) {
+        this.memberId = memberId;
         this.coupon = coupon;
         this.price = price;
         this.discountPrice = discountPrice;
@@ -28,8 +27,8 @@ public class CouponUseHistory {
     }
 
     @Builder
-    public CouponUseHistory(Long id, Member member, Coupon coupon, int price, int discountPrice, UseState useState, LocalDateTime createdAt) {
-        this(member, coupon, price, discountPrice, useState);
+    public CouponUseHistory(Long id, Long memberId, Coupon coupon, int price, int discountPrice, UseState useState, LocalDateTime createdAt) {
+        this(memberId, coupon, price, discountPrice, useState);
         this.id = id;
         this.createdAt = createdAt;
     }
