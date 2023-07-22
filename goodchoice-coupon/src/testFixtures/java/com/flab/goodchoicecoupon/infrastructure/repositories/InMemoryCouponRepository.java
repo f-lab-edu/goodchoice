@@ -1,6 +1,6 @@
-package com.flab.goodchoiceapi.coupon.infrastructure.repositories;
+package com.flab.goodchoicecoupon.infrastructure.repositories;
 
-import com.flab.goodchoiceapi.coupon.infrastructure.entity.CouponEntity;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 
 import java.util.*;
 

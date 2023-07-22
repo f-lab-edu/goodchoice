@@ -1,6 +1,6 @@
-package com.flab.goodchoiceapi.coupon.infrastructure.repositories;
+package com.flab.goodchoicecoupon.infrastructure.repositories;
 
-import com.flab.goodchoiceapi.coupon.infrastructure.entity.CouponIssueEntity;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueEntity;
 
 import java.util.*;
 
@@ -30,21 +30,21 @@ public class InMemoryCouponIssueRepository implements CouponIssueRepository {
     @Override
     public List<CouponIssueEntity> findCouponHistoryFetchByMemberId(Long memberId) {
         return couponPublishs.values().stream()
-                .filter(couponPublishHistory -> couponPublishHistory.getMemberEntity().getId().equals(memberId))
+                .filter(couponPublishHistory -> couponPublishHistory.getMemberId().equals(memberId))
                 .toList();
     }
 
     @Override
-    public Optional<CouponIssueEntity> findByCouponIssueTokenAndMemberEntityId(UUID couponPublishToken, Long memberId) {
+    public Optional<CouponIssueEntity> findByCouponIssueTokenAndMemberId(UUID couponPublishToken, Long memberId) {
         return couponPublishs.values().stream()
                 .filter(couponPublish -> couponPublish.getCouponIssueToken().equals(couponPublishToken))
-                .filter(couponPublish -> couponPublish.getMemberEntity().getId().equals(memberId))
+                .filter(couponPublish -> couponPublish.getMemberId().equals(memberId))
                 .findFirst();
     }
 
     @Override
-    public boolean existsByMemberEntityIdAndCouponEntity_CouponToken(Long memberId, UUID couponToken) {
+    public boolean existsByMemberIdAndCouponEntity_CouponToken(Long memberId, UUID couponToken) {
         return couponPublishs.values().stream()
-                .anyMatch(entity -> Objects.equals(entity.getMemberEntity().getId(), memberId) && Objects.equals(entity.getCouponEntity().getCouponToken(), couponToken));
+                .anyMatch(entity -> Objects.equals(entity.getMemberId(), memberId) && Objects.equals(entity.getCouponEntity().getCouponToken(), couponToken));
     }
 }

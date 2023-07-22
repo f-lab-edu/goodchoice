@@ -1,6 +1,6 @@
-package com.flab.goodchoiceapi.coupon.infrastructure.repositories;
+package com.flab.goodchoicecoupon.infrastructure.repositories;
 
-import com.flab.goodchoiceapi.coupon.infrastructure.entity.CouponUseHistoryEntity;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponUseHistoryEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class InMemoryCouponUseHistoryEntityRepository implements CouponUseHistor
     @Override
     public Optional<CouponUseHistoryEntity> findByMemberIdAndCouponEntityId(Long memberId, Long couponEntityId) {
         return couponUseHistoryEntitys.values().stream()
-                .filter(couponUseHistoryEntity -> couponUseHistoryEntity.getMember().getId().equals(memberId))
+                .filter(couponUseHistoryEntity -> couponUseHistoryEntity.getMemberId().equals(memberId))
                 .filter(couponUseHistoryEntity -> couponUseHistoryEntity.getCouponEntity().getId().equals(couponEntityId))
                 .findFirst();
     }

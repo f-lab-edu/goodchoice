@@ -1,5 +1,8 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation(project(":goodchoice-coupon"))
+    testImplementation(testFixtures(project(":goodchoice-coupon")))
+    testImplementation(testFixtures(project(":goodchoice-member")))
 }
 
 tasks.register("prepareKotlinBuildScriptModel") {}

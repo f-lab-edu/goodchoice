@@ -6,16 +6,17 @@ import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedInfoResponse;
-import com.flab.goodchoiceapi.coupon.exception.CouponException;
+import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponIssueCommand;
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponQuery;
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeMemberCommand;
-import com.flab.goodchoiceapi.coupon.infrastructure.entity.CouponEntity;
-import com.flab.goodchoiceapi.coupon.infrastructure.repositories.*;
 import com.flab.goodchoiceapi.member.application.MemberCommand;
-import com.flab.goodchoiceapi.member.domain.model.Member;
-import com.flab.goodchoiceapi.member.domain.repositories.MemberRepository;
 import com.flab.goodchoiceapi.member.exception.MemberException;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
+import com.flab.goodchoicecoupon.infrastructure.repositories.*;
+import com.flab.goodchoicemember.domain.model.Member;
+import com.flab.goodchoicemember.infrastructure.repositories.InMemoryMemberRepository;
+import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,7 +92,7 @@ class CouponUseServiceTest {
     @ParameterizedTest
     @CsvSource(value = {"10000:1000:9000", "15000:1500:13500", "20000:2000:18000"}, delimiter = ':')
     void couponUsedDiscount(int prePrice, int discountPrice, int result) {
-        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, member, couponDiscount, false));
+        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, memberId, couponDiscount, false));
 
         CouponUsedInfoResponse couponUsedInfoResponse = couponUseService.useCoupon(memberId, CouponPublishToken, prePrice);
 
@@ -105,7 +106,7 @@ class CouponUseServiceTest {
     @ParameterizedTest
     @CsvSource(value = {"10000:10000:0", "15000:10000:5000", "20000:10000:10000"}, delimiter = ':')
     void couponUsedDeduction(int prePrice, int discountPrice, int result) {
-        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, member, couponDeduction, false));
+        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, memberId, couponDeduction, false));
 
         CouponUsedInfoResponse couponUsedInfoResponse = couponUseService.useCoupon(memberId, CouponPublishToken, prePrice);
 
@@ -119,7 +120,7 @@ class CouponUseServiceTest {
     @Test
     void noneMemberCouponUsedDeduction() {
         assertThatThrownBy(() -> couponUseService.useCoupon(noneMemberId, couponTokenDeduction, 10000))
-                .isInstanceOf(MemberException.class);
+                .isInstanceOf(CouponException.class);
     }
 
     @DisplayName("존재하지 않은 쿠폰 사용시 에러")
@@ -132,7 +133,7 @@ class CouponUseServiceTest {
     @DisplayName("가지고 있지 않은 쿠폰 사용시 에러")
     @Test
     void memberNotCouponUsedDeduction() {
-        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, member, couponDiscount, false));
+        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, memberId, couponDiscount, false));
 
         assertThatThrownBy(() -> couponUseService.useCoupon(memberId, couponTokenDeduction, 10000))
                 .isInstanceOf(CouponException.class);
@@ -142,7 +143,7 @@ class CouponUseServiceTest {
     @ParameterizedTest
     @CsvSource(value = {"9000:10000", "13500:15000", "18000:20000"}, delimiter = ':')
     void couponUsedCancelDiscount(int prePrice, int result) {
-        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, member, couponDiscount, false));
+        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, memberId, couponDiscount, false));
 
         couponUseService.useCoupon(memberId, CouponPublishToken, prePrice);
 
@@ -155,7 +156,7 @@ class CouponUseServiceTest {
     @ParameterizedTest
     @CsvSource(value = {"0:10000", "5000:15000", "10000:20000"}, delimiter = ':')
     void couponUsedCancelDeduction(int prePrice, int result) {
-        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, member, couponDeduction, false));
+        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, memberId, couponDeduction, false));
 
         couponUseService.useCoupon(memberId, CouponPublishToken, prePrice);
 
@@ -181,7 +182,7 @@ class CouponUseServiceTest {
     @DisplayName("가지고 있지 않은 쿠폰 취소시 에러")
     @Test
     void memberNotCouponUsedCancelDiscount() {
-        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, member, couponDiscount, false));
+        couponIssueCommand.save(new CouponIssue(1L, CouponPublishToken, memberId, couponDiscount, false));
 
         assertThatThrownBy(() -> couponUseService.usedCouponCancel(memberId, couponTokenDeduction, 10000))
                 .isInstanceOf(CouponException.class);
@@ -190,7 +191,7 @@ class CouponUseServiceTest {
     @DisplayName("사용하지 않은 쿠폰 취소시 에러")
     @Test
     void notUsedCouponCancelDiscount() {
-        couponIssueCommand.save(new CouponIssue(1L, UUID.randomUUID(), member, couponDiscount, false));
+        couponIssueCommand.save(new CouponIssue(1L, UUID.randomUUID(), memberId, couponDiscount, false));
 
         assertThatThrownBy(() -> couponUseService.usedCouponCancel(memberId, couponTokenDiscount, 10000))
                 .isInstanceOf(CouponException.class);

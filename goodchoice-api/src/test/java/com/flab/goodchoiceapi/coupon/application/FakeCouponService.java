@@ -2,7 +2,7 @@ package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponCommand;
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponQuery;
-import com.flab.goodchoiceapi.coupon.infrastructure.repositories.CouponRepository;
+import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
 
 public class FakeCouponService {
 

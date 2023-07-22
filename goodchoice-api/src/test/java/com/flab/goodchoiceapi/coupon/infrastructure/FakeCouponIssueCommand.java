@@ -2,10 +2,9 @@ package com.flab.goodchoiceapi.coupon.infrastructure;
 
 import com.flab.goodchoiceapi.coupon.application.CouponIssueCommand;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
-import com.flab.goodchoiceapi.coupon.infrastructure.entity.CouponEntity;
-import com.flab.goodchoiceapi.coupon.infrastructure.entity.CouponIssueEntity;
-import com.flab.goodchoiceapi.coupon.infrastructure.repositories.CouponIssueRepository;
-import com.flab.goodchoiceapi.member.infrastructure.entity.MemberEntity;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueEntity;
+import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 
 public class FakeCouponIssueCommand implements CouponIssueCommand {
 
@@ -19,7 +18,7 @@ public class FakeCouponIssueCommand implements CouponIssueCommand {
     public CouponIssue save(CouponIssue couponPublish) {
         CouponIssueEntity couponIssueEntity = CouponIssueEntity.builder()
                 .couponIssueToken(couponPublish.getCouponIssueToken())
-                .memberEntity(MemberEntity.of(couponPublish.getMember()))
+                .memberId(couponPublish.getMemberId())
                 .couponEntity(CouponEntity.of(couponPublish.getCoupon()))
                 .usedYn(couponPublish.isUsedYn())
                 .build();
@@ -34,7 +33,7 @@ public class FakeCouponIssueCommand implements CouponIssueCommand {
         CouponIssueEntity couponIssueEntity = CouponIssueEntity.builder()
                 .id(couponPublish.getId())
                 .couponIssueToken(couponPublish.getCouponIssueToken())
-                .memberEntity(MemberEntity.of(couponPublish.getMember()))
+                .memberId(couponPublish.getMemberId())
                 .couponEntity(CouponEntity.of(couponPublish.getCoupon()))
                 .usedYn(couponPublish.isUsedYn())
                 .createdAt(couponPublish.getCreatedAt())

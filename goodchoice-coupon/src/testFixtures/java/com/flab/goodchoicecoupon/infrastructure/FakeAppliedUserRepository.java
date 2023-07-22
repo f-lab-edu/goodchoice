@@ -1,6 +1,6 @@
-package com.flab.goodchoiceapi.coupon.infrastructure;
+package com.flab.goodchoicecoupon.infrastructure;
 
-import com.flab.goodchoiceapi.coupon.infrastructure.repositories.AppliedUserRepository;
+import com.flab.goodchoicecoupon.infrastructure.repositories.AppliedUserRepository;
 
 public class FakeAppliedUserRepository implements AppliedUserRepository {
     @Override

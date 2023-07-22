@@ -2,10 +2,10 @@ package com.flab.goodchoiceapi.coupon.infrastructure;
 
 import com.flab.goodchoiceapi.coupon.application.CouponIssueQuery;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
-import com.flab.goodchoiceapi.coupon.exception.CouponError;
-import com.flab.goodchoiceapi.coupon.exception.CouponException;
-import com.flab.goodchoiceapi.coupon.infrastructure.entity.CouponIssueEntity;
-import com.flab.goodchoiceapi.coupon.infrastructure.repositories.CouponIssueRepository;
+import com.flab.goodchoicecoupon.exception.CouponError;
+import com.flab.goodchoicecoupon.exception.CouponException;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueEntity;
+import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +29,7 @@ public class FakeCouponIssueQuery implements CouponIssueQuery {
 
     @Override
     public CouponIssue getCouponIssue(UUID couponPublishToken, Long memberId) {
-        CouponIssueEntity couponPublishEntity = couponPublishRepository.findByCouponIssueTokenAndMemberEntityId(couponPublishToken, memberId).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
+        CouponIssueEntity couponPublishEntity = couponPublishRepository.findByCouponIssueTokenAndMemberId(couponPublishToken, memberId).orElseThrow(() -> new CouponException(CouponError.NOT_FOUND_COUPON));
         return couponPublishEntity.toCouponIssue();
     }
 }

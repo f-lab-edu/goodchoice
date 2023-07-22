@@ -2,8 +2,8 @@ package com.flab.goodchoiceapi.coupon.infrastructure;
 
 import com.flab.goodchoiceapi.coupon.application.CouponCommand;
 import com.flab.goodchoicecoupon.domain.Coupon;
-import com.flab.goodchoiceapi.coupon.infrastructure.entity.CouponEntity;
-import com.flab.goodchoiceapi.coupon.infrastructure.repositories.CouponRepository;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
+import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
 
 public class FakeCouponCommand implements CouponCommand {
 

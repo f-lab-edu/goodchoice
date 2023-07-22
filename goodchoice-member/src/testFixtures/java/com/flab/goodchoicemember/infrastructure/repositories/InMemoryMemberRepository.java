@@ -1,7 +1,6 @@
-package com.flab.goodchoiceapi.coupon.infrastructure.repositories;
+package com.flab.goodchoicemember.infrastructure.repositories;
 
-import com.flab.goodchoiceapi.member.domain.repositories.MemberRepository;
-import com.flab.goodchoiceapi.member.infrastructure.entity.MemberEntity;
+import com.flab.goodchoicemember.infrastructure.entity.MemberEntity;
 
 import java.util.HashMap;
 import java.util.Map;
