@@ -1,0 +1,7 @@
+spring:
+  config:
+    activate:
+      on-profile: redis
+  redis:
+    host: 118.67.135.217
+    port: 6379
