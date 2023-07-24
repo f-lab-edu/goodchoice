@@ -1,4 +1,4 @@
-package com.flab.goodchoiceredis.common.aop;
+package com.flab.goodchoiceredis.common.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
