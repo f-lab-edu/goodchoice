@@ -1,10 +1,10 @@
 package com.flab.goodchoiceapi.coupon.application;
 
-import com.flab.goodchoiceapi.common.aop.LimitedCountLock;
+import com.flab.goodchoiceredis.common.aop.LimitedCountLock;
 import com.flab.goodchoiceapi.member.application.MemberQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
-import com.flab.goodchoicecoupon.infrastructure.repositories.AppliedUserRepository;
+import com.flab.goodchoiceredis.infrastructure.AppliedUserRepository;
 import com.flab.goodchoicemember.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
