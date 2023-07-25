@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    hikari:
+      master:
+        jdbc-url: jdbc:mysql://118.67.135.217:32770/goodchoice
+        username: root
+        password: 1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      slave:
+        jdbc-url: jdbc:mysql://118.67.135.217:32769/goodchoice
+        username: root
+        password: 1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      maximum-pool-size: 200
+
+  cloud.vault:
+    uri: http://118.67.142.68:8200
+    authentication: TOKEN
+    token: qwer1234
+    connection-timeout: 5000
+    read-timeout: 15000
+    kv:
+      enabled: true
+      backend: good-choice-app
+      profile-separator: "/"
+      application-name: dev
+      profiles:
+
+  redis:
+    host: 118.67.135.217
+    port: 6379
+
+  jpa:
+    hibernate:
+      ddl-auto: none

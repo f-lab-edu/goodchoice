@@ -1,58 +1,96 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.12-SNAPSHOT'
+	id 'org.springframework.boot' version '2.7.13'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
-group = 'com.flab'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+// 모든 프로젝트에 적용.
+allprojects {
+	group = 'com.flab'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '17'
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+	repositories {
+		mavenCentral()
+		maven { url 'https://repo.spring.io/milestone' }
+		maven { url 'https://repo.spring.io/snapshot' }
 	}
 }
 
-repositories {
-	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
-	maven { url 'https://repo.spring.io/snapshot' }
+// 서브 프로젝트 전체에 적용.
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	ext {
+		set('springCloudVersion', "2021.0.5")
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		implementation 'org.springframework.cloud:spring-cloud-starter-vault-config:3.1.1'
+
+		implementation 'com.google.guava:guava:31.1-jre'
+		implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+		// lombok
+		implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+		implementation 'junit:junit:4.13.2'
+		compileOnly 'org.projectlombok:lombok'
+
+		// Mapstruct
+		implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+		annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+		annotationProcessor(
+				'org.projectlombok:lombok',
+				'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+		)
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.mockito:mockito-core:3.11.2'
+		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
+	}
+
+	tasks.named('test') {
+		useJUnitPlatform()
+	}
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.redisson:redisson-spring-boot-starter:3.21.1'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.cloud:spring-cloud-starter-vault-config:3.1.1'
-
-	implementation 'com.google.guava:guava:31.1-jre'
-	implementation 'org.apache.commons:commons-lang3:3.12.0'
-
-	// lombok
-	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-	implementation 'junit:junit:4.13.2'
-	compileOnly 'org.projectlombok:lombok'
-
-	// Mapstruct
-	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
-	annotationProcessor(
-			'org.projectlombok:lombok',
-			'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-	)
-
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.mockito:mockito-core:3.11.2'
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+project(':goodchoice-api') {
+	dependencies {
+		implementation project(':goodchoice-member')
+		implementation project(':goodchoice-order')
+		implementation project(':goodchoice-coupon')
+		implementation project(':goodchoice-item')
+		implementation project(':goodchoice-redis')
+		implementation project(':goodchoice-mysql')
+	}
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+//project(':goodchoice-member') {
+//	dependencies {
+//		implementation project(':goodchoice-mysql')
+//	}
+//}
+//
+//project(':goodchoice-member') {
+//	dependencies {
+//		implementation project(':goodchoice-mysql')
+//	}
+//}

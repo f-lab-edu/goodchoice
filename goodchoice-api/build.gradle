@@ -1,0 +1,17 @@
+dependencies {
+    implementation(project(":goodchoice-mysql"))
+    implementation(project(":goodchoice-redis"))
+    implementation(project(":goodchoice-coupon"))
+    implementation(project(":goodchoice-item"))
+    implementation(project(":goodchoice-member"))
+    implementation(project(":goodchoice-order"))
+
+    testImplementation(testFixtures(project(":goodchoice-coupon")))
+    testImplementation(testFixtures(project(":goodchoice-member")))
+    testImplementation(testFixtures(project(":goodchoice-redis")))
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
+
+tasks.register("prepareKotlinBuildScriptModel") {}
