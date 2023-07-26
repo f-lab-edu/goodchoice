@@ -1,7 +1,7 @@
-package com.flab.goodchoiceapi.member.application;
+package com.flab.goodchoicemember.application;
 
 import com.flab.goodchoicemember.domain.model.Member;
 
 public interface MemberQuery {
-    Member findById(Long memberId);
+    Member getMember(Long memberId);
 }

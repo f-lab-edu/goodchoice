@@ -2,8 +2,12 @@ package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedInfoResponse;
-import com.flab.goodchoiceapi.member.application.MemberQuery;
-import com.flab.goodchoicecoupon.domain.*;
+import com.flab.goodchoicecoupon.domain.Coupon;
+import com.flab.goodchoicecoupon.domain.CouponCalculator;
+import com.flab.goodchoicecoupon.domain.CouponIssue;
+import com.flab.goodchoicecoupon.domain.CouponUseHistory;
+import com.flab.goodchoicecoupon.domain.UseState;
+import com.flab.goodchoicemember.application.MemberQuery;
 import com.flab.goodchoicemember.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +51,7 @@ public class CouponUseService {
     }
 
     public CouponUsedCancelInfoResponse usedCouponCancel(final Long memberId, final UUID couponIssueToken, final int price) {
-        Member member = getMemberById(memberId);
+        Member member = getMember(memberId);
         CouponIssue couponPublish = couponIssueQuery.getCouponIssue(couponIssueToken, memberId);
         Coupon coupon = couponPublish.getCoupon();
 
@@ -63,7 +67,7 @@ public class CouponUseService {
         return new CouponUsedCancelInfoResponse(couponIssueToken, price, couponCalculator.usedCancelCalculation());
     }
 
-    private Member getMemberById(Long memberId) {
-        return memberQuery.findById(memberId);
+    private Member getMember(Long memberId) {
+        return memberQuery.getMember(memberId);
     }
 }

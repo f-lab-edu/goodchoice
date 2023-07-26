@@ -1,9 +1,9 @@
-package com.flab.goodchoiceapi.member.infrastructure;
+package com.flab.goodchoicemember.infrastructure;
 
-import com.flab.goodchoiceapi.member.application.MemberQuery;
-import com.flab.goodchoiceapi.member.exception.MemberError;
-import com.flab.goodchoiceapi.member.exception.MemberException;
+import com.flab.goodchoicemember.application.MemberQuery;
 import com.flab.goodchoicemember.domain.model.Member;
+import com.flab.goodchoicemember.exception.MemberError;
+import com.flab.goodchoicemember.exception.MemberException;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 import com.flab.goodchoicemember.infrastructure.entity.MemberEntity;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class MemberQueryImpl implements MemberQuery {
     }
 
     @Override
-    public Member findById(Long memberId) {
+    public Member getMember(Long memberId) {
         MemberEntity memberEntity = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberError.NOT_FOUND_MEMBER));
         return memberEntity.toMember();
     }

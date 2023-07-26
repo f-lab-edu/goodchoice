@@ -1,4 +1,4 @@
-package com.flab.goodchoiceapi.member.exception;
+package com.flab.goodchoicemember.exception;
 
 import lombok.Getter;
 

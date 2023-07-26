@@ -1,11 +1,11 @@
 package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoiceapi.coupon.infrastructure.*;
-import com.flab.goodchoiceapi.member.application.MemberQuery;
-import com.flab.goodchoiceredis.infrastructure.AppliedUserRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
+import com.flab.goodchoicemember.application.MemberQuery;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
+import com.flab.goodchoiceredis.infrastructure.AppliedUserRepository;
 import com.flab.goodchoiceredis.infrastructure.FakeAppliedUserRepository;
 
 public class FakeCouponIssueService {
