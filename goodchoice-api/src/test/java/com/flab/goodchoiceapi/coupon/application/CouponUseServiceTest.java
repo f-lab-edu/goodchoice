@@ -9,12 +9,12 @@ import com.flab.goodchoiceapi.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponIssueCommand;
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponQuery;
-import com.flab.goodchoiceapi.coupon.infrastructure.FakeMemberCommand;
-import com.flab.goodchoiceapi.member.application.MemberCommand;
-import com.flab.goodchoiceapi.member.exception.MemberException;
+import com.flab.goodchoicemember.application.MemberCommand;
+import com.flab.goodchoicemember.exception.MemberException;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.*;
 import com.flab.goodchoicemember.domain.model.Member;
+import com.flab.goodchoicemember.infrastructure.FakeMemberCommand;
 import com.flab.goodchoicemember.infrastructure.repositories.InMemoryMemberRepository;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -77,7 +77,7 @@ class CouponUseServiceTest {
 
         couponUseService = new FakeCouponUseService(memberRepository, couponIssueRepository, couponUseHistoryEntityRepository).createCouponUseService();
 
-        member = memberCommand.save(new Member(memberId));
+        member = memberCommand.createMember(new Member(memberId));
 
         couponDiscountEntity = createCouponEntity(couponIdDiscount, couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
 

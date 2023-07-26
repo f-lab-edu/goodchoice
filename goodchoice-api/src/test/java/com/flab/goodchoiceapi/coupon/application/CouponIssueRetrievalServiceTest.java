@@ -3,14 +3,14 @@ package com.flab.goodchoiceapi.coupon.application;
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoiceapi.coupon.dto.MemberSpecificCouponResponse;
-import com.flab.goodchoiceapi.coupon.infrastructure.FakeMemberCommand;
-import com.flab.goodchoiceapi.member.application.MemberCommand;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponRepository;
+import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
+import com.flab.goodchoicemember.infrastructure.FakeMemberCommand;
 import com.flab.goodchoicemember.infrastructure.repositories.InMemoryMemberRepository;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ class CouponIssueRetrievalServiceTest {
         couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository).createCouponIssueService();
         couponIssueRetrievalService = new FakeCouponIssueRetrievalService(couponIssueRepository).createCouponIssueRetrievalService();
 
-        member = memberCommand.save(new Member(memberId));
+        member = memberCommand.createMember(new Member(memberId));
 
         couponDiscountEntity = new CouponEntity(couponIdDiscount, couponTokenDiscount, couponNameDiscount, stockDiscount, CouponType.DISCOUNT, discountValue, State.ACTIVITY);
         couponRepository.save(couponDiscountEntity);
