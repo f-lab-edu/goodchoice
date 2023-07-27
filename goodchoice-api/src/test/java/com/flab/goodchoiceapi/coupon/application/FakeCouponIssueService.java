@@ -2,6 +2,8 @@ package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoiceapi.coupon.infrastructure.*;
 import com.flab.goodchoiceapi.member.application.MemberQuery;
+import com.flab.goodchoicecoupon.application.CouponCommand;
+import com.flab.goodchoicecoupon.infrastructure.FakeCouponCommand;
 import com.flab.goodchoiceredis.infrastructure.AppliedUserRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;

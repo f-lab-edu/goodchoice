@@ -1,5 +1,6 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoicecoupon.application.CouponCommand;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoiceapi.coupon.dto.CreateCouponRequest;
