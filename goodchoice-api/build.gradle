@@ -12,6 +12,9 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // spring docs (swagger)
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 }
 
 tasks.register("prepareKotlinBuildScriptModel") {}
