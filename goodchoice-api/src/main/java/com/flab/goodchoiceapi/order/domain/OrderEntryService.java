@@ -3,6 +3,8 @@ package com.flab.goodchoiceapi.order.domain;
 import com.flab.goodchoiceitem.infrastructure.StockHistoryRepository;
 import com.flab.goodchoiceitem.domain.StockHistory;
 import com.flab.goodchoiceorder.domain.Order;
+import com.flab.goodchoiceorder.domain.OrderStore;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
