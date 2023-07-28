@@ -9,7 +9,7 @@ import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoicecoupon.exception.CouponException;
-import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponIssueCommand;
+import com.flab.goodchoicecoupon.infrastructure.FakeCouponIssueCommand;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponQuery;
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeMemberCommand;
 import com.flab.goodchoiceapi.member.application.MemberCommand;

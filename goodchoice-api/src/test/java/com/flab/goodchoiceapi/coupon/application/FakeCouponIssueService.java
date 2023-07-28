@@ -6,6 +6,7 @@ import com.flab.goodchoicecoupon.application.CouponCommand;
 import com.flab.goodchoicecoupon.application.CouponIssueCommand;
 import com.flab.goodchoicecoupon.application.CouponQuery;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponCommand;
+import com.flab.goodchoicecoupon.infrastructure.FakeCouponIssueCommand;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponQuery;
 import com.flab.goodchoiceredis.infrastructure.AppliedUserRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
