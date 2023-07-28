@@ -1,4 +1,4 @@
-package com.flab.goodchoiceapi.coupon.application;
+package com.flab.goodchoicecoupon.application;
 
 import java.util.UUID;
 

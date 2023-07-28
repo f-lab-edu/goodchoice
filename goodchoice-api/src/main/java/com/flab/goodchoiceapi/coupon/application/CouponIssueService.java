@@ -1,6 +1,7 @@
 package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoicecoupon.application.CouponCommand;
+import com.flab.goodchoicecoupon.application.CouponIssueChecker;
 import com.flab.goodchoicecoupon.application.CouponIssueCommand;
 import com.flab.goodchoicecoupon.application.CouponQuery;
 import com.flab.goodchoiceredis.common.aop.LimitedCountLock;
