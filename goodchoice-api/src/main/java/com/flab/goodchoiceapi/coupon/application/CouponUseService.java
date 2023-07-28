@@ -6,6 +6,7 @@ import com.flab.goodchoiceapi.member.application.MemberQuery;
 import com.flab.goodchoicecoupon.application.CouponIssueCommand;
 import com.flab.goodchoicecoupon.application.CouponIssueQuery;
 import com.flab.goodchoicecoupon.application.CouponUseHistoryCommand;
+import com.flab.goodchoicecoupon.application.CouponUseHistoryQuery;
 import com.flab.goodchoicecoupon.domain.*;
 import com.flab.goodchoicemember.domain.model.Member;
 import org.springframework.stereotype.Service;

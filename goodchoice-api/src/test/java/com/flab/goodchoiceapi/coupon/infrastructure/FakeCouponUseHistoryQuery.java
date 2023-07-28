@@ -1,6 +1,6 @@
 package com.flab.goodchoiceapi.coupon.infrastructure;
 
-import com.flab.goodchoiceapi.coupon.application.CouponUseHistoryQuery;
+import com.flab.goodchoicecoupon.application.CouponUseHistoryQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponUseHistory;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponUseHistoryEntity;
