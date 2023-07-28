@@ -9,6 +9,7 @@ import com.flab.goodchoicecoupon.application.CouponUseHistoryQuery;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponIssueCommand;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponIssueQuery;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponUseHistoryCommand;
+import com.flab.goodchoicecoupon.infrastructure.FakeCouponUseHistoryQuery;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponUseHistoryRepository;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;

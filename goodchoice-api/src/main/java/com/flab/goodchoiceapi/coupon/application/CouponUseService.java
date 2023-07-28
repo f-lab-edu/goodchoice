@@ -55,7 +55,7 @@ public class CouponUseService {
         CouponIssue couponPublish = couponIssueQuery.getCouponIssue(couponIssueToken, memberId);
         Coupon coupon = couponPublish.getCoupon();
 
-        CouponUseHistory couponUseHistory = couponUseHistoryQuery.getCouponUseHistory(member, coupon);
+        CouponUseHistory couponUseHistory = couponUseHistoryQuery.getCouponUseHistory(memberId, coupon);
         couponUseHistory.cancel();
         couponUseHistoryCommand.modify(couponUseHistory);
 
