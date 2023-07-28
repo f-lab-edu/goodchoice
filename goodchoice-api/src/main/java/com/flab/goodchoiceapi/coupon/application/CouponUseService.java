@@ -3,6 +3,10 @@ package com.flab.goodchoiceapi.coupon.application;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedCancelInfoResponse;
 import com.flab.goodchoiceapi.coupon.dto.CouponUsedInfoResponse;
 import com.flab.goodchoiceapi.member.application.MemberQuery;
+import com.flab.goodchoicecoupon.application.CouponIssueCommand;
+import com.flab.goodchoicecoupon.application.CouponIssueQuery;
+import com.flab.goodchoicecoupon.application.CouponUseHistoryCommand;
+import com.flab.goodchoicecoupon.application.CouponUseHistoryQuery;
 import com.flab.goodchoicecoupon.domain.*;
 import com.flab.goodchoicemember.domain.model.Member;
 import org.springframework.stereotype.Service;
@@ -51,7 +55,7 @@ public class CouponUseService {
         CouponIssue couponPublish = couponIssueQuery.getCouponIssue(couponIssueToken, memberId);
         Coupon coupon = couponPublish.getCoupon();
 
-        CouponUseHistory couponUseHistory = couponUseHistoryQuery.getCouponUseHistory(member, coupon);
+        CouponUseHistory couponUseHistory = couponUseHistoryQuery.getCouponUseHistory(memberId, coupon);
         couponUseHistory.cancel();
         couponUseHistoryCommand.modify(couponUseHistory);
 

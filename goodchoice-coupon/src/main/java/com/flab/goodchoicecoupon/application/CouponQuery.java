@@ -1,4 +1,4 @@
-package com.flab.goodchoiceapi.coupon.application;
+package com.flab.goodchoicecoupon.application;
 
 import com.flab.goodchoicecoupon.domain.Coupon;
 import org.springframework.data.repository.query.Param;

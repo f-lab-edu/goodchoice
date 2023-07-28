@@ -1,11 +1,10 @@
-package com.flab.goodchoiceapi.coupon.infrastructure;
+package com.flab.goodchoicecoupon.infrastructure;
 
-import com.flab.goodchoiceapi.coupon.application.CouponUseHistoryQuery;
+import com.flab.goodchoicecoupon.application.CouponUseHistoryQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponUseHistory;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponUseHistoryEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponUseHistoryRepository;
-import com.flab.goodchoicemember.domain.model.Member;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +19,8 @@ public class CouponUseHistoryQueryImpl implements CouponUseHistoryQuery {
     }
 
     @Override
-    public CouponUseHistory getCouponUseHistory(Member member, Coupon coupon) {
-        CouponUseHistoryEntity couponUseHistoryEntity = couponUseHistoryRepository.findByMemberIdAndCouponEntityId(member.getId(), coupon.getId()).orElseThrow();
+    public CouponUseHistory getCouponUseHistory(Long memberId, Coupon coupon) {
+        CouponUseHistoryEntity couponUseHistoryEntity = couponUseHistoryRepository.findByMemberIdAndCouponEntityId(memberId, coupon.getId()).orElseThrow();
         return couponUseHistoryEntity.toCouponUseHistory();
     }
 }

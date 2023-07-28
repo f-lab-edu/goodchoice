@@ -1,6 +1,6 @@
-package com.flab.goodchoiceapi.coupon.infrastructure;
+package com.flab.goodchoicecoupon.infrastructure;
 
-import com.flab.goodchoiceapi.coupon.application.CouponIssueCommand;
+import com.flab.goodchoicecoupon.application.CouponIssueCommand;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueEntity;
