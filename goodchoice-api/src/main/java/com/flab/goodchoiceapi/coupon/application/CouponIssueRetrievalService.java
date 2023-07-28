@@ -1,5 +1,6 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoicecoupon.application.CouponIssueQuery;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
 import com.flab.goodchoiceapi.coupon.dto.MemberSpecificCouponResponse;
 import org.springframework.stereotype.Service;

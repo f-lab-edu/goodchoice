@@ -1,6 +1,6 @@
 package com.flab.goodchoiceapi.coupon.infrastructure;
 
-import com.flab.goodchoiceapi.coupon.application.CouponIssueQuery;
+import com.flab.goodchoicecoupon.application.CouponIssueQuery;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
 import com.flab.goodchoicecoupon.exception.CouponError;
 import com.flab.goodchoicecoupon.exception.CouponException;
