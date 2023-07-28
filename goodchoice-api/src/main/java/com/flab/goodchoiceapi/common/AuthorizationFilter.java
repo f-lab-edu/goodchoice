@@ -11,12 +11,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import com.flab.goodchoiceapi.common.config.VaultCredential;
-import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-//@Component
 @RequiredArgsConstructor
 public class AuthorizationFilter implements Filter {
 
