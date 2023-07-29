@@ -5,7 +5,7 @@ import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoicecoupon.exception.CouponException;
-import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponQuery;
+import com.flab.goodchoicecoupon.infrastructure.FakeCouponQuery;
 import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.exception.MemberException;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
