@@ -8,6 +8,11 @@ import com.flab.goodchoicecoupon.domain.CouponIssue;
 import com.flab.goodchoicecoupon.domain.CouponUseHistory;
 import com.flab.goodchoicecoupon.domain.UseState;
 import com.flab.goodchoicemember.application.MemberQuery;
+import com.flab.goodchoicecoupon.application.CouponIssueCommand;
+import com.flab.goodchoicecoupon.application.CouponIssueQuery;
+import com.flab.goodchoicecoupon.application.CouponUseHistoryCommand;
+import com.flab.goodchoicecoupon.application.CouponUseHistoryQuery;
+import com.flab.goodchoicecoupon.domain.*;
 import com.flab.goodchoicemember.domain.model.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +60,7 @@ public class CouponUseService {
         CouponIssue couponPublish = couponIssueQuery.getCouponIssue(couponIssueToken, memberId);
         Coupon coupon = couponPublish.getCoupon();
 
-        CouponUseHistory couponUseHistory = couponUseHistoryQuery.getCouponUseHistory(member, coupon);
+        CouponUseHistory couponUseHistory = couponUseHistoryQuery.getCouponUseHistory(memberId, coupon);
         couponUseHistory.cancel();
         couponUseHistoryCommand.modify(couponUseHistory);
 

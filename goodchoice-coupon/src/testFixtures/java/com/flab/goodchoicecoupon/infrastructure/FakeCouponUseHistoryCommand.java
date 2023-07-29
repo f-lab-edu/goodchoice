@@ -1,20 +1,16 @@
-package com.flab.goodchoiceapi.coupon.infrastructure;
+package com.flab.goodchoicecoupon.infrastructure;
 
-import com.flab.goodchoiceapi.coupon.application.CouponUseHistoryCommand;
+import com.flab.goodchoicecoupon.application.CouponUseHistoryCommand;
 import com.flab.goodchoicecoupon.domain.CouponUseHistory;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponUseHistoryEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponUseHistoryRepository;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@Component
-public class CouponUseHistoryCommandImpl implements CouponUseHistoryCommand {
+public class FakeCouponUseHistoryCommand implements CouponUseHistoryCommand {
 
-    private final CouponUseHistoryRepository couponUseHistoryRepository;
+    private CouponUseHistoryRepository couponUseHistoryRepository;
 
-    public CouponUseHistoryCommandImpl(CouponUseHistoryRepository couponUseHistoryRepository) {
+    public FakeCouponUseHistoryCommand(CouponUseHistoryRepository couponUseHistoryRepository) {
         this.couponUseHistoryRepository = couponUseHistoryRepository;
     }
 

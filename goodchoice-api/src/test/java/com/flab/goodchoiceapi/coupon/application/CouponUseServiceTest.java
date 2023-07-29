@@ -1,5 +1,7 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoicecoupon.application.CouponIssueCommand;
+import com.flab.goodchoicecoupon.application.CouponQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
 import com.flab.goodchoicecoupon.domain.CouponType;
@@ -11,6 +13,9 @@ import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponIssueCommand;
 import com.flab.goodchoiceapi.coupon.infrastructure.FakeCouponQuery;
 import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.exception.MemberException;
+import com.flab.goodchoicecoupon.infrastructure.FakeCouponIssueCommand;
+import com.flab.goodchoicecoupon.infrastructure.FakeCouponQuery;
+import com.flab.goodchoiceapi.coupon.infrastructure.FakeMemberCommand;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.*;
 import com.flab.goodchoicemember.domain.model.Member;

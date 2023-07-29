@@ -1,17 +1,19 @@
-package com.flab.goodchoiceapi.coupon.infrastructure;
+package com.flab.goodchoicecoupon.infrastructure;
 
-import com.flab.goodchoiceapi.coupon.application.CouponIssueChecker;
+import com.flab.goodchoicecoupon.application.CouponIssueChecker;
 import com.flab.goodchoicecoupon.exception.CouponError;
 import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-public class FakeCouponIssueExistChecker implements CouponIssueChecker {
+@Component
+public class CouponIssueExistCheckImpl implements CouponIssueChecker {
 
     private final CouponIssueRepository couponIssueRepository;
 
-    public FakeCouponIssueExistChecker(CouponIssueRepository couponIssueRepository) {
+    public CouponIssueExistCheckImpl(CouponIssueRepository couponIssueRepository) {
         this.couponIssueRepository = couponIssueRepository;
     }
 
