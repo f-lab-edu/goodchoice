@@ -1,10 +1,9 @@
-package com.flab.goodchoiceapi.order.infrastructure;
+package com.flab.goodchoiceorder.infrastructure;
 
 import com.flab.goodchoiceorder.domain.Order;
 import com.flab.goodchoiceorder.domain.OrderItem;
-import com.flab.goodchoiceapi.order.domain.OrderStore;
-import com.flab.goodchoiceorder.infrastructure.OrderItemRepository;
-import com.flab.goodchoiceorder.infrastructure.OrderRepository;
+import com.flab.goodchoiceorder.domain.OrderStore;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

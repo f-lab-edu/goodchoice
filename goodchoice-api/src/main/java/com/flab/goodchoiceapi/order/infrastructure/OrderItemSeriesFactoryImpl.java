@@ -4,6 +4,8 @@ import com.flab.goodchoiceapi.item.domain.ItemReader;
 import com.flab.goodchoiceapi.order.domain.*;
 import com.flab.goodchoiceorder.domain.Order;
 import com.flab.goodchoiceorder.domain.OrderItem;
+import com.flab.goodchoiceorder.domain.OrderStore;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
