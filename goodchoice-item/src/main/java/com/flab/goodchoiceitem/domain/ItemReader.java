@@ -1,6 +1,4 @@
-package com.flab.goodchoiceapi.item.domain;
-
-import com.flab.goodchoiceitem.domain.Item;
+package com.flab.goodchoiceitem.domain;
 
 import java.util.List;
 

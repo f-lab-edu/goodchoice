@@ -1,7 +1,7 @@
 package com.flab.goodchoiceapi.order.infrastructure;
 
-import com.flab.goodchoiceapi.item.domain.ItemReader;
 import com.flab.goodchoiceapi.order.domain.*;
+import com.flab.goodchoiceitem.domain.ItemReader;
 import com.flab.goodchoiceorder.domain.Order;
 import com.flab.goodchoiceorder.domain.OrderItem;
 import com.flab.goodchoiceorder.domain.OrderStore;
