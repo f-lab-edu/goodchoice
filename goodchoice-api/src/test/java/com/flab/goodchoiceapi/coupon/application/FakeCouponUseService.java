@@ -1,7 +1,5 @@
 package com.flab.goodchoiceapi.coupon.application;
 
-import com.flab.goodchoiceapi.coupon.infrastructure.*;
-import com.flab.goodchoiceapi.member.application.MemberQuery;
 import com.flab.goodchoicecoupon.application.CouponIssueCommand;
 import com.flab.goodchoicecoupon.application.CouponIssueQuery;
 import com.flab.goodchoicecoupon.application.CouponUseHistoryCommand;
@@ -12,6 +10,8 @@ import com.flab.goodchoicecoupon.infrastructure.FakeCouponUseHistoryCommand;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponUseHistoryQuery;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponUseHistoryRepository;
+import com.flab.goodchoicemember.application.MemberQuery;
+import com.flab.goodchoicemember.infrastructure.FakeMemberQuery;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 
 public class FakeCouponUseService {

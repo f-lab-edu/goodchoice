@@ -1,9 +1,9 @@
-package com.flab.goodchoiceapi.coupon.infrastructure;
+package com.flab.goodchoicemember.infrastructure;
 
-import com.flab.goodchoiceapi.member.application.MemberCommand;
+import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
-import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 import com.flab.goodchoicemember.infrastructure.entity.MemberEntity;
+import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 
 public class FakeMemberCommand implements MemberCommand {
 
@@ -14,7 +14,7 @@ public class FakeMemberCommand implements MemberCommand {
     }
 
     @Override
-    public Member save(Member member) {
+    public Member createMember(Member member) {
         MemberEntity memberEntity = MemberEntity.of(member);
         return memberRepository.save(memberEntity).toMember();
     }

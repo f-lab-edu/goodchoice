@@ -1,11 +1,11 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoicemember.application.MemberQuery;
 import com.flab.goodchoicecoupon.application.CouponCommand;
 import com.flab.goodchoicecoupon.application.CouponIssueChecker;
 import com.flab.goodchoicecoupon.application.CouponIssueCommand;
 import com.flab.goodchoicecoupon.application.CouponQuery;
 import com.flab.goodchoiceredis.common.aop.LimitedCountLock;
-import com.flab.goodchoiceapi.member.application.MemberQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
 import com.flab.goodchoiceredis.infrastructure.AppliedUserRepository;
@@ -71,6 +71,6 @@ public class CouponIssueService {
     }
 
     private Member getMember(Long memberId) {
-        return memberQuery.findById(memberId);
+        return memberQuery.getMember(memberId);
     }
 }
