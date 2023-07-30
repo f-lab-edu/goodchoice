@@ -1,20 +1,19 @@
 package com.flab.goodchoiceapi.coupon.application;
 
-import com.flab.goodchoicemember.application.MemberQuery;
-import com.flab.goodchoicecoupon.application.CouponCommand;
-import com.flab.goodchoicecoupon.application.CouponIssueChecker;
-import com.flab.goodchoicecoupon.application.CouponIssueCommand;
-import com.flab.goodchoicecoupon.application.CouponQuery;
-import com.flab.goodchoiceredis.common.aop.LimitedCountLock;
+import com.flab.goodchoicecoupon.application.*;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
-import com.flab.goodchoiceredis.infrastructure.AppliedUserRepository;
+import com.flab.goodchoicecoupon.domain.CouponIssueFailedEvent;
+import com.flab.goodchoicemember.application.MemberQuery;
 import com.flab.goodchoicemember.domain.model.Member;
+import com.flab.goodchoiceredis.common.aop.LimitedCountLock;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Slf4j
 @Transactional
 @Service
 public class CouponIssueService {
@@ -24,53 +23,72 @@ public class CouponIssueService {
     private final CouponCommand couponCommand;
     private final CouponIssueCommand couponIssueCommand;
     private final CouponIssueChecker couponIssueExistChecker;
-    private final AppliedUserRepository appliedUserRepository;
+    private final CouponIssueFailedEventCommand couponIssueFailedEventCommand;
 
     public CouponIssueService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponIssueCommand couponIssueCommand,
-                              CouponIssueChecker couponIssueExistChecker, AppliedUserRepository appliedUserRepository) {
+                              CouponIssueChecker couponIssueExistChecker, CouponIssueFailedEventCommand couponIssueFailedEventCommand) {
         this.memberQuery = memberQuery;
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
         this.couponIssueCommand = couponIssueCommand;
         this.couponIssueExistChecker = couponIssueExistChecker;
-        this.appliedUserRepository = appliedUserRepository;
+        this.couponIssueFailedEventCommand = couponIssueFailedEventCommand;
     }
 
-    public UUID couponIssue(final Long memberId, final UUID couponToken) {
-        Member member = getMember(memberId);
+    public boolean couponIssue(final Long memberId, final UUID couponToken) {
+        getMember(memberId);
 
         couponIssueExistChecker.duplicateCouponIssueCheck(memberId, couponToken);
 
         Coupon coupon = couponQuery.getCouponInfoLock(couponToken);
-        CouponIssue couponPublish = saveCouponIssue( member, coupon);
-
         coupon.useCoupon();
-        couponCommand.modify(coupon);
 
-        return couponPublish.getCouponIssueToken();
+        try {
+            saveCouponIssue(memberId, coupon);
+            couponCommand.modify(coupon);
+
+            return true;
+        } catch (Exception e) {
+            log.error("failed to create memberId : {}, couponIssue : {}", memberId, couponToken);
+            createCouponIssueFailedEvent(memberId, couponToken);
+        }
+
+        return false;
     }
 
     @LimitedCountLock(key = "key", waitTime = 20L)
-    public UUID couponIssueRedissonAop(final Long memberId, final UUID key) {
-        Member member = getMember(memberId);
+    public boolean couponIssueRedissonAop(final Long memberId, final UUID key) {
+        getMember(memberId);
 
-        appliedUserRepository.addRedisSet(key.toString(), memberId.toString());
+        couponIssueExistChecker.duplicateCouponIssueCheck(memberId, key);
 
         Coupon coupon = couponQuery.getCoupon(key);
-        CouponIssue couponIssue = saveCouponIssue(member, coupon);
-
         coupon.useCoupon();
-        couponCommand.modify(coupon);
 
-        return couponIssue.getCouponIssueToken();
+        try {
+            saveCouponIssue(memberId, coupon);
+            couponCommand.modify(coupon);
+
+            return true;
+        } catch (Exception e) {
+            log.error("failed to create memberId : {}, couponIssue : {}", memberId, key);
+            createCouponIssueFailedEvent(memberId, key);
+        }
+
+        return false;
     }
 
-    private CouponIssue saveCouponIssue(Member member, Coupon coupon) {
-        CouponIssue couponIssue = new CouponIssue(UUID.randomUUID(), member.getId(), coupon, false);
+    private CouponIssue saveCouponIssue(Long memberId, Coupon coupon) {
+        CouponIssue couponIssue = new CouponIssue(UUID.randomUUID(), memberId, coupon, false);
         return couponIssueCommand.save(couponIssue);
     }
 
     private Member getMember(Long memberId) {
         return memberQuery.getMember(memberId);
+    }
+
+    private void createCouponIssueFailedEvent(Long memberId, UUID couponToken) {
+        CouponIssueFailedEvent couponIssueFailedEvent = new CouponIssueFailedEvent(memberId, couponToken, false);
+        couponIssueFailedEventCommand.save(couponIssueFailedEvent);
     }
 }

@@ -1,5 +1,6 @@
 package com.flab.goodchoicecoupon.infrastructure.entity;
 
+import com.flab.goodchoicecoupon.domain.CouponIssueFailedEvent;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,9 +27,8 @@ public class CouponIssueFailedEventEntity {
     @Column(name = "member_id")
     private Long memberId;
 
-    @ManyToOne
-    @JoinColumn(name = "coupon_id")
-    private CouponEntity couponEntity;
+    @Column(name = "coupon_token", columnDefinition = "BINARY(16)", nullable = false)
+    private UUID couponToken;
 
     @Column(name = "restored_yn", nullable = false)
     private boolean restoredYn;
@@ -37,15 +38,31 @@ public class CouponIssueFailedEventEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "used_at")
-    private LocalDateTime usedAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
-    @Builder
-    public CouponIssueFailedEventEntity(Long memberId, CouponEntity couponEntity, boolean restoredYn, LocalDateTime createdAt, LocalDateTime usedAt) {
+    public CouponIssueFailedEventEntity(Long memberId, UUID couponToken, boolean restoredYn, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.memberId = memberId;
-        this.couponEntity = couponEntity;
+        this.couponToken = couponToken;
         this.restoredYn = restoredYn;
         this.createdAt = createdAt;
-        this.usedAt = usedAt;
+        this.updatedAt = updatedAt;
+    }
+
+    @Builder
+    public CouponIssueFailedEventEntity(Long id, Long memberId, UUID couponToken, boolean restoredYn, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(memberId, couponToken, restoredYn, createdAt, updatedAt);
+        this.id = id;
+    }
+
+    public CouponIssueFailedEvent toCouponIssueFailedEvent() {
+        return CouponIssueFailedEvent.builder()
+                .id(getId())
+                .memberId(getMemberId())
+                .couponToken(getCouponToken())
+                .restoredYn(isRestoredYn())
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
     }
 }
