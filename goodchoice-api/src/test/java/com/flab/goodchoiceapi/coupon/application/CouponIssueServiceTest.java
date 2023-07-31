@@ -6,14 +6,11 @@ import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponQuery;
-import com.flab.goodchoicemember.application.MemberCommand;
-import com.flab.goodchoicemember.exception.MemberException;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
-import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
-import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
-import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponIssueRepository;
-import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponRepository;
+import com.flab.goodchoicecoupon.infrastructure.repositories.*;
+import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
+import com.flab.goodchoicemember.exception.MemberException;
 import com.flab.goodchoicemember.infrastructure.FakeMemberCommand;
 import com.flab.goodchoicemember.infrastructure.repositories.InMemoryMemberRepository;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
@@ -29,9 +26,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CouponIssueServiceTest {
 
     private MemberRepository memberRepository;
-    private CouponIssueService couponIssueService;
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
+    private CouponIssueFailedEventRepository couponIssueFailedEventRepository;
+
+    private CouponIssueService couponIssueService;
 
     private MemberCommand memberCommand;
     private CouponQuery couponQuery;
@@ -57,11 +56,12 @@ class CouponIssueServiceTest {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
+        couponIssueFailedEventRepository = new InMemoryCouponIssueFailedEventRepository();
 
         memberCommand = new FakeMemberCommand(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
 
-        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository).createCouponIssueService();
+        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedEventRepository).createCouponIssueService();
 
         member = memberCommand.createMember(new Member(memberId));
 

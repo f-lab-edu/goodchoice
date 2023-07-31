@@ -4,6 +4,7 @@ import com.flab.goodchoicecoupon.application.*;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
 import com.flab.goodchoicecoupon.domain.CouponIssueFailedEvent;
+import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoicemember.application.MemberQuery;
 import com.flab.goodchoicemember.domain.model.Member;
 import com.flab.goodchoiceredis.common.aop.LimitedCountLock;
@@ -48,9 +49,10 @@ public class CouponIssueService {
             couponCommand.modify(coupon);
 
             return true;
-        } catch (Exception e) {
+        } catch (CouponException e) {
             log.error("failed to create memberId : {}, couponIssue : {}", memberId, couponToken);
             createCouponIssueFailedEvent(memberId, couponToken);
+            couponCommand.modify(coupon);
         }
 
         return false;
@@ -70,9 +72,10 @@ public class CouponIssueService {
             couponCommand.modify(coupon);
 
             return true;
-        } catch (Exception e) {
+        } catch (CouponException e) {
             log.error("failed to create memberId : {}, couponIssue : {}", memberId, key);
             createCouponIssueFailedEvent(memberId, key);
+            couponCommand.modify(coupon);
         }
 
         return false;

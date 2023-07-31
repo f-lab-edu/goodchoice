@@ -2,8 +2,8 @@ package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
-import com.flab.goodchoiceapi.coupon.dto.MemberSpecificCouponResponse;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueFailedEventEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.*;
 import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
@@ -14,13 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
-class CouponIssueRetrievalServiceTest {
+public class CouponIssueServiceCouponIssueFailEventTest {
 
     private MemberRepository memberRepository;
     private CouponRepository couponRepository;
@@ -31,11 +29,8 @@ class CouponIssueRetrievalServiceTest {
 
     private MemberCommand memberCommand;
 
-    private CouponIssueRetrievalService couponIssueRetrievalService;
-
     Member member;
     final Long memberId = 1L;
-    final Long noneMemberId = 2L;
 
     final Long couponIdDiscount = 1L;
     final UUID couponTokenDiscount = UUID.randomUUID();
@@ -54,8 +49,7 @@ class CouponIssueRetrievalServiceTest {
 
         memberCommand = new FakeMemberCommand(memberRepository);
 
-        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedEventRepository).createCouponIssueService();
-        couponIssueRetrievalService = new FakeCouponIssueRetrievalService(couponIssueRepository).createCouponIssueRetrievalService();
+        couponIssueService = new FakeCouponIssueServiceCouponIssueFailEvent(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedEventRepository).createCouponIssueService();
 
         member = memberCommand.createMember(new Member(memberId));
 
@@ -63,27 +57,14 @@ class CouponIssueRetrievalServiceTest {
         couponRepository.save(couponDiscountEntity);
     }
 
-    @DisplayName("회원이 가진 쿠폰 목록 조회")
+    @DisplayName("회원별 쿠폰 등록 중 에러 발생시 fail 쿠폰 등록")
     @Test
-    void memberGetCouponList() {
+    void createCouponIssueExceptionCreateFailCouponIssue() {
         couponIssueService.couponIssue(memberId, couponTokenDiscount);
 
-        List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponIssueRetrievalService.getIssuedMemberCoupon(memberId);
+        CouponIssueFailedEventEntity entity = couponIssueFailedEventRepository.findById(1L).get();
 
-        assertAll(
-                () -> assertThat(memberSpecificCouponResponses.get(0).couponId()).isEqualTo(couponTokenDiscount),
-                () -> assertThat(memberSpecificCouponResponses.get(0).couponName()).isEqualTo(couponNameDiscount),
-                () -> assertThat(memberSpecificCouponResponses.get(0).discountValue()).isEqualTo(discountValue)
-        );
-    }
-
-    @DisplayName("쿠폰을 가지지 않은 회원이 쿠폰 조회시 빈 목록 리턴")
-    @Test
-    void NoneMemberGetCouponList() {
-        couponIssueService.couponIssue(memberId, couponTokenDiscount);
-
-        List<MemberSpecificCouponResponse> result = couponIssueRetrievalService.getIssuedMemberCoupon(noneMemberId);
-
-        assertThat(result.size()).isEqualTo(0);
+        assertThat(entity.getMemberId()).isEqualTo(memberId);
+        assertThat(entity.getCouponToken()).isEqualTo(couponTokenDiscount);
     }
 }

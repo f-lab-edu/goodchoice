@@ -9,7 +9,7 @@ import com.flab.goodchoicemember.application.MemberQuery;
 import com.flab.goodchoicemember.infrastructure.FakeMemberQuery;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
 
-public class FakeCouponIssueService {
+public class FakeCouponIssueServiceCouponIssueFailEvent {
 
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
@@ -23,7 +23,7 @@ public class FakeCouponIssueService {
     private CouponIssueChecker couponIssueExistChecker;
     private CouponIssueFailedEventCommand couponIssueFailedEventCommand;
 
-    FakeCouponIssueService(MemberRepository memberRepository, CouponRepository couponRepository, CouponIssueRepository couponIssueRepository, CouponIssueFailedEventRepository couponIssueFailedEventRepository) {
+    FakeCouponIssueServiceCouponIssueFailEvent(MemberRepository memberRepository, CouponRepository couponRepository, CouponIssueRepository couponIssueRepository, CouponIssueFailedEventRepository couponIssueFailedEventRepository) {
         this.memberRepository = memberRepository;
         this.couponRepository = couponRepository;
         this.couponIssueRepository = couponIssueRepository;
@@ -33,8 +33,8 @@ public class FakeCouponIssueService {
     CouponIssueService createCouponIssueService() {
         memberQuery = new FakeMemberQuery(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
-        couponCommand = new FakeCouponCommand(couponRepository);
-        couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
+        couponCommand = new FakeErrorCouponCommand(couponRepository);
+        couponIssueCommand = new FakeErrorCouponIssueCommand();
         couponIssueExistChecker = new FakeCouponIssueExistChecker(couponIssueRepository);
         couponIssueFailedEventCommand = new FakeCouponIssueFailedEventCommand(couponIssueFailedEventRepository);
 
