@@ -45,7 +45,7 @@ public class CouponIssueService {
         coupon.useCoupon();
 
         try {
-            saveCouponIssue(memberId, coupon);
+            createCouponIssue(memberId, coupon);
             couponCommand.modify(coupon);
 
             return true;
@@ -68,7 +68,7 @@ public class CouponIssueService {
         coupon.useCoupon();
 
         try {
-            saveCouponIssue(memberId, coupon);
+            createCouponIssue(memberId, coupon);
             couponCommand.modify(coupon);
 
             return true;
@@ -81,7 +81,7 @@ public class CouponIssueService {
         return false;
     }
 
-    private CouponIssue saveCouponIssue(Long memberId, Coupon coupon) {
+    private CouponIssue createCouponIssue(Long memberId, Coupon coupon) {
         CouponIssue couponIssue = new CouponIssue(UUID.randomUUID(), memberId, coupon, false);
         return couponIssueCommand.save(couponIssue);
     }
