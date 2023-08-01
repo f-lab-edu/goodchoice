@@ -3,7 +3,7 @@ package com.flab.goodchoiceapi.coupon.application;
 import com.flab.goodchoicecoupon.application.*;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
-import com.flab.goodchoicecoupon.domain.CouponIssueFailedEvent;
+import com.flab.goodchoicecoupon.domain.CouponIssueFailed;
 import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoicemember.application.MemberQuery;
 import com.flab.goodchoicemember.domain.model.Member;
@@ -24,16 +24,16 @@ public class CouponIssueService {
     private final CouponCommand couponCommand;
     private final CouponIssueCommand couponIssueCommand;
     private final CouponIssueChecker couponIssueExistChecker;
-    private final CouponIssueFailedEventCommand couponIssueFailedEventCommand;
+    private final CouponIssueFailedCommand couponIssueFailedCommand;
 
     public CouponIssueService(MemberQuery memberQuery, CouponQuery couponQuery, CouponCommand couponCommand, CouponIssueCommand couponIssueCommand,
-                              CouponIssueChecker couponIssueExistChecker, CouponIssueFailedEventCommand couponIssueFailedEventCommand) {
+                              CouponIssueChecker couponIssueExistChecker, CouponIssueFailedCommand couponIssueFailedCommand) {
         this.memberQuery = memberQuery;
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
         this.couponIssueCommand = couponIssueCommand;
         this.couponIssueExistChecker = couponIssueExistChecker;
-        this.couponIssueFailedEventCommand = couponIssueFailedEventCommand;
+        this.couponIssueFailedCommand = couponIssueFailedCommand;
     }
 
     public boolean couponIssue(final Long memberId, final UUID couponToken) {
@@ -91,11 +91,11 @@ public class CouponIssueService {
     }
 
     private void createCouponIssueFailedEvent(Long memberId, UUID couponToken) {
-        CouponIssueFailedEvent couponIssueFailedEvent = CouponIssueFailedEvent.builder()
+        CouponIssueFailed couponIssueFailedEvent = CouponIssueFailed.builder()
                 .memberId(memberId)
                 .couponToken(couponToken)
                 .restoredYn(false)
                 .build();
-        couponIssueFailedEventCommand.save(couponIssueFailedEvent);
+        couponIssueFailedCommand.save(couponIssueFailedEvent);
     }
 }

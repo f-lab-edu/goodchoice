@@ -3,7 +3,7 @@ package com.flab.goodchoiceapi.coupon.application;
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
-import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueFailedEventEntity;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueFailedEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.*;
 import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
@@ -18,12 +18,12 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CouponIssueServiceCouponIssueFailEventTest {
+public class CouponIssueServiceCouponIssueFailTest {
 
     private MemberRepository memberRepository;
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
-    private CouponIssueFailedEventRepository couponIssueFailedEventRepository;
+    private CouponIssueFailedRepository couponIssueFailedRepository;
 
     private CouponIssueService couponIssueService;
 
@@ -45,11 +45,11 @@ public class CouponIssueServiceCouponIssueFailEventTest {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
-        couponIssueFailedEventRepository = new InMemoryCouponIssueFailedEventRepository();
+        couponIssueFailedRepository = new InMemoryCouponIssueFailedRepository();
 
         memberCommand = new FakeMemberCommand(memberRepository);
 
-        couponIssueService = new FakeCouponIssueServiceCouponIssueFailEvent(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedEventRepository).createCouponIssueService();
+        couponIssueService = new FakeCouponIssueServiceCouponIssueFailEvent(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedRepository).createCouponIssueService();
 
         member = memberCommand.createMember(new Member(memberId));
 
@@ -62,7 +62,7 @@ public class CouponIssueServiceCouponIssueFailEventTest {
     void createCouponIssueExceptionCreateFailCouponIssue() {
         couponIssueService.couponIssue(memberId, couponTokenDiscount);
 
-        CouponIssueFailedEventEntity entity = couponIssueFailedEventRepository.findById(1L).get();
+        CouponIssueFailedEntity entity = couponIssueFailedRepository.findById(1L).get();
 
         assertThat(entity.getMemberId()).isEqualTo(memberId);
         assertThat(entity.getCouponToken()).isEqualTo(couponTokenDiscount);

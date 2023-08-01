@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
-public class CouponIssueFailedEvent {
+public class CouponIssueFailed {
 
     private final Long id;
     private final Long memberId;
@@ -18,7 +18,7 @@ public class CouponIssueFailedEvent {
     private final LocalDateTime updatedAt;
 
     @Builder
-    public CouponIssueFailedEvent(Long id, Long memberId, UUID couponToken, boolean restoredYn, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public CouponIssueFailed(Long id, Long memberId, UUID couponToken, boolean restoredYn, LocalDateTime createdAt, LocalDateTime updatedAt) {
         Assert.notNull(memberId, "쿠폰 등록한 회원을 알 수가 없습니다.");
         Assert.notNull(couponToken, "해당 쿠폰을 입력해주세요.");
         Assert.notNull(restoredYn, "실패된 쿠폰 상태를 입력해주세요.");

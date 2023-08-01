@@ -1,6 +1,6 @@
 package com.flab.goodchoicecoupon.infrastructure.entity;
 
-import com.flab.goodchoicecoupon.domain.CouponIssueFailedEvent;
+import com.flab.goodchoicecoupon.domain.CouponIssueFailed;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "coupon_issue_failed_event")
-public class CouponIssueFailedEventEntity {
+public class CouponIssueFailedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +41,7 @@ public class CouponIssueFailedEventEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public CouponIssueFailedEventEntity(Long memberId, UUID couponToken, boolean restoredYn, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public CouponIssueFailedEntity(Long memberId, UUID couponToken, boolean restoredYn, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.memberId = memberId;
         this.couponToken = couponToken;
         this.restoredYn = restoredYn;
@@ -50,13 +50,13 @@ public class CouponIssueFailedEventEntity {
     }
 
     @Builder
-    public CouponIssueFailedEventEntity(Long id, Long memberId, UUID couponToken, boolean restoredYn, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public CouponIssueFailedEntity(Long id, Long memberId, UUID couponToken, boolean restoredYn, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this(memberId, couponToken, restoredYn, createdAt, updatedAt);
         this.id = id;
     }
 
-    public CouponIssueFailedEvent toCouponIssueFailedEvent() {
-        return CouponIssueFailedEvent.builder()
+    public CouponIssueFailed toCouponIssueFailedEvent() {
+        return CouponIssueFailed.builder()
                 .id(getId())
                 .memberId(getMemberId())
                 .couponToken(getCouponToken())

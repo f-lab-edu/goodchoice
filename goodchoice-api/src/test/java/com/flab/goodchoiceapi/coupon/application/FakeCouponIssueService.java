@@ -2,7 +2,7 @@ package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoicecoupon.application.*;
 import com.flab.goodchoicecoupon.infrastructure.*;
-import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueFailedEventRepository;
+import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueFailedRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
 import com.flab.goodchoicemember.application.MemberQuery;
@@ -14,16 +14,16 @@ public class FakeCouponIssueService {
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
     private final CouponIssueRepository couponIssueRepository;
-    private final CouponIssueFailedEventRepository couponIssueFailedEventRepository;
+    private final CouponIssueFailedRepository couponIssueFailedEventRepository;
 
     private MemberQuery memberQuery;
     private CouponQuery couponQuery;
     private CouponCommand couponCommand;
     private CouponIssueCommand couponIssueCommand;
     private CouponIssueChecker couponIssueExistChecker;
-    private CouponIssueFailedEventCommand couponIssueFailedEventCommand;
+    private CouponIssueFailedCommand couponIssueFailedEventCommand;
 
-    FakeCouponIssueService(MemberRepository memberRepository, CouponRepository couponRepository, CouponIssueRepository couponIssueRepository, CouponIssueFailedEventRepository couponIssueFailedEventRepository) {
+    FakeCouponIssueService(MemberRepository memberRepository, CouponRepository couponRepository, CouponIssueRepository couponIssueRepository, CouponIssueFailedRepository couponIssueFailedEventRepository) {
         this.memberRepository = memberRepository;
         this.couponRepository = couponRepository;
         this.couponIssueRepository = couponIssueRepository;
@@ -36,7 +36,7 @@ public class FakeCouponIssueService {
         couponCommand = new FakeCouponCommand(couponRepository);
         couponIssueCommand = new FakeCouponIssueCommand(couponIssueRepository);
         couponIssueExistChecker = new FakeCouponIssueExistChecker(couponIssueRepository);
-        couponIssueFailedEventCommand = new FakeCouponIssueFailedEventCommand(couponIssueFailedEventRepository);
+        couponIssueFailedEventCommand = new FakeCouponIssueFailedCommand(couponIssueFailedEventRepository);
 
         return new CouponIssueService(memberQuery, couponQuery, couponCommand, couponIssueCommand, couponIssueExistChecker, couponIssueFailedEventCommand);
     }

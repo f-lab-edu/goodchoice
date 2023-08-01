@@ -28,7 +28,7 @@ class CouponIssueServiceTest {
     private MemberRepository memberRepository;
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
-    private CouponIssueFailedEventRepository couponIssueFailedEventRepository;
+    private CouponIssueFailedRepository couponIssueFailedRepository;
 
     private CouponIssueService couponIssueService;
 
@@ -56,12 +56,12 @@ class CouponIssueServiceTest {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
-        couponIssueFailedEventRepository = new InMemoryCouponIssueFailedEventRepository();
+        couponIssueFailedRepository = new InMemoryCouponIssueFailedRepository();
 
         memberCommand = new FakeMemberCommand(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
 
-        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedEventRepository).createCouponIssueService();
+        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedRepository).createCouponIssueService();
 
         member = memberCommand.createMember(new Member(memberId));
 

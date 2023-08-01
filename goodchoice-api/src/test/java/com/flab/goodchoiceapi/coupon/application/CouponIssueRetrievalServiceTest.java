@@ -25,7 +25,7 @@ class CouponIssueRetrievalServiceTest {
     private MemberRepository memberRepository;
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
-    private CouponIssueFailedEventRepository couponIssueFailedEventRepository;
+    private CouponIssueFailedRepository couponIssueFailedEventRepository;
 
     private CouponIssueService couponIssueService;
 
@@ -50,7 +50,7 @@ class CouponIssueRetrievalServiceTest {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
-        couponIssueFailedEventRepository = new InMemoryCouponIssueFailedEventRepository();
+        couponIssueFailedEventRepository = new InMemoryCouponIssueFailedRepository();
 
         memberCommand = new FakeMemberCommand(memberRepository);
 

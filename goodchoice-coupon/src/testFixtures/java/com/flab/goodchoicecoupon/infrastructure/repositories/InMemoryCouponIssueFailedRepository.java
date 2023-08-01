@@ -1,17 +1,14 @@
 package com.flab.goodchoicecoupon.infrastructure.repositories;
 
-import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueFailedEventEntity;
+import com.flab.goodchoicecoupon.infrastructure.entity.CouponIssueFailedEntity;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-public class InMemoryCouponIssueFailedEventRepository implements CouponIssueFailedEventRepository {
-    private final Map<Long, CouponIssueFailedEventEntity> couponIssueFailedEventEntitys = new HashMap<>();
+public class InMemoryCouponIssueFailedRepository implements CouponIssueFailedRepository {
+    private final Map<Long, CouponIssueFailedEntity> couponIssueFailedEventEntitys = new HashMap<>();
 
     @Override
-    public CouponIssueFailedEventEntity save(CouponIssueFailedEventEntity couponIssueFailedEventEntity) {
+    public CouponIssueFailedEntity save(CouponIssueFailedEntity couponIssueFailedEventEntity) {
         if (couponIssueFailedEventEntitys.containsValue(couponIssueFailedEventEntity)) {
             for (Long key : couponIssueFailedEventEntitys.keySet()) {
                 if (couponIssueFailedEventEntitys.get(key).equals(couponIssueFailedEventEntity)) {
@@ -26,12 +23,12 @@ public class InMemoryCouponIssueFailedEventRepository implements CouponIssueFail
     }
 
     @Override
-    public Optional<CouponIssueFailedEventEntity> findById(Long couponCouponIssueFailedEventId) {
+    public Optional<CouponIssueFailedEntity> findById(Long couponCouponIssueFailedEventId) {
         return Optional.ofNullable(couponIssueFailedEventEntitys.get(couponCouponIssueFailedEventId));
     }
 
     @Override
-    public List<CouponIssueFailedEventEntity> findAllByCouponToken(Long couponToken) {
+    public List<CouponIssueFailedEntity> findAllByCouponToken(UUID couponToken) {
         return couponIssueFailedEventEntitys.values().stream()
                 .filter(entity -> entity.getCouponToken().equals(couponToken))
                 .toList();
