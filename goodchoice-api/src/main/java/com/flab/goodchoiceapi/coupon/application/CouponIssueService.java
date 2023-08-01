@@ -91,7 +91,11 @@ public class CouponIssueService {
     }
 
     private void createCouponIssueFailedEvent(Long memberId, UUID couponToken) {
-        CouponIssueFailedEvent couponIssueFailedEvent = new CouponIssueFailedEvent(memberId, couponToken, false);
+        CouponIssueFailedEvent couponIssueFailedEvent = CouponIssueFailedEvent.builder()
+                .memberId(memberId)
+                .couponToken(couponToken)
+                .restoredYn(false)
+                .build();
         couponIssueFailedEventCommand.save(couponIssueFailedEvent);
     }
 }
