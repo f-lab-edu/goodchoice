@@ -57,7 +57,7 @@ public class CouponIssueServiceCouponIssueFailTest {
         couponRepository.save(couponDiscountEntity);
     }
 
-    @DisplayName("회원별 쿠폰 등록 중 에러 발생시 fail 쿠폰 등록")
+    @DisplayName("회원별 쿠폰 등록 중 에러 발생시 실패한 쿠폰 정보 등록")
     @Test
     void createCouponIssueExceptionCreateFailCouponIssue() {
         couponIssueService.couponIssue(memberId, couponTokenDiscount);
