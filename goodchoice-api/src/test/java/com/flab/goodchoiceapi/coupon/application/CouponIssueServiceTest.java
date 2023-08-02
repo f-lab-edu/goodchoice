@@ -1,19 +1,20 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoiceapi.coupon.domain.CouponIssueService;
 import com.flab.goodchoicecoupon.application.CouponQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponQuery;
-import com.flab.goodchoicemember.application.MemberCommand;
-import com.flab.goodchoicemember.exception.MemberException;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponIssueRepository;
 import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponRepository;
+import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
+import com.flab.goodchoicemember.exception.MemberException;
 import com.flab.goodchoicemember.infrastructure.FakeMemberCommand;
 import com.flab.goodchoicemember.infrastructure.repositories.InMemoryMemberRepository;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
@@ -29,9 +30,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CouponIssueServiceTest {
 
     private MemberRepository memberRepository;
-    private CouponIssueService couponIssueService;
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
+
+    private CouponIssueService couponIssueService;
 
     private MemberCommand memberCommand;
     private CouponQuery couponQuery;
@@ -61,7 +63,7 @@ class CouponIssueServiceTest {
         memberCommand = new FakeMemberCommand(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
 
-        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository).createCouponIssueService();
+        couponIssueService = new FakeCouponIssueService(couponRepository, couponIssueRepository).createCouponIssueService();
 
         member = memberCommand.createMember(new Member(memberId));
 
@@ -89,13 +91,6 @@ class CouponIssueServiceTest {
 
         assertThatThrownBy(() -> couponIssueService.couponIssue(memberId, couponTokenDiscount))
                 .isInstanceOf(CouponException.class);
-    }
-
-    @DisplayName("존재하지 않은 회원 쿠폰 등록시 에러")
-    @Test
-    void noneMemberCouponPublish() {
-        assertThatThrownBy(() -> couponIssueService.couponIssue(noneMemberId, couponTokenDiscount))
-                .isInstanceOf(MemberException.class);
     }
 
     @DisplayName("모두 소진된 쿠폰을 회원이 등록하면 에러")

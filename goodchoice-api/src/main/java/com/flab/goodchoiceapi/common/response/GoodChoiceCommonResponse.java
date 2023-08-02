@@ -10,25 +10,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GoodChoiceCommonResponse<T> {
 
-    private String errorCode;
+    private String code;
     private String message;
     private T data;
 
-    private GoodChoiceCommonResponse(String errorCode, String message) {
-        this.errorCode = errorCode;
+    private GoodChoiceCommonResponse(String code, String message) {
+        this.code = code;
         this.message = message;
     }
 
-    private GoodChoiceCommonResponse(String errorCode, String message, T data) {
-        this(errorCode, message);
+    private GoodChoiceCommonResponse(String code, String message, T data) {
+        this(code, message);
         this.data = data;
     }
 
-    public static <T> GoodChoiceCommonResponse<T> success(String errorCode, String message, T data) {
-        return new GoodChoiceCommonResponse<>(errorCode, message, data);
+    public static <T> GoodChoiceCommonResponse<T> success(String code, String message, T data) {
+        return new GoodChoiceCommonResponse<>(code, message, data);
     }
 
-    public static GoodChoiceCommonResponse<Void> fail(String errorCode, String message) {
-        return new GoodChoiceCommonResponse<>(errorCode, message);
+    public static GoodChoiceCommonResponse<Void> success(String message) {
+        return new GoodChoiceCommonResponse<>("200", message);
+    }
+
+    public static GoodChoiceCommonResponse<Void> fail(String code, String message) {
+        return new GoodChoiceCommonResponse<>(code, message);
     }
 }

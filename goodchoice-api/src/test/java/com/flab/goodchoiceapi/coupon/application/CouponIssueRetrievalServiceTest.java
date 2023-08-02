@@ -1,13 +1,11 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoiceapi.coupon.domain.CouponIssueService;
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoiceapi.coupon.dto.MemberSpecificCouponResponse;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
-import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
-import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
-import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponIssueRepository;
-import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponRepository;
+import com.flab.goodchoicecoupon.infrastructure.repositories.*;
 import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
 import com.flab.goodchoicemember.infrastructure.FakeMemberCommand;
@@ -26,9 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class CouponIssueRetrievalServiceTest {
 
     private MemberRepository memberRepository;
-    private CouponIssueService couponIssueService;
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
+    private CouponIssueFailedRepository couponIssueFailedEventRepository;
+
+    private CouponIssueService couponIssueService;
 
     private MemberCommand memberCommand;
 
@@ -51,10 +51,11 @@ class CouponIssueRetrievalServiceTest {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
+        couponIssueFailedEventRepository = new InMemoryCouponIssueFailedRepository();
 
         memberCommand = new FakeMemberCommand(memberRepository);
 
-        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository).createCouponIssueService();
+        couponIssueService = new FakeCouponIssueService(couponRepository, couponIssueRepository).createCouponIssueService();
         couponIssueRetrievalService = new FakeCouponIssueRetrievalService(couponIssueRepository).createCouponIssueRetrievalService();
 
         member = memberCommand.createMember(new Member(memberId));
