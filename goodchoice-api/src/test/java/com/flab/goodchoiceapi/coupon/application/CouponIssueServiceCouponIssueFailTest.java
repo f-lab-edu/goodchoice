@@ -1,5 +1,6 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoiceapi.coupon.domain.CouponIssueService;
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
@@ -49,7 +50,7 @@ public class CouponIssueServiceCouponIssueFailTest {
 
         memberCommand = new FakeMemberCommand(memberRepository);
 
-        couponIssueService = new FakeCouponIssueServiceCouponIssueFailEvent(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedRepository).createCouponIssueService();
+        couponIssueService = new FakeCouponIssueServiceCouponIssueFail(couponRepository, couponIssueRepository).createCouponIssueService();
 
         member = memberCommand.createMember(new Member(memberId));
 

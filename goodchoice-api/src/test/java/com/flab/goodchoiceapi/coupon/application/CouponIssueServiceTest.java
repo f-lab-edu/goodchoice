@@ -1,5 +1,6 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoiceapi.coupon.domain.CouponIssueService;
 import com.flab.goodchoicecoupon.application.CouponQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponType;
@@ -7,7 +8,10 @@ import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoicecoupon.exception.CouponException;
 import com.flab.goodchoicecoupon.infrastructure.FakeCouponQuery;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
-import com.flab.goodchoicecoupon.infrastructure.repositories.*;
+import com.flab.goodchoicecoupon.infrastructure.repositories.CouponIssueRepository;
+import com.flab.goodchoicecoupon.infrastructure.repositories.CouponRepository;
+import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponIssueRepository;
+import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponRepository;
 import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
 import com.flab.goodchoicemember.exception.MemberException;
@@ -28,7 +32,6 @@ class CouponIssueServiceTest {
     private MemberRepository memberRepository;
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
-    private CouponIssueFailedRepository couponIssueFailedRepository;
 
     private CouponIssueService couponIssueService;
 
@@ -56,12 +59,11 @@ class CouponIssueServiceTest {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
-        couponIssueFailedRepository = new InMemoryCouponIssueFailedRepository();
 
         memberCommand = new FakeMemberCommand(memberRepository);
         couponQuery = new FakeCouponQuery(couponRepository);
 
-        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedRepository).createCouponIssueService();
+        couponIssueService = new FakeCouponIssueService(couponRepository, couponIssueRepository).createCouponIssueService();
 
         member = memberCommand.createMember(new Member(memberId));
 

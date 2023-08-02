@@ -1,7 +1,7 @@
 package com.flab.goodchoiceapi.coupon.api;
 
 import com.flab.goodchoiceapi.common.response.GoodChoiceCommonResponse;
-import com.flab.goodchoiceapi.coupon.application.CouponIssueService;
+import com.flab.goodchoiceapi.coupon.domain.CouponIssueService;
 import com.flab.goodchoiceapi.coupon.dto.CouponIssueRequest;
 import com.flab.goodchoicecoupon.exception.CouponError;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,5 +1,6 @@
 package com.flab.goodchoiceapi.coupon.application;
 
+import com.flab.goodchoiceapi.coupon.domain.CouponIssueService;
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoiceapi.coupon.dto.MemberSpecificCouponResponse;
@@ -54,7 +55,7 @@ class CouponIssueRetrievalServiceTest {
 
         memberCommand = new FakeMemberCommand(memberRepository);
 
-        couponIssueService = new FakeCouponIssueService(memberRepository, couponRepository, couponIssueRepository, couponIssueFailedEventRepository).createCouponIssueService();
+        couponIssueService = new FakeCouponIssueService(couponRepository, couponIssueRepository).createCouponIssueService();
         couponIssueRetrievalService = new FakeCouponIssueRetrievalService(couponIssueRepository).createCouponIssueRetrievalService();
 
         member = memberCommand.createMember(new Member(memberId));

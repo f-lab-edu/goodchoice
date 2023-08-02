@@ -13,7 +13,7 @@ public class CouponIssueFailed {
     private final Long id;
     private final Long memberId;
     private final UUID couponToken;
-    private boolean restoredYn;
+    private final RestoredYn restoredYn;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -26,7 +26,7 @@ public class CouponIssueFailed {
         this.id = id;
         this.memberId = memberId;
         this.couponToken = couponToken;
-        this.restoredYn = restoredYn;
+        this.restoredYn = new RestoredYn(restoredYn);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
