@@ -39,7 +39,7 @@ public class CouponIssueService {
 
         try {
             createCouponIssue(memberId, coupon);
-            couponCommand.modify(coupon);
+            modify(coupon);
 
             return true;
         } catch (CouponException e) {
@@ -61,7 +61,6 @@ public class CouponIssueService {
             return true;
         } catch (CouponException e) {
             return false;
-
         }
     }
 

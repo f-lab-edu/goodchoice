@@ -18,7 +18,7 @@ public class FakeCouponIssueFailedCommand implements CouponIssueFailedCommand {
         CouponIssueFailedEntity couponIssueFailedEventEntity = CouponIssueFailedEntity.builder()
                 .memberId(couponIssueFailedEvent.getMemberId())
                 .couponToken(couponIssueFailedEvent.getCouponToken())
-                .restoredYn(couponIssueFailedEvent.isRestoredYn())
+                .restoredYn(couponIssueFailedEvent.getRestoredYn().isRestoredYn())
                 .createdAt(couponIssueFailedEvent.getCreatedAt())
                 .updatedAt(couponIssueFailedEvent.getUpdatedAt())
                 .build();

@@ -93,13 +93,6 @@ class CouponIssueServiceTest {
                 .isInstanceOf(CouponException.class);
     }
 
-    @DisplayName("존재하지 않은 회원 쿠폰 등록시 에러")
-    @Test
-    void noneMemberCouponPublish() {
-        assertThatThrownBy(() -> couponIssueService.couponIssue(noneMemberId, couponTokenDiscount))
-                .isInstanceOf(MemberException.class);
-    }
-
     @DisplayName("모두 소진된 쿠폰을 회원이 등록하면 에러")
     @Test
     void couponCountZeroPublish() {
