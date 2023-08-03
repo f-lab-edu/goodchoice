@@ -28,9 +28,9 @@ public class InMemoryCouponIssueFailedRepository implements CouponIssueFailedRep
     }
 
     @Override
-    public List<CouponIssueFailedEntity> findAllByCouponToken(UUID couponToken) {
+    public List<CouponIssueFailedEntity> findAllByCouponId(Long couponId) {
         return couponIssueFailedEventEntitys.values().stream()
-                .filter(entity -> entity.getCouponToken().equals(couponToken))
+                .filter(entity -> entity.getCouponId().equals(couponId))
                 .toList();
     }
 }

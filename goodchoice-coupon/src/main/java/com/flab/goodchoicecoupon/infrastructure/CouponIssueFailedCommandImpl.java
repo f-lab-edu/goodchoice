@@ -19,7 +19,7 @@ public class CouponIssueFailedCommandImpl implements CouponIssueFailedCommand {
     public CouponIssueFailed save(CouponIssueFailed couponIssueFailedEvent) {
         CouponIssueFailedEntity couponIssueFailedEventEntity = CouponIssueFailedEntity.builder()
                 .memberId(couponIssueFailedEvent.getMemberId())
-                .couponToken(couponIssueFailedEvent.getCouponToken())
+                .couponId(couponIssueFailedEvent.getCouponId())
                 .restoredYn(couponIssueFailedEvent.getRestoredYn().isRestoredYn())
                 .createdAt(couponIssueFailedEvent.getCreatedAt())
                 .updatedAt(couponIssueFailedEvent.getUpdatedAt())
