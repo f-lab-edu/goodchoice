@@ -31,8 +31,8 @@ public class CouponIssueFacade {
         boolean result = couponIssueService.couponIssue(memberId, couponToken);
 
         if (!result) {
-            couponIssueFailedService.createCouponIssueFailed(memberId, couponToken);
             Coupon coupon = couponService.getCoupon(couponToken);
+            couponIssueFailedService.createCouponIssueFailed(memberId, coupon.getId());
             couponIssueService.modify(coupon);
         }
 

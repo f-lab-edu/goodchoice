@@ -5,8 +5,6 @@ import com.flab.goodchoicecoupon.domain.CouponIssueFailed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Slf4j
 @Service
 public class CouponIssueFailedService {
@@ -17,12 +15,12 @@ public class CouponIssueFailedService {
         this.couponIssueFailedCommand = couponIssueFailedCommand;
     }
 
-    public void createCouponIssueFailed(Long memberId, UUID couponToken) {
-        log.error("failed to create memberId : {}, couponIssue : {}", memberId, couponToken);
+    public void createCouponIssueFailed(Long memberId, Long couponId) {
+        log.error("failed to create memberId : {}, couponId : {}", memberId, couponId);
 
         CouponIssueFailed couponIssueFailedEvent = CouponIssueFailed.builder()
                 .memberId(memberId)
-                .couponToken(couponToken)
+                .couponId(couponId)
                 .restoredYn(false)
                 .build();
         couponIssueFailedCommand.save(couponIssueFailedEvent);
