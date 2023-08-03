@@ -33,6 +33,6 @@ public class FakeCouponIssueServiceCouponIssueFail {
         couponIssueCommand = new FakeErrorCouponIssueCommand();
         couponIssueExistChecker = new FakeCouponIssueExistChecker(couponIssueRepository);
 
-        return new CouponIssueService(couponQuery, couponCommand, couponIssueCommand, couponIssueExistChecker);
+        return new CouponIssueService(couponQuery, couponCommand, couponIssueCommand);
     }
 }

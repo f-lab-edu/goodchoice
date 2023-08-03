@@ -39,7 +39,7 @@ class CouponIssueFacadeTest {
     @Test
     void createCouponIssue() {
         when(memberRetrievalService.getMember(anyLong())).thenReturn(Member.builder().build());
-        when(couponIssueService.couponIssue(anyLong(), any())).thenReturn(true);
+        when(couponIssueService.couponIssue(anyLong(), any(), any())).thenReturn(true);
 
         boolean result = couponIssueFacade.couponIssue(1L, UUID.randomUUID());
 
@@ -59,7 +59,7 @@ class CouponIssueFacadeTest {
     @Test
     void failCreateCouponIssue() {
         when(memberRetrievalService.getMember(anyLong())).thenReturn(Member.builder().build());
-        when(couponIssueService.couponIssue(anyLong(), any())).thenReturn(false);
+        when(couponIssueService.couponIssue(anyLong(), any(), any())).thenReturn(false);
 
         boolean result = couponIssueFacade.couponIssue(1L, UUID.randomUUID());
 

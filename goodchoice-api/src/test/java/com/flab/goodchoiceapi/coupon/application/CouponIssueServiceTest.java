@@ -14,7 +14,6 @@ import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponIssue
 import com.flab.goodchoicecoupon.infrastructure.repositories.InMemoryCouponRepository;
 import com.flab.goodchoicemember.application.MemberCommand;
 import com.flab.goodchoicemember.domain.model.Member;
-import com.flab.goodchoicemember.exception.MemberException;
 import com.flab.goodchoicemember.infrastructure.FakeMemberCommand;
 import com.flab.goodchoicemember.infrastructure.repositories.InMemoryMemberRepository;
 import com.flab.goodchoicemember.infrastructure.repositories.MemberRepository;
@@ -76,7 +75,7 @@ class CouponIssueServiceTest {
     @DisplayName("회원별 쿠폰 등록")
     @Test
     void couponPublish() {
-        couponIssueService.couponIssue(memberId, couponTokenDiscount);
+        couponIssueService.couponIssue(memberId, couponTokenDiscount, couponDiscountEntity.toCoupon());
 
         Coupon result = couponQuery.getCoupon(couponTokenDiscount);
 
@@ -87,9 +86,9 @@ class CouponIssueServiceTest {
     @DisplayName("한 계정당 하나의 쿠폰만 등록 가능 중복 등록시 에러")
     @Test
     void oneMemberOneCouponPublish() {
-        couponIssueService.couponIssue(memberId, couponTokenDiscount);
+        couponIssueService.couponIssue(memberId, couponTokenDiscount, couponDiscountEntity.toCoupon());
 
-        assertThatThrownBy(() -> couponIssueService.couponIssue(memberId, couponTokenDiscount))
+        assertThatThrownBy(() -> couponIssueService.couponIssue(memberId, couponTokenDiscount, couponDiscountEntity.toCoupon()))
                 .isInstanceOf(CouponException.class);
     }
 
@@ -99,7 +98,7 @@ class CouponIssueServiceTest {
         CouponEntity couponEntity = new CouponEntity(3L, UUID.randomUUID(), couponNameDeduction, 0, CouponType.DEDUCTION, deductionValue, State.ACTIVITY);
         couponRepository.save(couponEntity);
 
-        assertThatThrownBy(() -> couponIssueService.couponIssue(memberId, couponEntity.getCouponToken()))
+        assertThatThrownBy(() -> couponIssueService.couponIssue(memberId, couponEntity.getCouponToken(), couponEntity.toCoupon()))
                 .isInstanceOf(CouponException.class);
     }
 }
