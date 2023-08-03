@@ -1,9 +1,11 @@
 package com.flab.goodchoiceapi.coupon.application;
 
 import com.flab.goodchoiceapi.coupon.domain.CouponIssueService;
+import com.flab.goodchoicecoupon.application.CouponIssueChecker;
 import com.flab.goodchoicecoupon.domain.CouponType;
 import com.flab.goodchoicecoupon.domain.State;
 import com.flab.goodchoiceapi.coupon.dto.MemberSpecificCouponResponse;
+import com.flab.goodchoicecoupon.infrastructure.FakeCouponIssueExistChecker;
 import com.flab.goodchoicecoupon.infrastructure.entity.CouponEntity;
 import com.flab.goodchoicecoupon.infrastructure.repositories.*;
 import com.flab.goodchoicemember.application.MemberCommand;
@@ -26,7 +28,7 @@ class CouponIssueRetrievalServiceTest {
     private MemberRepository memberRepository;
     private CouponRepository couponRepository;
     private CouponIssueRepository couponIssueRepository;
-    private CouponIssueFailedRepository couponIssueFailedEventRepository;
+    private CouponIssueChecker couponIssueChecker;
 
     private CouponIssueService couponIssueService;
 
@@ -51,12 +53,12 @@ class CouponIssueRetrievalServiceTest {
         memberRepository = new InMemoryMemberRepository();
         couponRepository = new InMemoryCouponRepository();
         couponIssueRepository = new InMemoryCouponIssueRepository();
-        couponIssueFailedEventRepository = new InMemoryCouponIssueFailedRepository();
+        couponIssueChecker = new FakeCouponIssueExistChecker(couponIssueRepository);
 
         memberCommand = new FakeMemberCommand(memberRepository);
 
         couponIssueService = new FakeCouponIssueService(couponRepository, couponIssueRepository).createCouponIssueService();
-        couponIssueRetrievalService = new FakeCouponIssueRetrievalService(couponIssueRepository).createCouponIssueRetrievalService();
+        couponIssueRetrievalService = new FakeCouponIssueRetrievalService(couponIssueRepository, couponIssueChecker).createCouponIssueRetrievalService();
 
         member = memberCommand.createMember(new Member(memberId));
 
@@ -67,7 +69,7 @@ class CouponIssueRetrievalServiceTest {
     @DisplayName("회원이 가진 쿠폰 목록 조회")
     @Test
     void memberGetCouponList() {
-        couponIssueService.couponIssue(memberId, couponTokenDiscount);
+        couponIssueService.couponIssue(memberId, couponTokenDiscount, couponDiscountEntity.toCoupon());
 
         List<MemberSpecificCouponResponse> memberSpecificCouponResponses = couponIssueRetrievalService.getIssuedMemberCoupon(memberId);
 
@@ -81,7 +83,7 @@ class CouponIssueRetrievalServiceTest {
     @DisplayName("쿠폰을 가지지 않은 회원이 쿠폰 조회시 빈 목록 리턴")
     @Test
     void NoneMemberGetCouponList() {
-        couponIssueService.couponIssue(memberId, couponTokenDiscount);
+        couponIssueService.couponIssue(memberId, couponTokenDiscount, couponDiscountEntity.toCoupon());
 
         List<MemberSpecificCouponResponse> result = couponIssueRetrievalService.getIssuedMemberCoupon(noneMemberId);
 

@@ -1,13 +1,11 @@
 package com.flab.goodchoiceapi.coupon.domain;
 
 import com.flab.goodchoicecoupon.application.CouponCommand;
-import com.flab.goodchoicecoupon.application.CouponIssueChecker;
 import com.flab.goodchoicecoupon.application.CouponIssueCommand;
 import com.flab.goodchoicecoupon.application.CouponQuery;
 import com.flab.goodchoicecoupon.domain.Coupon;
 import com.flab.goodchoicecoupon.domain.CouponIssue;
 import com.flab.goodchoicecoupon.exception.CouponException;
-import com.flab.goodchoiceredis.common.aop.LimitedCountLock;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +20,14 @@ public class CouponIssueService {
     private final CouponQuery couponQuery;
     private final CouponCommand couponCommand;
     private final CouponIssueCommand couponIssueCommand;
-    private final CouponIssueChecker couponIssueExistChecker;
 
-    public CouponIssueService(CouponQuery couponQuery, CouponCommand couponCommand, CouponIssueCommand couponIssueCommand, CouponIssueChecker couponIssueExistChecker) {
+    public CouponIssueService(CouponQuery couponQuery, CouponCommand couponCommand, CouponIssueCommand couponIssueCommand) {
         this.couponQuery = couponQuery;
         this.couponCommand = couponCommand;
         this.couponIssueCommand = couponIssueCommand;
-        this.couponIssueExistChecker = couponIssueExistChecker;
     }
 
-    public boolean couponIssue(final Long memberId, final UUID couponToken) {
-        couponIssueExistChecker.duplicateCouponIssueCheck(memberId, couponToken);
-
-        Coupon coupon = couponQuery.getCouponInfoLock(couponToken);
+    public boolean couponIssue(final Long memberId, final UUID couponToken, final Coupon coupon) {
         coupon.useCoupon();
 
         try {
@@ -47,10 +40,7 @@ public class CouponIssueService {
         }
     }
 
-    @LimitedCountLock(key = "key", waitTime = 20L)
     public boolean couponIssueRedissonAop(final Long memberId, final UUID key) {
-        couponIssueExistChecker.duplicateCouponIssueCheck(memberId, key);
-
         Coupon coupon = couponQuery.getCoupon(key);
         coupon.useCoupon();
 
@@ -66,6 +56,10 @@ public class CouponIssueService {
 
     public void modify(Coupon coupon) {
         couponCommand.modify(coupon);
+    }
+
+    public Coupon getCouponInfoLock(UUID couponToken) {
+        return couponQuery.getCouponInfoLock(couponToken);
     }
 
     private CouponIssue createCouponIssue(Long memberId, Coupon coupon) {

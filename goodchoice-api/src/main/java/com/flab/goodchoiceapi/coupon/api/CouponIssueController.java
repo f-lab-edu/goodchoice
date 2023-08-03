@@ -1,7 +1,7 @@
 package com.flab.goodchoiceapi.coupon.api;
 
 import com.flab.goodchoiceapi.common.response.GoodChoiceCommonResponse;
-import com.flab.goodchoiceapi.coupon.domain.CouponIssueService;
+import com.flab.goodchoiceapi.coupon.application.CouponIssueFacade;
 import com.flab.goodchoiceapi.coupon.dto.CouponIssueRequest;
 import com.flab.goodchoicecoupon.exception.CouponError;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CouponIssueController {
 
-    private final CouponIssueService couponIssueService;
+    private final CouponIssueFacade couponIssueFacade;
 
-    public CouponIssueController(CouponIssueService couponIssueService) {
-        this.couponIssueService = couponIssueService;
+    public CouponIssueController(CouponIssueFacade couponIssueFacade) {
+        this.couponIssueFacade = couponIssueFacade;
     }
 
     @PostMapping("/issue")
     public GoodChoiceCommonResponse<Void> createCouponIssue(@RequestBody CouponIssueRequest couponIssueRequest) {
-        boolean result = couponIssueService.couponIssue(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
+        boolean result = couponIssueFacade.couponIssue(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
         if (result) {
             return GoodChoiceCommonResponse.success("쿠폰 등록이 성공하였습니다.");
         }
@@ -31,7 +31,7 @@ public class CouponIssueController {
 
     @PostMapping("/issue/redisson")
     public GoodChoiceCommonResponse<Void> createCouponIssueRedissonAop(@RequestBody CouponIssueRequest couponIssueRequest) {
-        boolean result = couponIssueService.couponIssueRedissonAop(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
+        boolean result = couponIssueFacade.couponIssueRedissonAop(couponIssueRequest.memberId(), couponIssueRequest.couponToken());
         if (result) {
             return GoodChoiceCommonResponse.success("쿠폰 등록이 성공하였습니다.");
         }
