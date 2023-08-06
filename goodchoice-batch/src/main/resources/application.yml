@@ -1,0 +1,66 @@
+server:
+  shutdown: graceful
+spring:
+  profiles:
+    active: local
+  #    include:
+  #      - mysql
+  #      - redis
+  config:
+    import: vault://
+  cloud.vault:
+    uri: http://118.67.142.68:8200
+    authentication: TOKEN
+    token: qwer1234
+    connection-timeout: 5000
+    read-timeout: 15000
+    kv:
+      enabled: true
+      backend: good-choice-app
+      profile-separator: "/"
+      application-name: dev
+      profiles:
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      #      ddl-auto: create
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+  cache:
+    type: redis
+  redis:
+    host: 118.67.135.217
+    port: 6379
+  datasource:
+    hikari:
+      master:
+        jdbc-url: jdbc:mysql://118.67.135.217:32770/goodchoice
+        username: root
+        password: 1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      slave:
+        jdbc-url: jdbc:mysql://118.67.135.217:32769/goodchoice
+        username: root
+        password: 1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+  batch:
+    jdbc:
+      initialize-schema: never
+
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

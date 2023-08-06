@@ -54,6 +54,10 @@ public class CouponIssueFailedEntity {
         this.id = id;
     }
 
+    public void changeRestoredYn() {
+        this.restoredYn = true;
+    }
+
     public CouponIssueFailed toCouponIssueFailedEvent() {
         return CouponIssueFailed.builder()
                 .id(getId())
