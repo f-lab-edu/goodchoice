@@ -21,13 +21,6 @@
 |                       [선강](https://github.com/zzangoobrother)                        |                            [은지](https://github.com/KATEKEITH)                            |       |
 
 
-
-## 프로젝트 기술스택
-
-
-## 프로젝트 아키텍쳐 🏛
-
-
 ## 프로젝트 중점사항
 
 - 확장성을 고려한 역할에 맞는 멀티모듈
