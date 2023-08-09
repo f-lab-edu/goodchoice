@@ -22,6 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FailedCoupon {
 
+    private final static int PAGE_OFFSET_NUMBER = 0;
+
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
@@ -50,7 +52,7 @@ public class FailedCoupon {
         JpaPagingItemReader reader = new JpaPagingItemReader() {
             @Override
             public int getPage() {
-                return 0;
+                return PAGE_OFFSET_NUMBER;
             }
         };
 

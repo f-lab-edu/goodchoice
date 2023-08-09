@@ -16,6 +16,13 @@ import java.util.UUID;
 @Repository
 public class CouponBatchWriterRepository {
 
+    private final static int SQL_PARAMETER_ONE = 1;
+    private final static int SQL_PARAMETER_TWO = 2;
+    private final static int SQL_PARAMETER_THREE = 3;
+    private final static int SQL_PARAMETER_FOUR = 4;
+    private final static int SQL_PARAMETER_FIVE = 5;
+    private final static int SQL_PARAMETER_SIX = 6;
+
     private final JdbcTemplate jdbcTemplate;
 
     public CouponBatchWriterRepository(DataSource dataSource) {
@@ -33,12 +40,12 @@ public class CouponBatchWriterRepository {
                         CouponIssueFailedEntity entity = couponIssueFailedEntities.get(i);
                         String token = UUID.randomUUID().toString().trim();
 
-                        ps.setString(1, token);
-                        ps.setLong(2, entity.getMemberId());
-                        ps.setLong(3, entity.getCouponId());
-                        ps.setBoolean(4, false);
-                        ps.setString(5, LocalDateTime.now().toString());
-                        ps.setString(6, LocalDateTime.now().toString());
+                        ps.setString(SQL_PARAMETER_ONE, token);
+                        ps.setLong(SQL_PARAMETER_TWO, entity.getMemberId());
+                        ps.setLong(SQL_PARAMETER_THREE, entity.getCouponId());
+                        ps.setBoolean(SQL_PARAMETER_FOUR, false);
+                        ps.setString(SQL_PARAMETER_FIVE, LocalDateTime.now().toString());
+                        ps.setString(SQL_PARAMETER_SIX, LocalDateTime.now().toString());
                     }
 
                     @Override
@@ -57,7 +64,7 @@ public class CouponBatchWriterRepository {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
                         CouponIssueFailedEntity entity = couponIssueFailedEntities.get(i);
-                        ps.setObject(1, entity.getId());
+                        ps.setObject(SQL_PARAMETER_ONE, entity.getId());
                     }
 
                     @Override
