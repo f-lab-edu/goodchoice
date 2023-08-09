@@ -72,7 +72,10 @@ class FailedCouponTest {
                 .build();
         couponIssueFailedRepository.save(couponIssueFailedEntity);
 
-        JobParameters parameters = new JobParametersBuilder().addLong("couponId", couponEntity.getId()).toJobParameters();
+        JobParameters parameters = new JobParametersBuilder()
+                .addLong("couponId", couponEntity.getId())
+                .addLong("chunkSize", 10L)
+                .toJobParameters();
 
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(parameters);
 

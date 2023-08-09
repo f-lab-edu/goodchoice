@@ -27,28 +27,26 @@ public class FailedCoupon {
     private final EntityManagerFactory entityManagerFactory;
     private final CouponBatchWriterRepository couponBatchWriterRepository;
 
-    private static final int chunkSize = 10;
-
     @Bean
     public Job failedCouponJob() {
         return jobBuilderFactory.get("failedCouponJob")
-                .start(failedCouponStepJob())
+                .start(failedCouponStepJob(null))
                 .build();
     }
 
     @Bean
     @JobScope
-    public Step failedCouponStepJob() {
+    public Step failedCouponStepJob(@Value("#{jobParameters[chunkSize]}") Long chunkSize) {
         return stepBuilderFactory.get("failedCouponStepJob")
-                .<CouponIssueFailedEntity, CouponIssueFailedEntity>chunk(chunkSize)
-                .reader(failedCouponReader(null))
+                .<CouponIssueFailedEntity, CouponIssueFailedEntity>chunk(chunkSize.intValue())
+                .reader(failedCouponReader(null, null))
                 .writer(failedCouponWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<CouponIssueFailedEntity> failedCouponReader(@Value("#{jobParameters[couponId]}") Long couponId) {
+    public JpaPagingItemReader<CouponIssueFailedEntity> failedCouponReader(@Value("#{jobParameters[couponId]}") Long couponId, @Value("#{jobParameters[chunkSize]}") Long chunkSize) {
         JpaPagingItemReader reader = new JpaPagingItemReader() {
             @Override
             public int getPage() {
@@ -57,7 +55,7 @@ public class FailedCoupon {
         };
 
         reader.setQueryString("SELECT c FROM CouponIssueFailedEntity c WHERE c.restoredYn = false AND c.couponId = " + couponId + " order by c.id asc");
-        reader.setPageSize(chunkSize);
+        reader.setPageSize(chunkSize.intValue());
         reader.setEntityManagerFactory(entityManagerFactory);
         reader.setName("reader");
 
