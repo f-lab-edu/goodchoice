@@ -20,6 +20,8 @@
 | <img src="" width=400px alt="선강"/> | <img src="" width=400px alt="봄봄"/> |
 |                       [선강](https://github.com/zzangoobrother)                        |                            [은지](https://github.com/KATEKEITH)                            |       |
 
+## 기술 스택
+![Java](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.14-6DB33F?logo=spring%20boot&logoColor=6DB33F) ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?logo=swagger&logoColor=85EA2D) ![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?logo=&logoColor=6DB33F) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=4479A1) ![Gradle](https://img.shields.io/badge/Gradle-02303A?logo=gradle&logoColor=02303A) ![IntelliJ IDEA](https://img.shields.io/badge/-IntelliJ%20IDEA-FF0000?logo=intellij%20idea&logoColor=white)
 
 ## 프로젝트 중점사항
 
