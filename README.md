@@ -26,9 +26,9 @@
 ## 프로젝트 중점사항
 
 - 확장성을 고려한 역할에 맞는 멀티모듈
-- service layer를 고립시켜 pojo로 단위테스트 작성
-- Jenkins를 사용하여 CI/CD 구축
-- Docker 를 이용하여 CD 구현
+- Layered Architecture
+  - service layer를 고립시켜 pojo로 단위테스트 작성
+- Blue/Green 배포
 - Vault 서버를 띄워 암호, 설정값 관리
 - Mysql Replication, Master/Slave로 데이터베이스 이중화
 
