@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: local
+  jpa:
+    open-in-view: false
+server:
+  port: 8082
+
+---
+spring:
+  kafka:
+    template:
+      default-topic: point
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: foo
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+    mail:
+      host: smtp.naver.com
+      posrt: 587
+      username: username
+      password: password
+      properties:
+        mail.smtp.auth: true
+        mail.smtp.ssl.enable: true
+        mail.smtp.ssl.trust: smtp.naver.com
+        mail.smtp.starttls.enable: true
+  config:
+    activate:
+      on-profile: local
