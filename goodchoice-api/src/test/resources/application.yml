@@ -13,6 +13,9 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
       maximum-pool-size: 200
 
+  config:
+    import: vault://
+
   cloud.vault:
     uri: http://118.67.142.68:8200
     authentication: TOKEN
